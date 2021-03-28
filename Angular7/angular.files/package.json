@@ -1,0 +1,28 @@
+#set( $appName = $aib.getApplicationNameFormatted() )
+{
+  "name": "${appName}",
+  "version": "${aib.getParam('application.version')}",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "setup": "npm install --save @ng-bootstrap/ng-bootstrap rxjs-compat express body-parser cors mongoose buffer @types/node @angular/material @angular/cdk @angular/animations  @angular/material-moment-adapter angular-bootstrap-md moment",
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoServerUrl = ${aib.getParam('artifact-repo.serverUrl')} )
+#set( $repoNPMRepository = ${aib.getParam('artifact-repo.publishRepoKey')} )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoEmail = ${aib.getParam('artifact-repo.email')} )
+#set( $repoRepoUrl = "${repoServerUrl}/api/npm/${repoNPMRepository}" )
+   	"predeploy": "ng build",
+    "deploy": "npm-cli-login -u ${repoUserName} -p ${repoPassword} -e ${repoEmail} -r ${repoRepoUrl}",
+    "postdeploy" : "npm publish --registry ${repoRepoUrl}",
+#end##if ( ${aib.getParam('repo.inUse')} == "true" )    
+
+    "e2e": "ng e2e"
+  },
+  "private": false,
+#angularDependencies()
+}

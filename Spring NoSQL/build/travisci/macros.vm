@@ -1,0 +1,22 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+
+########################################################################
+## Travis_Script 
+########################################################################
+#macro( Travis_Script )
+#end##macro( Travis_Script )
+
+########################################################################
+## Travis_Services
+########################################################################
+#macro( Travis_Services )
+services:
+  - mongodb
+  - memcached
+#end##macro( Travis_Services )
+  
+

@@ -1,0 +1,44 @@
+########################################################################
+## Bitbucket_Pipeline_Image_Declaration
+########################################################################
+#macro( Bitbucket_Pipeline_Image_Declaration )
+image: python:3.7
+#end##macro( Bitbucket_Pipeline_Image_Declaration )
+
+########################################################################
+## Bitbucket_Pipeline_Definitions
+########################################################################
+#macro( Bitbucket_Pipeline_Definitions )          
+#end##macro( Bitbucket_Pipeline_Definitions )
+
+########################################################################
+## Bitbucket_Pipeline_Step
+########################################################################
+#macro( Bitbucket_Pipeline_Step )  
+  - step:
+      name: install ${appName} dependencies
+      script:
+          - export PIP_CACHE_DIR=.cache/pip
+          - pip install pipenv
+          - pipenv install
+          - pipenv install Django
+          - pipenv install pytest-django
+          - pip install pipenv
+          - pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests
+#end##macro( Bitbucket_Pipeline_Step )  
+
+########################################################################
+## Bitbucket_Pipeline_Caches
+########################################################################
+#macro( Bitbucket_Pipeline_Caches )
+      caches:
+          - pip
+#end##macro( Bitbucket_Pipeline_Caches )
+
+########################################################################
+## Bitbucket_Pipeline_Services
+########################################################################
+#macro( Bitbucket_Pipeline_Services )  
+      services:
+          - mongo
+#end##macro( Bitbucket_Pipeline_Services )

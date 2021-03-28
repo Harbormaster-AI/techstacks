@@ -1,0 +1,74 @@
+########################################################################
+## Bitbucket Pipeline Macros
+########################################################################
+
+########################################################################
+## Bitbucket_Pipeline_Image_Declaration
+########################################################################
+#macro( Bitbucket_Pipeline_Image_Declaration )
+image: maven:3.3.9
+#end##macro( Bitbucket_Pipeline_Image_Declaration )
+
+########################################################################
+## Bitbucket_Pipeline_Definitions
+########################################################################
+#macro( Bitbucket_Pipeline_Definitions )          
+definitions:
+  services:
+    mysql:
+      image: mysql:5.7
+      variables: # for mysql
+        MYSQL_USER: 'root'
+        MYSQL_ROOT_PASSWORD: 'letmein2'
+#end##macro( Bitbucket_Pipeline_Definitions )
+
+########################################################################
+## Bitbucket_Pipeline_Pipelines
+########################################################################
+#macro( Bitbucket_Pipeline_Pipelines )
+pipelines:
+  default:
+#Bitbucket_Pipeline_Step()
+#Bitbucket_Pipeline_Caches()  
+#Bitbucket_Pipeline_Services()  
+      services:
+          - mysql
+#end##macro( Bitbucket_Pipeline_Pipelines )
+
+########################################################################
+## Bitbucket_Pipeline_Step
+########################################################################
+#macro( Bitbucket_Pipeline_Step )  
+  - step:
+      script:
+          - export DATABASE_USERNAME=root
+          - export DATABASE_PASSWORD=letmein2
+          - export DATABASE_DIALECT=org.hibernate.dialect.MySQL5Dialect
+          - export DATABASE_DRIVER=com.mysql.cj.jdbc.Driver
+          - export DATABASE_URL=jdbc:mysql://localhost:3306/bitbuckettest?createDatabaseIfNotExist=true
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
+          - mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
+#else        
+          - mvn package
+#end##if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#end##macro( Bitbucket_Pipeline_Step )  
+
+########################################################################
+## Bitbucket_Pipeline_Caches
+########################################################################
+#macro( Bitbucket_Pipeline_Caches )  
+      caches:
+          - maven
+#end##macro( Bitbucket_Pipeline_Caches )
+
+########################################################################
+## Bitbucket_Pipeline_Services
+########################################################################
+#macro( Bitbucket_Pipeline_Services )  
+      services:
+          - mysql
+#end##macro( Bitbucket_Pipeline_Services )
+          

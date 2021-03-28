@@ -1,0 +1,27 @@
+########################################################################
+## Codeship_From_Image
+########################################################################
+#macro( Codeship_From_Image  ) 
+FROM node:8.12
+#end##macro( Codeship_From_Image  )
+
+########################################################################
+## Codeship_Install
+########################################################################
+#macro( Codeship_Install  ) 
+# install the Angular CLI, pip to /dev/null to remove analytics invocation
+RUN npm install -g @angular/cli@7.2.3 > /dev/null
+#end##macro( Codeship_Install  )
+
+########################################################################
+## Codeship_Build
+########################################################################
+#macro( Codeship_Build )
+mkdir appRoot
+cd appRoot && ng new ${appName} --defaults
+cp -r -n /appRoot/${appName}/ /gitRoot/
+cd /gitRoot/${appName} && npm install --prod && npm run setup
+cd /gitRoot/${appName} && ng build
+cp -r -n /gitRoot/ /code/    
+#end##macro( Codeship_Build )
+

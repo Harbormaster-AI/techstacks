@@ -1,0 +1,24 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+version: 0.2
+env:
+  variables:
+#AWS_CodeBuild_EnvVarsDeclaration()
+
+phases:
+  install:
+#AWS_CodeBuild_Runtime_Versions()    
+#AWS_CodeBuild_Install_Phase_Commands()
+  build:
+#AWS_CodeBuild_Build_Phase_Commands()
+  post_build:
+    commands:
+#AWS_DockerImageDeclaration()
+
+#AWS_TerraformJobDefinition()
+
+artifacts:
+#AWS_CodeBuild_Artifacts()

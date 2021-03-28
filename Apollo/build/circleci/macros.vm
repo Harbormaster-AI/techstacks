@@ -1,0 +1,60 @@
+########################################################################
+## CircleCI Docker Image Output
+########################################################################
+#macro( CircleCI_OutputDockerImageDecl )        
+    # CircleCI Node.js image
+    # mongodb image - runs in a common network where ports exposed
+    #          on the primary container are available on localhost
+    docker:
+      - image: circleci/node:10.9.0-jessie
+      - image: mongo:4.0.5
+        command: [mongod, --smallfiles]
+#end##macro( CircleCI_OutputDockerImageDecl )
+
+
+########################################################################
+## CircleCI Run Commands
+########################################################################
+#macro( CircleCI_RunCommands )
+# install the Angular CLI
+     # assign vars for Git
+      - run: 'export EMAIL=circleci@circleci.com'
+      - run: 'export GIT_AUTHOR_NAME=CircleCi'
+      - run: 'export GIT_COMMITTER_NAME=CircleCi'
+      
+     # install the Angular CLI, pip to /dev/null to remove analytics invocation
+      - run: 'sudo npm install -g @angular/cli@7.2.3 > /dev/null'
+
+      # create an appRoot directory to install into 
+      - run: mkdir /home/circleci/appRoot
+
+      # create a new Angular project shell
+      - run: cd /home/circleci/appRoot && ng new ${appName} --defaults
+
+      # copy the application files from the working directory
+      - run: cp -r -n /home/circleci/appRoot/${appName}/ /home/circleci/gitRoot/
+
+      # setup the application, copies generated app files to the project directory
+      - run: cd /home/circleci/gitRoot/${appName} && npm install --prod && npm run setup
+
+      # perform the build into a directory called angular under the dist directory
+      - run: cd /home/circleci/gitRoot/${appName} && ng build #--base-href /${appName}/
+      
+#if ( ${aib.getParam('jfrog.inUse')} == "true" || ${aib.getParam('nexus.inUse')} == "true" )
+      # deploy to target repo
+      - run: npm run deploy
+#end      
+
+#end###macro( CircleCI_RunCommands )
+
+########################################################################
+## CircleCI Store Test Results
+########################################################################
+#macro( CircleCI_StoreTestResults )
+#end###macro( CircleCI_StoreTestResults )
+
+########################################################################
+## CircleCI Store Artifact
+########################################################################
+#macro( CircleCI_StoreArtifacts )
+#end###macro( CircleCI_StoreArtifacts )

@@ -1,0 +1,11 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+template: true   # required for local templates
+valuesFilePath: ./values.yml
+
+#JFrog_Pipelines_Resource_Declaration()
+#JFrog_Pipelines_Pipeline_Declaration()
+

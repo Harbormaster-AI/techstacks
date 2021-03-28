@@ -1,0 +1,20 @@
+########################################################################
+## Bitbucket_Pipeline_Step
+########################################################################
+#macro( Bitbucket_Pipeline_Step )  
+  - step:
+      name: build, test, and package RESTful API
+      script:
+          - export DATABASE_USERNAME=root
+          - export DATABASE_PASSWORD=letmein2
+          - export DATABASE_DIALECT=org.hibernate.dialect.MySQL5Dialect
+          - export DATABASE_DRIVER=com.mysql.cj.jdbc.Driver
+          - export DATABASE_URL=jdbc:mysql://localhost:3306/bitbuckettest?createDatabaseIfNotExist=true
+# first run test using JUnit 
+          - mvn dependency:go-offline test -f pom-restful-api.xml
+  - step:
+      name: deploy lambda functions
+      script:
+# Make sure the key vars (USER_AWS_ACCESSKEY and USER_AWS_SECRETKEY) are read in as env vars for the current project. 
+          - mvn package lambda:delete-lambda lambda:deploy-lambda -f pom-aws-lambda.xml  -DAWS_ACCESSKEY=$USER_AWS_ACCESSKEY -DAWS_SECRETKEY=$USER_AWS_SECRETKEY # deploy the lambda functions 
+#end##macro( Bitbucket_Pipeline_Step )  

@@ -1,0 +1,23 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+${appName}Service:
+  build:
+    image: ${appName}
+    dockerfile: Dockerfile_For_Setup
+  cached: true
+  volumes:
+    - ./tmp/code:/code 
+adddocker:
+  build:
+    image: realmethods/${appName}
+    dockerfile: Dockerfile_For_CodeShip
+  volumes_from:
+    - ${appName}Service
+terraform:
+  build:
+    dockerfile: Dockerfile_For_Terraform
+  volumes_from:
+    - ${appName}Service

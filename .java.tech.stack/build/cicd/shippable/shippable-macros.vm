@@ -1,0 +1,56 @@
+########################################################################
+## Semaphore Macros
+########################################################################
+
+########################################################################
+## Shippable_Language_Declaration
+########################################################################
+#macro( Shippable_Language_Declaration )
+language: java
+
+jdk:
+  - oraclejdk8
+#end##macro( Shippable_Language_Declaration )
+
+########################################################################
+## Shippable_EnvVar_Declarations
+########################################################################
+#macro( Shippable_EnvVar_Declarations )
+#### force usage of MySQL for the purpose of testing with mvn test  
+env:
+  - DATABASE_USERNAME=shippable DATABASE_PASSWORD= DATABASE_DIALECT=org.hibernate.dialect.MySQL8Dialect DATABASE_DRIVER=com.mysql.cj.jdbc.Driver
+#end##macro( Shippable_EnvVar_Declarations )
+
+########################################################################
+## Shippable_Cache
+########################################################################
+#macro( Shippable_Cache )
+  cache: true
+#end##macro( Shippable_Cache )
+
+########################################################################
+## Shippable_CI
+########################################################################
+#macro( Shippable_CI )
+  ci:
+    - mysql -e "CREATE USER shippable@localhost IDENTIFIED BY ''; GRANT ALL ON *.* TO shippable@localhost; FLUSH PRIVILEGES;"
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoRepoUrl = ${aib.getParam('artifact-repo.mavenRepoUrl')} )
+    - mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
+#else        
+    - mvn test
+#end    
+    - mkdir -p shippable/testresults
+    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} shippable/testresults/ \;
+#end##macro( Shippable_CI )
+
+########################################################################
+## Shippable_Services
+########################################################################
+#macro( Shippable_Services )
+services:
+  - mysql    
+#end##macro( Shippable_Services )
+

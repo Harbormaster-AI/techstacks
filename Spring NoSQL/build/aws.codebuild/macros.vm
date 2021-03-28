@@ -1,0 +1,40 @@
+########################################################################
+## AWS Codebuild Install Phase Commands
+########################################################################
+#macro( AWS_CodeBuild_Install_Phase_Commands )  
+  install:
+    commands:
+      - echo Entered the install phase...
+      - apt-get update -y
+      - echo Installing Apache Maven...
+      - apt-get install -y maven
+      - echo Installing MongoDB...
+      - apt-get -y install mongodb-server
+      - echo Starting mongodb server...
+      - service mongodb start
+    finally:
+      - echo Install phase complete...
+#end##macro( AWS_CodeBuild_Install_Phase_Commands )
+
+########################################################################
+## AWS Codebuild Build Phase Commands
+########################################################################
+#macro( AWS_CodeBuild_Build_Phase_Commands )
+  build:
+    commands:
+      - echo Entered the build phase...
+      - mvn package
+    finally:
+      - echo Build phase complete
+#end##macro( AWS_CodeBuild_Build_Phase_Commands )
+
+########################################################################
+## AWS Codebuild Artifact Declaration
+########################################################################
+#macro( AWS_CodeBuild_Artifacts )
+  files:
+    - ${appName}/*.egg-info
+  cache:
+    paths:
+      - '/root/.cache/pip'
+#end##macro( AWS_CodeBuild_Artifacts )

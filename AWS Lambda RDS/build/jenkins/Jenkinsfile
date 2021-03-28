@@ -1,0 +1,20 @@
+node {
+    checkout scm
+    
+    docker.image('mysql:5').withRun('-e "MYSQL_ROOT_PASSWORD=letmein2"') { c ->
+        docker.image('maven:3.3.9').inside("--link ${c.id}:db \
+                                              -e 'DATABASE_USERNAME=root' \
+                                              -e 'DATABASE_PASSWORD=letmein2' \
+                                              -e 'DATABASE_DIALECT=org.hibernate.dialect.MySQL5Dialect' \
+                                              -e 'DATABASE_URL=jdbc:mysql://db:3306/jenkinstest?createDatabaseIfNotExist=true'") {
+            try {
+                sh 'mvn test -f pom-restful-api.xml'
+
+                /*   # You must assign the key vars (USER_AWS_ACCESSKEY and USER_AWS_SECRETKEY) as env vars for the current project.*/
+                sh 'mvn package lambda:delete-lambda lambda:deploy-lambda -f pom-aws-lambda.xml -DAWS_ACCESSKEY=$USER_AWS_ACCESSKEY -DAWS_SECRETKEY=$USER_AWS_SECRETKEY'
+                junit 'target/surefire-reports/TEST-*.xml'
+            } finally {
+            }                                            
+        }
+    }
+}

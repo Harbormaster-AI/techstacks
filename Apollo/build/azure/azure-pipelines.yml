@@ -1,0 +1,49 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+pool:
+  vmImage: 'ubuntu-16.04'
+
+variables: # pipeline-level
+  BUILD_ENV: 'PROD'
+
+steps:
+- script: docker run -d --name=rm-test-mongo mongo
+  displayName: 'installing latest mongodb docker image'
+
+- script: sudo npm install -g @angular/cli
+  displayName: 'installing angular7 CLI'
+
+- script: |
+    sudo mkdir -p $(Build.SourcesDirectory)/appRoot
+    cd $(Build.SourcesDirectory)/appRoot
+    sudo ng new ${appName} --defaults
+  displayName: 'create ${appName} angular project'
+
+- script: |
+    ls $(Build.SourcesDirectory)
+    sudo cp -r $(Build.SourcesDirectory)/${appName}/. $(Build.SourcesDirectory)/appRoot/${appName}
+  displayName: 'laying generated ${appName} source over angular project'
+
+- script: |
+    cd $(Build.SourcesDirectory)/appRoot/${appName}
+    sudo npm install --${BUILD_ENV}
+    sudo npm audit fix
+  displayName: 'installing app depenedencies'
+
+- script: |
+    cd $(Build.SourcesDirectory)/appRoot/${appName}
+    sudo npm run setup
+  displayName: 'running mongoose/mongodb setup'
+
+- script: |
+    cd $(Build.SourcesDirectory)/appRoot/${appName}
+    sudo ng build
+#if ( ${aib.getParam('jfrog.inUse')} == "true" || ${aib.getParam('nexus.inUse')} == "true" )
+    sudo npm run deploy
+#end
+    
+  displayName: 'build the entire application'
+   

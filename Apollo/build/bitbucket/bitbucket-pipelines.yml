@@ -1,0 +1,27 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+image: node:8
+pipelines:
+  default:
+  - step:
+      name: install ${appName} dependencies and build
+      script:
+        - expose FULL_APP_DIR=./appRoot/${appName}
+        - npm install -g @angular/cli
+        - mkdir -p appRoot
+        - cd appRoot
+        - ng new ${appName} --defaults
+        - ls
+        - cp -r ./${appName}/. $FULL_APP_DIR
+        - cd $FULL_APP_DIR
+        - npm install --prod
+        - npm run setup
+        - ng build
+#if ( ${aib.getParam('jfrog.inUse')} == "true" || ${aib.getParam('nexus.inUse')} == "true" )
+        - npm run deploy
+#end
+    
+

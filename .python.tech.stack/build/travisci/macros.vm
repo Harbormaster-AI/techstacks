@@ -1,0 +1,64 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+########################################################################
+## Travis_Language_Declaration
+########################################################################
+#macro( Travis_Language_Declaration )
+language: python
+python: 3.7
+#end##macro( Travis_Language_Declaration )
+
+########################################################################
+## Travis_Cache_Declaration
+########################################################################
+#macro( Travis_Cache_Declaration )
+cache: pip
+#end##macro( Travis_Cache_Declaration )
+
+########################################################################
+## Travis_EnvVar_Declarations
+########################################################################
+#macro( Travis_EnvVar_Declarations )
+env: 
+  - PIPENV_VENV_IN_PROJECT: true
+#end##macro( Travis_EnvVar_Declarations )
+
+########################################################################
+## Travis_Before_Install 
+########################################################################
+#macro( Travis_Before_Install )
+before_install:
+- echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
+- git lfs pull
+#end##macro( Travis_Before_Install )
+
+########################################################################
+## Travis_Install 
+########################################################################
+#macro( Travis_Install )
+install: 
+  - "sudo pip install pipenv"
+  - "sudo pipenv install"
+  - "sudo pipenv install Django"
+  - "sudo pipenv install pytest-django"
+#end##macro( Travis_Install )
+
+########################################################################
+## Travis_Script 
+########################################################################
+#macro( Travis_Script )
+script: 
+  - "sudo pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests"
+#end##macro( Travis_Script )
+
+########################################################################
+## Travis_Script 
+########################################################################
+#macro( Travis_Services )
+#end##macro( Travis_Services )
+
+
+

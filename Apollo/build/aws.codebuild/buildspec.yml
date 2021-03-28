@@ -1,0 +1,50 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+version: 0.2
+env:
+  variables:
+    BUILD_ENV: "prod"
+
+phases:
+  install:
+    commands:
+      - echo Entered the install phase...
+      - apt-get update -y
+      - apt-get -y install mongodb-server
+      - echo Starting mongodb server...
+      - service mongodb start
+      - echo Installing Angular CLI...
+      - npm install -g @angular/cli
+      - mkdir -p ${CODEBUILD_SRC_DIR}/appRoot
+      - cd ${CODEBUILD_SRC_DIR}/appRoot
+      - echo Creating new Angular project ${appName}...      
+      - ng new ${appName} --defaults
+      - ls $CODEBUILD_SRC_DIR
+      - cp -r ${CODEBUILD_SRC_DIR}/${appName}/. $CODEBUILD_SRC_DIR/appRoot/${appName}
+      - cd $CODEBUILD_SRC_DIR/appRoot/${appName}
+      - echo install ${BUILD_ENV}...      
+      - npm install --${BUILD_ENV}
+      - echo Running setup...      
+      - npm run setup
+    finally:
+      - echo Install phase complete...
+  build:
+    commands:
+      - echo Entered the build phase...
+      - "ng build" 
+#if ( ${aib.getParam('jfrog.inUse')} == "true" || ${aib.getParam('nexus.inUse')} == "true" )
+      - npm run deploy
+#end      
+    finally:
+      - echo Build phase complete
+artifacts:
+  files:
+  - '**/*'
+  base-directory: 'dist*'
+  discard-paths: yes
+  cache:
+    paths:
+      - '/node_modules/**/*'

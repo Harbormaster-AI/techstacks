@@ -1,0 +1,73 @@
+########################################################################
+## Semaphore Macros
+########################################################################
+
+########################################################################
+## Semaphore_Machine_Declaration
+########################################################################
+#macro( Semaphore_Machine_Declaration )
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+#end##macro( Semaphore_Machine_Declaration )
+
+########################################################################
+## Semaphore_Block_Name
+########################################################################
+#macro( Semaphore_Block_Name )
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true"  )
+  - name: Build-Test-Deploy using Maven
+#else
+  - name: Build-Test using Maven
+#end##if ( ${aib.getParam('artifact-repo.inUse')} == "true"  )
+#end##macro( Semaphore_Block_Name )
+
+########################################################################
+## Semaphore_Env_Vars
+########################################################################
+#macro( Semaphore_Env_Vars )    
+      env_vars:
+        - name: DEFAULT_HOST_ADDRESS
+          value: "mongo"
+        - name: DEFAULT_HOST_PORT
+          value: "27017"
+#end##macro( Semaphore_Env_Vars )
+
+########################################################################
+## Semaphore_Prologue
+########################################################################
+#macro( Semaphore_Prologue )
+      prologue:
+        commands:
+          - cache restore maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml)     
+          - sem-service start mongodb
+          - sem-service status mongodb
+          - sem-service start memcached
+          - sem-service status memcached
+          - checkout
+#end##macro( Semaphore_Prologue )
+
+########################################################################
+## Semaphore_Prologue
+########################################################################
+#macro( Semaphore_Prologue )
+      prologue:
+        commands:
+          - cache restore maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml)     
+          - sem-service start mongodb
+          - sem-service status mongodb
+          - sem-service start memcached
+          - sem-service status memcached
+          - checkout
+#end##macro( Semaphore_Prologue )
+
+########################################################################
+## Semaphore_Jobs
+########################################################################
+#macro( Semaphore_Jobs )
+      jobs:
+        - name: Running test using Junit
+          commands:
+            - mvn dependency:go-offline test
+            - cache store maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml) ~/.m2
+#end##macro( Semaphore_Jobs )

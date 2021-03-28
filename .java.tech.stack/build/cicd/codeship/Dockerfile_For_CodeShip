@@ -1,0 +1,28 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#Codeship_From_Image()
+
+# this allows for updates to take place without failure
+RUN printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
+
+# install dos2unix
+RUN apt-get update --fix-missing && \
+apt-get install -y dos2unix
+
+# copy all file to a working directory
+ARG PROJECT=${appName}
+ARG PROJECT_DIR=/var/www/${PROJECT}
+RUN mkdir -p $PROJECT_DIR
+COPY /tmp/code/gitRoot /var/www/
+RUN ls /var/www
+RUN ls /var/www/${appName}
+
+#Codeship_Install()
+
+# prepare entrypoint
+RUN dos2unix /var/www/entrypoint.sh
+RUN chmod +x /var/www/entrypoint.sh
+ENTRYPOINT ["/var/www/entrypoint.sh"]

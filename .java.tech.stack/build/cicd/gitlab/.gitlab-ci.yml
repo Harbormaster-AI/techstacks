@@ -1,0 +1,23 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#GitLab_Image_Declarations()
+
+#GitLab_Service_Declarations()
+
+#GitLab_Variable_Declarations()
+
+#GitLab_Cache_Declaration()
+
+#GitLab_Stage_Declarations()
+
+#GitLab_Before_Script()
+
+#GitLab_Stage_Definitions()
+
+#GitLab_After_Script()
+
+#GitLab_Artifacts()
+      

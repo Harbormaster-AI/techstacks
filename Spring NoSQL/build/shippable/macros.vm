@@ -1,0 +1,8 @@
+########################################################################
+## Shippable_Services
+########################################################################
+#macro( Shippable_Services )
+services:
+  - memcached
+  - mongodb    
+#end##macro( Shippable_Services )

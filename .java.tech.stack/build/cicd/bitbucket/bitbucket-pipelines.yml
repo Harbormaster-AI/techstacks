@@ -1,0 +1,8 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#Bitbucket_Pipeline_Image_Declaration()
+#Bitbucket_Pipeline_Pipelines()
+#Bitbucket_Pipeline_Definitions() 

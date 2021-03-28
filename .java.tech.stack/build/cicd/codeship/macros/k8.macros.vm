@@ -1,0 +1,100 @@
+########################################################################
+## Expose_K8_Ports - Default is an app using MySQL
+########################################################################
+#macro( Expose_K8_Ports )
+################################################################
+################################################################    
+## expose the MySQL port for better remote client 
+################################################################
+    port {
+      name        = "mysql-port"
+      port        = 3306
+      target_port = 3306
+    }
+#end##macro( Expose_K8_Ports )
+
+########################################################################
+## Declare_K8_Containers - Default is an app using MySQL
+########################################################################
+#macro( Declare_K8_Containers )
+################################################################
+## MySQL container
+################################################################
+    template {
+      container {
+        image = "mysql"
+        name  = "mysql"
+
+        port {
+          container_port = 3606
+        }
+
+        resources {
+          requests {
+            cpu    = "100m"
+            memory = "100Mi"
+          }
+        }
+      }
+
+################################################################
+## ${appName} container
+################################################################
+#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
+#set( $dockerRepo = ${aib.getParam("docker.repo")} )
+#set( $dockerTag = ${aib.getParam("docker.tag")} )      
+      container {
+        image = "${dockerOrgName}/${dockerRepo}:${dockerTag}"
+        name  = "app-container"
+        
+################################################################        
+## need to make the MySQL host available to the app Docker image
+################################################################
+        env {
+          name  = "DATABASE_USERNAME"
+          value = "root"                 
+        }
+
+        env {
+          name  = "DATABASE_PASSWORD"
+          value = ""                 
+        }
+
+        env {
+          name  = "DATABASE_DIALECT"
+          value = "org.hibernate.dialect.MySQL8Dialect"                 
+        }
+
+        env {
+          name  = "DATABASE_DRIVER"
+          value = "com.mysql.cj.jdbc.Driver"                 
+        }
+
+        env {
+          name  = "DATABASE_URL"
+          value = jdbc:mysql://${esc.dollar}{kubernetes_service.app-master.load_balancer_ingress.0.ip}:3306/${appName}?createDatabaseIfNotExist=true                 
+        }
+        
+################################################################
+## expose the application ports
+################################################################        
+        port {
+          container_port = 8080
+        }
+
+################################################################
+## expose the mysql port
+################################################################                        
+        port {
+          container_port = 3606
+        }
+
+        resources {
+          requests {
+            cpu    = "100m"
+            memory = "100Mi"
+          }
+        }
+      }
+    }
+#end##macro( Declare_K8_Containers )

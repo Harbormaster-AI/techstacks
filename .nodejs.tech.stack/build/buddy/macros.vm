@@ -1,0 +1,83 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#set( $gitRepoName = $aib.getParam("git.repository") )
+########################################################################
+## Buddy Macros
+########################################################################
+
+########################################################################
+## Buddy_Actions
+########################################################################
+#macro( Buddy_Actions )
+  - action: "Execute: npm commands"
+    type: "BUILD"
+    working_directory: "/buddy/${gitRepoName}"
+    docker_image_name: "library/node"
+    docker_image_tag: "8"    
+    execute_commands:
+    - npm i -g npm
+    - npm install -g @angular/cli
+    - mkdir -p $APP_ROOT_DIR
+    - cd $APP_ROOT_DIR
+    - ng new $APP_NAME --defaults
+    - cd ..
+    - cp -r $APP_NAME/. $APP_ROOT_DIR/$APP_NAME/.
+    - cd $APP_ROOT_DIR/$APP_NAME/
+    - npm install --prod
+    - npm run setup
+    - ng build
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+    - npm run deploy
+#end    
+#end##macro( Buddy_Actions )
+
+########################################################################
+## Buddy_Variable_Declarations
+########################################################################
+#macro( Buddy_Variable_Declarations )
+    variables:
+    - key: "APP_NAME"
+      value: "${appName}"
+      settable: true
+      description: "application name"
+    - key: "APP_ROOT_DIR"
+      value: "appRoot"
+      settable: true
+      description: "app root directory"
+    - key: "DEFAULT_HOST_ADDRESS"
+      value: "mongo"
+      settable: true
+      description: "default mongo host address, not localhost since in a docker container"
+    - key: "DEFAULT_HOST_PORT"
+      value: "27017"
+      settable: true
+      description: "default host port"         
+#end##macro( Buddy_Variable_Declarations )
+
+########################################################################
+## Buddy_Service_Declarations
+########################################################################
+#macro( Buddy_Service_Declarations )
+    services:
+    - type: "MEMCACHED"
+      version: "1.4.29"
+      connection:
+        host: "memcached"
+        port: 11211
+    - type: "MONGO_DB"
+      version: "3.2.4"
+      connection:
+        host: "mongo"
+        port: 27017 
+#end##macro( Buddy_Service_Declarations )
+
+########################################################################
+## Buddy_Cache_Declaration
+########################################################################
+#macro( Buddy_Cache_Declaration )
+    cached_dirs:
+    - "/node_modules"
+#end##macro( Buddy_Cache_Declaration )

@@ -1,0 +1,65 @@
+########################################################################
+## Common CI/CD Macros
+########################################################################
+
+########################################################################
+## Determine which files to include in a generation session based
+## on the CI/CD Platform type.  Supports generating for multiple 
+## platforms at once
+########################################################################
+
+#macro( determineCICDPlatformFiles )
+#set( $cicd = ${aib.getParam( "cicd.platform" )} )
+#if ( $cicd == $null || $cicd == "" ) 
+## do nothing
+#else
+#if ( $cicd.indexOf("jenkins") >= 0 )
+Jenkinsfile=
+#end##if ( $cicd.indexOf("jenkins") >= 0 )
+#if ( $cicd.indexOf("codeship") >= 0 )
+codeship-services.yml
+codeship-steps.yml=
+Dockerfile_For_Setup=
+Dockerfile_For_CodeShip=
+Dockerfile_For_Terraform=
+projectbuild.sh=
+terraform.sh=
+codeship.aes=
+docker.decrypted=
+aws.env.encrypted=
+empty.tmp.code.file=.tmp.code
+empty.code.file=.code
+#end##if ( $cicd.indexOf("codeship") >= 0 )
+#if ( $cicd.indexOf("azure") >= 0 )
+azure-pipelines.yml=
+#end##if ( $cicd.indexOf("azure") >= 0 )
+#if ( $cicd.indexOf("aws") >= 0 )
+buildspec.yml=
+#end##if ( $cicd.indexOf("aws") >= 0 )
+#if ( $cicd.indexOf("buddy") >= 0 )
+buddy.yml=
+#end##if ( $cicd.indexOf("buddy") >= 0 )
+#if ( $cicd.indexOf("shippable") >= 0 )
+shippable.yml=
+#end##if ( $cicd.indexOf("shippable") >= 0 )
+#if ( $cicd.indexOf("travis") >= 0 )
+.travis.yml=
+#end##if ( $cicd.indexOf("travis") >= 0 )
+#if ( $cicd.indexOf("jfrog.pipelines") >= 0 )
+pipelines.yml=
+values.yml
+#end##if ( $cicd.indexOf("jfrog.pipelines") >= 0 )
+#if ( $cicd.indexOf("circleci") >= 0 )
+config.yml=..circleci
+#end##if ( $cicd.indexOf("circleci") >= 0 )
+#if ( $cicd.indexOf("bitbucket") >= 0 )
+bitbucket-pipelines.yml=
+#end##if ( $cicd.indexOf("bitbucket") >= 0 )
+#if ( $cicd.indexOf("gitlab") >= 0 )
+.gitlab-ci.yml=
+#end##if ( $cicd.indexOf("gitlab") >= 0 )
+#if ( $cicd.indexOf("semaphore") >= 0 )
+semaphore.yml=..semaphore
+#end##if ( $cicd.indexOf("semaphore") >= 0 )
+#end##if ( $cicd == $null || $cicd == "" )
+#end##macro( determineCICDPlatform )

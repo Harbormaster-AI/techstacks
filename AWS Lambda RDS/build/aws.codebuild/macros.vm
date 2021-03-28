@@ -1,0 +1,33 @@
+########################################################################
+## AWS Codebuild Install Phase Commands
+########################################################################
+#macro( AWS_CodeBuild_Install_Phase_Commands )
+  install:
+    commands:
+      - echo Entered the install phase...
+      - apt-get update -y
+      - echo Installing Apache Maven...
+      - apt-get install -y maven
+      - echo Installing MongoDB...
+      - apt-get -y install mongodb-server
+      - echo Starting mongodb server...
+      - service mongodb start
+    finally:
+      - echo Install phase complete...
+#end##macro( AWS_CodeBuild_Install_Phase_Commands )
+
+########################################################################
+## AWS Codebuild Build Phase Commands
+########################################################################
+#macro( AWS_CodeBuild_Build_Phase_Commands )
+  build:
+    commands:
+      - echo Entered the build phase...
+      - echo 1st, build-test Spark Restful API as a normal Java package
+      - mvn dependency:go-offline test -f pom-restful-api.xml
+      - echo finally, build and deploy the Lambda functions
+      - mvn package lambda:delete-lambda lambda:deploy-lambda -f pom-aws-lambda.xml  -DAWS_ACCESSKEY=$USER_AWS_ACCESSKEY -DAWS_SECRETKEY=$USER_AWS_SECRETKEY # deploy the lambda functions 
+    finally:
+      - echo Build phase complete
+#end##macro( AWS_CodeBuild_Build_Phase_Commands )
+

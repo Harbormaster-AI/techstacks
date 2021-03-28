@@ -1,0 +1,18 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#set( $gitRepoName = $aib.getParam("git.repository") )
+- pipeline: "${appName} build-test pipeline"
+  trigger_mode: "ON_EVERY_PUSH"
+  trigger_condition: "ALWAYS"
+  ref_name: "${gitRepoName}"
+  ref_type: "BRANCH"  
+#Buddy_Actions()
+#Buddy_Variable_Declarations()
+#Buddy_Service_Declarations()
+#Buddy_Cache_Declaration()
+    mount_filesystem_path: "/buddy/${gitRepoName}"
+    shell: "BASH"
+    trigger_condition: "ALWAYS"

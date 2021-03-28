@@ -1,0 +1,531 @@
+#macro( outputAWSLambdaCRUDs $className $exposeAPI )
+#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
+
+    /**
+     * Creates the provided ${className}
+     * @param		businessObject 	${className}
+	 * @param		context		Context	
+     * @return     	${className}
+     * @exception   CreationException
+     */
+#if( $exposeAPI == true )     
+    @ApiOperation(value = "Creates a ${className}", notes = "Creates ${className} using the provided data" )
+    @POST
+    @Path("/create")
+    @Consumes(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )
+    public static ${className} create${className}( 
+    		@ApiParam(value = "${className} entity to create", required = true) ${className} businessObject, 
+    		Context context ) 
+    	throws CreationException {
+    	
+		if ( businessObject == null ) {
+            String errMsg = "Null ${className} provided but not allowed " + getContextDetails(context);
+            context.getLogger().log( errMsg );
+            throw new CreationException( errMsg ); 
+        }
+      
+        // return value once persisted
+        ${className}DAO dao  = get${className}DAO();
+        
+        try {
+            businessObject = dao.create${className}( businessObject );
+        }
+        catch (Exception exc) {
+        	String errMsg = "${className}AWSLambdaDelegate:create${className}() - Unable to create ${className}" + getContextDetails(context) + exc;
+        	context.getLogger().log( errMsg );
+            throw new CreationException( errMsg );
+        }
+        finally {
+            release${className}DAO( dao );            
+        }        
+         
+        return( businessObject );
+         
+     }
+
+    /**
+     * Method to retrieve the ${className} via a supplied ${className}PrimaryKey.
+     * @param 	key
+	 * @param	context		Context
+     * @return 	${className}
+     * @exception NotFoundException - Thrown if processing any related problems
+     */
+#if( $exposeAPI == true )     
+    @ApiOperation(value = "Gets a ${className}", notes = "Gets the ${className} associated with the provided primary key", response = ${className}.class)
+    @GET
+    @Path("/find")
+    @Produces(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )        
+    public static ${className} get${className}( 
+    		@ApiParam(value = "${className} primary key", required = true) ${className}PrimaryKey key, 
+    		Context context  ) 
+    	throws NotFoundException {
+        
+        ${className} businessObject  	= null;                
+        ${className}DAO dao 			= get${className}DAO();
+            
+        try {
+        	businessObject = dao.find${className}( key );
+        }
+        catch( Exception exc ) {
+            String errMsg = "Unable to locate ${className} with key " + key.toString() + " - " + getContextDetails(context) + exc;
+            context.getLogger().log( errMsg );
+            throw new NotFoundException( errMsg );
+        }
+        finally {
+            release${className}DAO( dao );
+        }        
+        
+        return businessObject;
+    }
+     
+   /**
+    * Saves the provided ${className}
+    * @param		businessObject		${className}
+	* @param		context		Context	
+    * @return       what was just saved
+    * @exception    SaveException
+    */
+#if( $exposeAPI == true )    
+    @ApiOperation(value = "Saves a ${className}", notes = "Saves ${className} using the provided data" )
+    @PUT
+    @Path("/save")
+    @Consumes(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )    
+    public static ${className} save${className}( 
+    		@ApiParam(value = "${className} entity to save", required = true) ${className} businessObject, Context context  ) 
+    	throws SaveException {
+
+    	if ( businessObject == null ) {
+            String errMsg = "Null ${className} provided but not allowed " + getContextDetails(context);
+            context.getLogger().log( errMsg );
+            throw new SaveException( errMsg ); 
+        }
+    	
+        // --------------------------------
+        // If the businessObject has a key, find it and apply the businessObject
+        // --------------------------------
+        ${className}PrimaryKey key = businessObject.get${className}PrimaryKey();
+                    
+        if ( key != null ) {
+            ${className}DAO dao = get${className}DAO();
+
+            try {                    
+                businessObject = (${className})dao.save${className}( businessObject );
+            }
+            catch (Exception exc) {
+                String errMsg = "Unable to save ${className}" + getContextDetails(context) + exc;
+                context.getLogger().log( errMsg );
+                throw new SaveException( errMsg );
+            }
+            finally {
+            	release${className}DAO( dao );
+            }
+        }
+        else {
+            String errMsg = "Unable to create ${className} due to it having a null ${className}PrimaryKey."; 
+            context.getLogger().log( errMsg );
+            throw new SaveException( errMsg );
+        }
+		        
+        return( businessObject );
+        
+    }
+     
+
+	/**
+     * Method to retrieve a collection of all ${className}s
+     * @param		context		Context
+     * @return 	ArrayList<${className}> 
+     */
+#if( $exposeAPI == true )     
+    @ApiOperation(value = "Get all ${className}", notes = "Get all ${className} from storage", responseContainer = "ArrayList", response = ${className}.class)
+    @GET
+    @Path("/getAll")
+    @Produces(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )
+    public static ArrayList<${className}> getAll${className}( Context context ) 
+    	throws NotFoundException {
+
+        ArrayList<${className}> array	= null;
+        ${className}DAO dao 			= get${className}DAO();
+        
+        try {
+            array = dao.findAll${className}();
+        }
+        catch( Exception exc ) {
+            String errMsg = "failed to getAll${className} - " + getContextDetails(context) + exc.getMessage();
+            context.getLogger().log( errMsg );
+            throw new NotFoundException( errMsg );
+        }
+        finally{
+        	release${className}DAO( dao );
+        }        
+        
+        return array;
+    }
+           
+     
+    /**
+     * Deletes the associated business object using the provided primary key.
+     * @param		key 	${className}PrimaryKey
+     * @param		context		Context    
+     * @exception 	DeletionException
+     */
+#if( $exposeAPI == true )     
+    @ApiOperation(value = "Deletes a ${className}", notes = "Deletes the ${className} associated with the provided primary key", response = ${className}.class)
+    @DELETE
+    @Path("/delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )
+	public static void delete${className}( 
+			@ApiParam(value = "${className} primary key", required = true) ${className}PrimaryKey key, 
+			Context context  ) 
+    	throws DeletionException {    	
+
+    	if ( key == null ) {
+            String errMsg = "Null key provided but not allowed " + getContextDetails(context) ;
+            context.getLogger().log( errMsg );
+            throw new DeletionException( errMsg );
+        }
+
+        ${className}DAO dao  = get${className}DAO();
+
+		boolean deleted = false;
+		
+        try {                    
+            deleted = dao.delete${className}( key );
+        }
+        catch (Exception exc) {
+        	String errMsg = "Unable to delete ${className} using key = "  + key + ". " + getContextDetails(context) + exc;
+        	context.getLogger().log( errMsg );
+            throw new DeletionException( errMsg );
+        }
+        finally {
+            release${className}DAO( dao );
+        }
+         		
+        return;
+     }
+
+// role related methods
+#set( $includeComposites = false )
+
+#foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
+#set( $roleName = $singleAssociation.getRoleName() )
+#set( $childName = $singleAssociation.getType() )
+#set( $parentName  = $classObject.getName() )
+    /**
+     * Gets the ${roleName} using the provided primary key of a ${className}
+     * @param		parentKey	${className}PrimaryKey
+     * @return    	${childName}
+     * @exception	NotFoundException
+     */
+#if( $exposeAPI == true )     
+    @ApiOperation(value = "Returns the get${roleName}", notes = "Returns the $get{roleName} using the provided primaryKey" )
+    @PUT
+    @Path("/get${roleName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )     
+	public static $childName get${roleName}( ${className}PrimaryKey parentKey, Context context )
+		throws NotFoundException {
+		
+		$className $lowercaseClassName 	= get${className}( parentKey, context );
+		${childName}PrimaryKey childKey = ${lowercaseClassName}.get${roleName}().get${childName}PrimaryKey(); 
+		${childName} child 				= ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
+		
+		return( child );
+	}
+
+    /**
+     * Assigns the ${roleName} on a ${className} using the provided primary key of a ${childName}
+     * @param		parentKey	${className}PrimaryKey
+     * @param		parentKey	${className}PrimaryKey
+     * @param		context		Context
+     * @return    	${className}
+     * @exception	SaveException
+     * @exception	NotFoundException
+     */
+#if( $exposeAPI == true )     
+    @ApiOperation(value = "Saves the ${roleName}", notes = "Saves the ${roleName} using the provided parent key and child key" )
+    @PUT
+    @Path("/save${roleName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )     
+	public static ${className} save${roleName}( ${className}PrimaryKey parentKey, 
+												${childName}PrimaryKey childKey,
+												Context context)
+		throws SaveException, NotFoundException {
+		
+		$className $lowercaseClassName 	= get${className}( parentKey, context );
+		${childName} child 				= ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
+
+		// assign the ${roleName}
+		${lowercaseClassName}.set${roleName}( child );
+	
+		// save the ${className} 
+		${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+		
+		return( $lowercaseClassName );
+	}
+
+    /**
+     * Unassigns the ${roleName} on a ${className}
+     * @param		parentKey	${className}PrimaryKey
+     * @param		Context		context
+     * @return    	${className}
+     * @exception	SaveException
+     * @exception	NotFoundException
+	 * @exception	SaveException	
+     */
+#if( $exposeAPI == true )     
+    @ApiOperation(value = "Deletes the ${roleName}", notes = "Deletes the ${roleName} of the provided parent key" )
+    @PUT
+    @Path("/delete${roleName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )     
+	public static ${className} delete${roleName}( ${className}PrimaryKey parentKey, Context context )
+	throws DeletionException, NotFoundException, SaveException {
+
+		$className $lowercaseClassName 	= get${className}( parentKey, context );
+		
+		if ( ${lowercaseClassName}.get${roleName}() != null ) {
+			${childName}PrimaryKey pk = ${lowercaseClassName}.get${roleName}().get${childName}PrimaryKey();
+			
+			// first null out the ${childName} on the parent so there's no constraint during deletion
+			${lowercaseClassName}.set${roleName}( null );
+			${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+			
+			// now it is safe to delete the ${roleName} 
+			${childName}AWSLambdaDelegate.delete${childName}( pk, context );
+		}
+
+		return( $lowercaseClassName );
+	}
+		
+#end##foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
+
+#foreach( $multiAssociation in $classObject.getMultipleAssociations() )
+#set( $roleName = $multiAssociation.getRoleName() )
+#set( $childName = $multiAssociation.getType() )
+#set( $parentName  = $classObject.getName() )
+    /**
+     * Retrieves the ${roleName} on a ${className}
+     * @param		parentKey	${className}PrimaryKey
+     * @param		context		Context
+     * @return    	Set<${childName}>
+     * @exception	NotFoundException
+     */
+#if( $exposeAPI == true )     
+    @ApiOperation(value = "Returns the ${roleName} collection", notes = "Returns the ${roleName} collection using the provided parent key and child key" )
+    @PUT
+    @Path("/get${roleName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )          
+	public static Set<${childName}> get${roleName}( ${className}PrimaryKey parentKey, Context context )
+		throws NotFoundException {
+    	$className $lowercaseClassName 	= get${className}( parentKey, context );
+    	return (${lowercaseClassName}.get${roleName}());
+    }
+    
+    /**
+     * Add the assigned ${childName} into the ${roleName} of the relevant ${className}
+     * @param		parentKey	${className}PrimaryKey
+     * @param		childKey	${childName}PrimaryKey
+	 * @param		context		Context
+     * @return    	${className}
+     * @exception	NotFoundException
+     */
+#if( $exposeAPI == true )     
+    @ApiOperation(value = "Add the ${roleName}", notes = "Add the child to the ${roleName} of the provided parent" )
+    @PUT
+    @Path("/save${roleName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )          
+	public static ${className} add${roleName}( ${className}PrimaryKey parentKey, 
+									${childName}PrimaryKey childKey, 
+									Context context )
+	throws SaveException, NotFoundException {
+		$className $lowercaseClassName 	= get${className}( parentKey, context );
+
+		// find the ${childName}
+		${childName} child = ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
+		
+		// add it to the ${roleName} 
+		${lowercaseClassName}.get${roleName}().add( child );				
+		
+		// save the ${className}
+		${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+
+		return ( ${lowercaseClassName} );
+	}
+
+    /**
+     * Saves multiple ${childName} entities as the ${roleName} to the relevant ${className}
+     * @param		parentKey	${className}PrimaryKey
+     * @param		List<${childName}PrimaryKey> childKeys
+     * @return    	${className}
+     * @exception	SaveException
+     * @exception	NotFoundException
+     */
+#if( $exposeAPI == true )     
+    @ApiOperation(value = "Assigns the ${roleName}", notes = "Assigns the collection of children to the ${roleName} of the provided parent" )
+    @PUT
+    @Path("/assign${roleName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )          
+	public ${className} assign${roleName}( ${className}PrimaryKey parentKey, 
+											List<${childName}PrimaryKey> childKeys, 
+											Context context )
+		throws SaveException, NotFoundException {
+
+		$className $lowercaseClassName 	= get${className}( parentKey, context );
+		
+		// clear out the ${roleName} 
+		${lowercaseClassName}.get${roleName}().clear();
+		
+		// finally, find each child and add
+		if ( childKeys != null )
+		{
+			${childName} child = null;
+			for( ${childName}PrimaryKey childKey : childKeys )
+			{
+				// retrieve the ${childName}
+				child = ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
+
+				// add it to the ${roleName} List
+				${lowercaseClassName}.get${roleName}().add( child );
+			}
+		}
+		
+		// save the ${className}
+		${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+
+		return( ${lowercaseClassName} );
+	}
+
+    /**
+     * Delete multiple ${childName} entities as the ${roleName} to the relevant ${className}
+     * @param		parentKey	${className}PrimaryKey
+     * @param		List<${childName}PrimaryKey> childKeys
+     * @return    	${className}
+     * @exception	DeletionException
+     * @exception	NotFoundException
+     * @exception	SaveException
+     */
+#if( $exposeAPI == true )     
+    @ApiOperation(value = "Deletes the ${roleName}", notes = "Deletes the provided childrent from the ${roleName} of the provided parent" )
+    @PUT
+    @Path("/delete${roleName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+#end##if( $exposeAPI == true )          
+	public ${className} delete${roleName}( ${className}PrimaryKey parentKey, 
+											List<${childName}PrimaryKey> childKeys, 
+											Context context )
+		throws DeletionException, NotFoundException, SaveException {		
+		$className $lowercaseClassName 	= get${className}( parentKey, context );
+
+		if ( childKeys != null ) {
+			Set<${childName}> children	= ${lowercaseClassName}.get${roleName}();
+			${childName} child 			= null;
+			
+			for( ${childName}PrimaryKey childKey : childKeys ) {
+				try {
+					// first remove the relevant child from the list
+					child = ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
+					children.remove( child );
+					
+					// then safe to delete the child				
+					${childName}AWSLambdaDelegate.delete${childName}( childKey, context );
+				}
+				catch( Exception exc ) {
+					String errMsg = "Deletion failed - " + exc.getMessage();
+					context.getLogger().log( errMsg );
+					throw new DeletionException( errMsg );
+				}
+			}
+			
+			// assign the modified list of ${childName} back to the ${lowercaseClassName}
+			${lowercaseClassName}.set${roleName}( children );			
+			// save it 
+			${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+		}
+		
+		return ( ${lowercaseClassName} );
+	}
+
+#end##foreach( $multiAssociation in $classObject.getMultipleAssociations() )
+    /**
+     * Returns the ${classObject.getName()} specific DAO.
+     *
+     * @return      ${classObject.getName()} DAO
+     */
+    public static ${classObject.getName()}DAO get${classObject.getName()}DAO() {
+        return( new ${aib.getRootPackageName(true)}.#getDAOPackageName().${classObject.getName()}DAO() ); 
+    }
+
+    /**
+     * Release the ${classObject.getName()}DAO back to the FrameworkDAOFactory
+     */
+    public static void release${classObject.getName()}DAO( ${aib.getRootPackageName(true)}.#getDAOPackageName().${classObject.getName()}DAO dao ) {
+        dao = null;
+    }
+
+#end##macro( outputAWSLambdaCRUDs $className )
+
+#macro( outputStdCRUDCalls  $classArg )
+#set( $className = $classArg.getName() )
+
+                case ( "create" ):
+                    return( ${className}.create${className}(new Gson().fromJson(jsonObjectData, ${className}.class));
+                case ( "find" ):
+                    return( ${className}.get${className}( parentKey, context );
+                case ( "save" ):
+                    return( ${className}.save${className}(new Gson().fromJson(jsonObjectData, ${className}.class));
+                case ( "delete" ):
+                    return( ${className}.delete${className}( parentKey );
+                case ( "getAll" ):
+                    return( ${className}.getAll${className}(context);
+#end##macro( outputStdCRUDCalls )
+
+#macro( outputSingleAssociationCRUDCalls $classArg )
+#set( $className = $classArg.getName() )
+#foreach( $singleAssociation in $classArg.getSingleAssociations( ${includeComposites} ) )
+#set( $roleName = $singleAssociation.getRoleName() )
+#set( $childName = $singleAssociation.getType() )
+                case ( "get${roleName}" ):
+                    return( ${className}.get${roleName}(parentKey, context);
+                case ( "save${roleName}" ):
+                    return( ${className}.save${roleName}(parentKey, childKey, context);
+                case ( "delete${roleName}" ):
+                    return( ${className}.delete${roleName}(parentKey, Context context );
+#end##foreach( $singleAssociation in $classArg.getSingleAssociations( ${includeComposites} ) )
+#end##macro( outputSingleAssociationCRUDCalls $classArg )
+
+#macro( outputMultipleAssociationCRUDCalls $classArg )
+#set( $className = $classArg.getName() )
+#foreach( $multiAssociation in $classArg.getMultipleAssociations() )
+#set( $roleName = $multiAssociation.getRoleName() )
+#set( $childName = $multiAssociation.getType() )
+                case ( "get${roleName}" ):
+                    return( ${className}.get${roleName}(parentKey, context);
+                case ( "add${roleName}" ):
+                    return( ${className}.add${roleName}(parentKey, childKey, context);
+                case ( "assign${roleName}" ):
+                    return( ${className}.assign${roleName}(parentKey, childKeys, context);
+                case ( "delete${roleName}" ):
+                    return( ${className}.delete${roleName}(parentKey, childKeys, context);
+#end##foreach( $singleAssociation in $classArg.getSingleAssociations( ${includeComposites} ) )
+#end##macro( outputMultipleAssociationCRUDCalls $classArg )
+
+
+#macro( outputCRUDCallsForClass( $class )
+        switch(${class.getName()}) { 
+#outputStdCRUDCalls( $class )
+#outputSingleAssociationCRUDCalls(  $class )
+#outputMultipleAssociationCRUDCalls(  $class )
+                default:
+					break;
+		}
+#end##macro( outputCRUDCallsForClass( $class )

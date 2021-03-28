@@ -1,0 +1,43 @@
+########################################################################
+## AWS Provider Terraform expressions
+########################################################################
+#macro( outputAsNutanixProvider )
+#set( $vmPassword = $aib.getParam("nutanix.vmPassword") )
+
+provider "nutanix" {
+  username  = "$aib.getParam( "nutanix.userName" )"
+  password  = "$aib.getParam( "nutanix.password" )"
+  endpoint  = "$aib.getParam( "nutanix.endpoint" )"
+  insecure  = $aib.getParam( "nutanix.insecure" )
+  port      = $aib.getParam( "nutanix.port" )
+  version = "~> 1.0"
+}
+
+
+resource "null_resource" "cluster" {
+
+  connection {
+    user = "$aib.getParam("nutanix.vmUserName")"
+    password = "${vmPassword}"
+    host = "$aib.getParam("nutanix.vmHost")"
+  }
+
+#set( $dockerUserName = ${aib.getParam("docker.userName")} ) 
+#set( $dockerPassword = ${aib.getParam("docker.password")} )
+#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
+#set( $dockerRepo = ${aib.getParam("docker.repo")} )
+#set( $dockerTag = ${aib.getParam("docker.tag")} )
+#set( $mongoHostAddress = "mongodb://${aib.getParam('mongodb.server address')}/${aib.getParam('mongodb.database name')}" )
+  provisioner "remote-exec" {
+    inline = [
+      "echo '${vmPassword}' | sudo -kS apt-get -y update",
+      "echo '${vmPassword}' | sudo -kS apt-get -y install docker",
+      "echo '${vmPassword}' | sudo -kS docker login --username ${dockerUserName} --password ${dockerPassword}",
+      "echo '${vmPassword}' | sudo -kS docker pull ${dockerOrgName}/${dockerRepo}:${dockerTag}",
+      "echo '${vmPassword}' | sudo -kS docker run -i -e MONGOOSE_HOST_NAME=${aib.getParam("nutanix.vmHost")} -e MONGO_HOST_ADDRESS=${mongoHostAddress} -p 4000:4000 -p 8088:8080 -p 8000:8000 ${dockerOrgName}/${dockerRepo}:${dockerTag}"
+    ]
+  }
+}
+
+
+#end

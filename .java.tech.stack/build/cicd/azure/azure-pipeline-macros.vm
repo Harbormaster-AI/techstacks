@@ -1,0 +1,51 @@
+########################################################################
+## Azure Pipeline Macros
+########################################################################
+
+########################################################################
+## Azure_Pipeline_Pool_Declaration
+########################################################################
+#macro( Azure_Pipeline_Pool_Declaration )
+pool:
+  vmImage: 'ubuntu-16.04'
+#end##macro( Azure_Pipeline_Pool_Declaration )
+
+########################################################################
+## Azure_Pipeline_Var_Declarations
+########################################################################
+#macro( Azure_Pipeline_Var_Declarations )
+variables: # pipeline-level
+  DATABASE_USERNAME: 'root'
+  DATABASE_PASSWORD: 'letmein2'
+  DATABASE_DIALECT: 'org.hibernate.dialect.MySQL8Dialect'
+  DATABASE_DRIVER: 'com.mysql.cj.jdbc.Driver'
+  DATABASE_URL: 'jdbc:mysql://127.0.0.1:3306/azuretest?createDatabaseIfNotExist=true'
+#end##macro( Azure_Pipeline_Var_Declarations )
+
+########################################################################
+## Azure_Pipeline_Steps
+########################################################################
+#macro( Azure_Pipeline_Steps )
+steps:
+- script: docker run -d --name=rm-test-mysql -e MYSQL_ROOT_PASSWORD=letmein2 mysql
+  displayName: 'installing latest mysql docker image'
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
+#set( $mavenGoals = "deploy" )
+#set( $mavenOptions = "--settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${nexusRepoUrl}" )
+#else
+#set( $mavenOptions = "" )
+#set( $mavenGoals = "package" )
+#end    
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '${mavenOptions}'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: yes
+    testResultsFiles: '**/TEST-*.xml'
+    goals: '${mavenGoals}'
+#end##macro( Azure_Pipeline_Steps )

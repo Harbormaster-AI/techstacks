@@ -1,0 +1,203 @@
+########################################################################
+## AWS Provider Terraform expressions
+########################################################################
+#macro( outputAsAWSProvider )
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+
+# Specify the provider and access details
+provider "aws" {
+  region     = "${aib.getParam("terraform.region")}"
+  access_key = "${var.aws-access-key}"
+  secret_key = "${var.aws-secret-key}"
+  version = "~> 2.0"
+}
+
+#outputAWSKeyPairDecl()
+
+#set( $aws-vpc = ${aib.getParam("terraform.aws-vpc")} )
+#if ( ${aws-vpc.isEmpty()} == true ) ## use the default
+#set( $aws-vpc = "${esc.dollar}{aws_vpc.default.id}" )
+# Default vpc
+resource "aws_vpc" "default" {
+  cidr_block = "10.0.0.0/16"
+}
+#end
+
+# Default security group to access
+# the instances over SSH and HTTP
+resource "aws_security_group" "web" {
+#  name        = "${appName}-security-group-from-terrorform" #optional, when omitted, terraform creates a random name
+  description = "security group for ${appName} web created from terraform"
+  vpc_id      = "${aws-vpc}"
+
+  # SSH access from anywhere
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # HTTP access from the VPC
+  ingress {
+    from_port   = 8000
+    to_port     = 8000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # HTTP access from the VPC
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  # outbound internet access
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# Our default security group to for the database
+resource "aws_security_group" "rds" {
+  description = "security group for ${appName} RDS created from terraform"
+  vpc_id      = "${aws-vpc}"
+
+  # mysql access from anywhere
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # outbound internet access
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+#set( $dbEngine = ${aib.getParam("terraform.db-engine")} )
+#set( $dbVersion = ${aib.getParam("terraform.db-version")} )
+resource "aws_db_instance" "default" {
+  depends_on             = ["aws_security_group.rds"]
+#  identifier             = "${appName}-rds" # Terraform will create a unique id if not assigned
+  allocated_storage      = "10"
+  engine                 = "${dbEngine}"
+  engine_version         = "${dbVersion}"
+  instance_class         = "${aib.getParam("terraform.aws-db-instance-type")}"
+  name                   = "${appName}"
+  username               = "${aib.getParam("hibernate.hibernate.connection.username")}"
+  password               = "${aib.getParam("hibernate.hibernate.connection.password")}"
+  vpc_security_group_ids = ["${aws_security_group.rds.id}"]
+}
+
+resource "aws_instance" "web" {
+  # The connection block tells our provisioner how to
+  # communicate with the resource (instance)
+  connection {
+    # The default username for our AMI
+    user = "ubuntu"
+    private_key = "${tls_private_key.generated.private_key_pem}"
+  }
+
+  instance_type = "${aib.getParam("terraform.aws-ec2-instance-type")}"
+  
+  tags = { Name = "${appName} instance" } 
+
+  # standard harbormaster community AMI with docker pre-installed
+  ami = "ami-05033408e5e831fb0"
+
+  # The name of the  SSH keypair you've created and downloaded
+  # from the AWS console.
+  #
+  # https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#KeyPairs:
+  #
+  # key_name = "${aib.getParam("terraform.aws-key-pair-name")}"
+  key_name = "${aws_key_pair.generated.key_name}"
+  
+  # Our Security group to allow HTTP and SSH access
+  vpc_security_group_ids = ["${aws_security_group.web.id}"]
+
+#set( $dockerUserName = ${aib.getParam("docker.userName")} ) 
+#set( $dockerPassword = ${aib.getParam("docker.password")} )
+#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
+#set( $dockerRepo = ${aib.getParam("docker.repo")} )
+#set( $dockerTag = ${aib.getParam("docker.tag")} )
+#set( $databaseUrl = "jdbc:${dbEngine}://${esc.dollar}{aws_db_instance.default.endpoint}/${appName}" )
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get -y update",
+      "sudo docker login --username ${dockerUserName} --password ${dockerPassword}",
+      "sudo docker pull ${dockerOrgName}/${dockerRepo}:${dockerTag}",
+      "sudo docker run -it -p 8000:8000 -p 8080:8080 -e DATABASE_URL=${databaseUrl} ${dockerOrgName}/${dockerRepo}:${dockerTag}"
+    ]
+  }
+}
+
+#outputSSHCommandDecl()
+
+#end
+
+########################################################################
+## aws key pair declaration components to dynamically create SSH access
+########################################################################
+#macro ( outputAWSKeyPairDecl )
+locals {
+  public_key_filename  = "${path.root}/keys/id_rsa.pub"
+  private_key_filename = "${path.root}/keys/id_rsa"
+}
+
+# Generate an RSA key to be used
+resource "tls_private_key" "generated" {
+  algorithm = "RSA"
+}
+
+# Generate the local SSH Key pair in the directory specified
+resource "local_file" "public_key_openssh" {
+  content  = "${tls_private_key.generated.public_key_openssh}"
+  filename = "${local.public_key_filename}"
+}
+resource "local_file" "private_key_pem" {
+  content  = "${tls_private_key.generated.private_key_pem}"
+  filename = "${local.private_key_filename}"
+}
+
+resource "aws_key_pair" "generated" {
+  key_name   = "pjsk-sshtest-${esc.dollar}{uuid()}"
+  public_key = "${tls_private_key.generated.public_key_openssh}"
+
+  lifecycle {
+    ignore_changes = ["key_name"]
+  }
+}
+#end ##macro ( outputAWSKeyPairDecl )
+
+########################################################################
+## expression to use to ssh into the created AWS EC2 instance
+########################################################################
+#macro ( outputSSHCommandDecl )
+output "ssh_command" {
+  description = "Command to use to SSH into the instance."
+  value = "ssh -i ${local.private_key_filename} ubuntu@${aws_instance.web.public_ip}"
+}
+#end ##macro ( outputSSHCommandDecl )
+
+########################################################################
+## declare default harbormaster community MongoDB AMI
+########################################################################
+#macro ( outputMongoDBCommunityAMIDecl )
+  # standard harbormaster community Amazon Machine Image using MongoDB started on the default port 
+  ami = "ami-05df3d475fe54e496"
+#end ##macro ( outputMongoDBCommunityAMIDecl )

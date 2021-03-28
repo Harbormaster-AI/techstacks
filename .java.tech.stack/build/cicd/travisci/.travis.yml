@@ -1,0 +1,23 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#Travis_Dist_Declaration()
+
+#Travis_Language_Declaration()
+
+#Travis_Cache_Declaration()
+
+#Travis_Git_Declaration()
+
+#Travis_EnvVar_Declarations()
+
+#Travis_Before_Install()
+
+#Travis_Install()
+
+#Travis_Script()
+
+#Travis_Services()
+  

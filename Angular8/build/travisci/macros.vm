@@ -1,0 +1,87 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+
+########################################################################
+## Travis_Language_Declaration
+########################################################################
+#macro( Travis_Language_Declaration )
+language: node_js
+node_js:
+  - "8"
+#end##macro( Travis_Language_Declaration )
+
+########################################################################
+## Travis_Cache_Declaration
+########################################################################
+#macro( Travis_Cache_Declaration )
+cache: npm
+#end##macro( Travis_Cache_Declaration )
+
+
+########################################################################
+## Travis_Git_Declaration
+########################################################################
+#macro( Travis_Git_Declaration )
+git:
+  depth: false
+  quiet: true
+#end##macro( Travis_Git_Declaration )
+
+
+########################################################################
+## Travis_EnvVar_Declarations
+########################################################################
+#macro( Travis_EnvVar_Declarations )
+env:
+  - APP_NAME=${appName} APP_ROOT_DIR=appRoot FULL_APP_DIR=$TRAVIS_BUILD_DIR/appRoot/${appName}
+#end##macro( Travis_EnvVar_Declarations )
+
+########################################################################
+## Travis_Before_Install 
+########################################################################
+#macro( Travis_Before_Install )
+before_install:
+  - "echo -e \"machine github.com\\n  login $GITHUB_TOKEN\" > ~/.netrc"
+  - "git lfs pull"
+#end##macro( Travis_Before_Install )
+
+
+########################################################################
+## Travis_Install 
+########################################################################
+#macro( Travis_Install )
+install: 
+  - "npm install -g @angular/cli"
+  - "mkdir -p $APP_ROOT_DIR"
+  - "cd $APP_ROOT_DIR"
+  - "ng new $APP_NAME --defaults"
+  - "ls $TRAVIS_BUILD_DIR"
+  - "cp -r $TRAVIS_BUILD_DIR/$APP_NAME/. $FULL_APP_DIR"
+  - "cd $FULL_APP_DIR"
+  - "npm install --prod"
+  - "npm run setup"
+#end##macro( Travis_Install )
+
+########################################################################
+## Travis_Script 
+########################################################################
+#macro( Travis_Script )
+script: 
+    - "ng build"
+#if ( ${aib.getParam('jfrog.inUse')} == "true" || ${aib.getParam('nexus.inUse')} == "true" )
+    - "npm run deploy"
+#end      
+#end##macro( Travis_Script )
+
+########################################################################
+## Travis_Script 
+########################################################################
+#macro( Travis_Services )
+services:
+  - mongodb
+#end##macro( Travis_Services )
+  
+

@@ -1,0 +1,28 @@
+########################################################################
+## determiner for which terraform file to use
+########################################################################
+#macro( determineDeploymentPlan )
+#if ( $aib.getParam( "kubernetes.inUse" ) == "true" )
+k8s.variables.tf=terraform.k8s
+k8s.tf=terraform.k8s
+pods.tf=terraform.k8s
+services.tf=terraform.k8s
+#if ( $aib.getParam( "kubernetes.hostTarget" ) == "google" )
+account.json=terraform
+k8.google.main.tf=terraform
+gcp.cluster.tf=terraform.gke
+gcp.tf=terraform.gke
+gcp.variables.tf=terraform.gke
+#elseif ( $aib.getParam( "kubernetes.hostTarget" ) == "aws" )
+k8.aws.main.tf=terraform
+aws.cluster.tf=terraform.eks
+aws.tf=terraform.eks
+aws.variables.tf=terraform.eks
+#elseif ( $aib.getParam( "kubernetes.hostTarget" ) == "nutanix" )
+main.tf=terraform
+#end ##if ( $aib.getParam( "kubernetes.hostTarget" ) == "google" )
+#else
+main.tf=terraform
+variables.tf=terraform
+#end ##if ( $aib.getParam( "kubernetes.inUse" ) == "true" )
+#end ##macro( determineDeploymentPlan )

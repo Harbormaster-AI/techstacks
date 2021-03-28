@@ -1,0 +1,55 @@
+########################################################################
+## Bitbucket_Pipeline_Image_Declaration
+########################################################################
+#macro( Bitbucket_Pipeline_Image_Declaration )
+image: node:8
+#end##macro( Bitbucket_Pipeline_Image_Declaration )
+
+########################################################################
+## Bitbucket_Pipeline_Definitions
+########################################################################
+#macro( Bitbucket_Pipeline_Definitions )          
+definitions:
+  services:
+    mongo: 
+      image: mongo
+#end##macro( Bitbucket_Pipeline_Definitions )
+
+########################################################################
+## Bitbucket_Pipeline_Step
+########################################################################
+#macro( Bitbucket_Pipeline_Step )  
+  - step:
+      name: install ${appName} dependencies and build
+      script:
+        - expose FULL_APP_DIR=./appRoot/${appName}
+        - npm install -g @angular/cli
+        - mkdir -p appRoot
+        - cd appRoot
+        - ng new ${appName} --defaults
+        - ls
+        - cp -r ./${appName}/. $FULL_APP_DIR
+        - cd $FULL_APP_DIR
+        - npm install --prod
+        - npm run setup
+        - ng build
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true"  )
+        - npm run deploy
+#end
+#end##macro( Bitbucket_Pipeline_Step )  
+
+########################################################################
+## Bitbucket_Pipeline_Caches
+########################################################################
+#macro( Bitbucket_Pipeline_Caches )
+      caches:
+          - node
+#end##macro( Bitbucket_Pipeline_Caches )
+
+########################################################################
+## Bitbucket_Pipeline_Services
+########################################################################
+#macro( Bitbucket_Pipeline_Services )  
+      services:
+          - mongo
+#end##macro( Bitbucket_Pipeline_Services )

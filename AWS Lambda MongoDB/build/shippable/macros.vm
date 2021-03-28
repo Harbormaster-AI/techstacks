@@ -1,0 +1,23 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+########################################################################
+## Shippable_CI
+########################################################################
+#macro( Shippable_CI )
+  ci:
+#### make use of the AWS S3/Lambda Maven Plugin to deploy the functions
+    - mvn package lambda:delete-lambda lambda:deploy-lambda -DAWS_ACCESSKEY=$USER_AWS_ACCESSKEY -DAWS_SECRETKEY=$USER_AWS_SECRETKEY
+#end##macro( Shippable_CI )
+
+########################################################################
+## Shippable_Services
+########################################################################
+#macro( Shippable_Services )
+services:
+  - mongodb    
+#end##macro( Shippable_Services )
+
+

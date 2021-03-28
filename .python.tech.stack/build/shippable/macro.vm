@@ -1,0 +1,67 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+########################################################################
+## Shippable_Language_Declaration
+########################################################################
+#macro( Shippable_Language_Declaration )
+language: python
+
+python:
+  - 3.7
+#end##macro( Shippable_Language_Declaration )
+
+########################################################################
+## Shippable_EnvVar_Declarations
+########################################################################
+#macro( Shippable_EnvVar_Declarations )
+#end##macro( Shippable_EnvVar_Declarations )
+
+########################################################################
+## Shippable_Cache
+########################################################################
+#macro( Shippable_Cache )
+  cache: true
+#end##macro( Shippable_Cache )
+
+########################################################################
+## Shippable_CI
+########################################################################
+#macro( Shippable_CI )
+  ci:
+#### Running tests using pytest
+
+    - '[ $EUID == 0 ] && SUDO="" || SUDO=sudo'
+    - $SUDO pip install pipenv
+    - pipenv install
+    - pipenv install Django
+    - pipenv install pytest-django
+    - pipenv run pytest --junitxml=shippable/testresults/junit.xml ${appName}/tests
+#if( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoName = ${aib.getParam('artifact-repo.type')} )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
+    - cd ${appName}
+    - echo creating distribution
+    - python setup.py sdist    
+    - echo -e "[distutils]" >> ~/.pypirc
+    - echo -e "index-servers = ${repoName}" >> ~/.pypirc
+    - echo -e "[${repoName}]" >> ~/.pypirc
+    - echo -e "username = ${repoUserName}" >> ~/.pypirc
+    - echo -e "password = ${repoPassword}" >> ~/.pypirc
+    - echo -e "repository = ${repoRepoUrl}" >> ~/.pypirc    
+    - echo installing twine
+    - pip install twine
+    - echo upload archive to ${repoName} repo
+    - twine upload -r ${repoName} dist/*.gz
+#end##if ( ${aib.getParam('repo.inUse')} == "true" )
+#end##macro( Shippable_CI )
+
+########################################################################
+## Shippable_Services
+########################################################################
+#macro( Shippable_Services )
+#end##macro( Shippable_Services )

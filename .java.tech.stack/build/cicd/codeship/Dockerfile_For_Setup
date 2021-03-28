@@ -1,0 +1,24 @@
+#Codeship_From_Image()
+
+# update and install dos2unix
+RUN apt-get update --fix-missing && \
+apt-get install -y dos2unix
+
+# assign vars for Git
+RUN export EMAIL=${aib.getParam("application.email")}
+RUN export GIT_AUTHOR_NAME=${aib.getParam("application.author")}
+RUN export GIT_COMMITTER_NAME=${aib.getParam("application.company name")}
+      
+#Codeship_Install()      
+
+# copy it all to gitRoot directory
+COPY . /gitRoot
+
+# ensure unix formatted
+RUN dos2unix /gitRoot/projectbuild.sh
+RUN dos2unix /gitRoot/terraform.sh
+
+# ensure executable
+RUN chmod 777 /gitRoot/projectbuild.sh
+RUN chmod 777 /gitRoot/terraform.sh
+

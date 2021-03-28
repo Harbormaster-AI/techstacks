@@ -1,0 +1,18 @@
+<tech-stack-package 
+    name="Base Python Tech Stack"
+    shortName="python.tech.stack"
+    description="The base for all Python related tech stacks" 
+    icon-url=""
+ 	info-page-url=""
+    version="1.0"
+    app-type="webapp"
+    release-status="production"
+    visible="false">
+	<target-languages>
+		<target-language name="python"/>
+		<target-language name="javascript"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+	    <tech-stack-component name="build" description="ci/cd templates " app-layer="build"/>
+	</tech-stack>
+</tech-stack-package>

@@ -1,0 +1,29 @@
+#######################################################################
+## Expose_K8_Ports
+########################################################################
+#macro( Expose_K8_Ports )
+## no extra ports to expose
+#end##macro( Expose_K8_Ports )
+
+########################################################################
+## Declare_K8_Containers
+########################################################################
+#macro( Declare_K8_Containers )
+################################################################
+## ${appName} container
+################################################################
+#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
+#set( $dockerRepo = ${aib.getParam("docker.repo")} )
+#set( $dockerTag = ${aib.getParam("docker.tag")} )      
+      container {
+        image = "${dockerOrgName}/${dockerRepo}:${dockerTag}"
+        name  = "app-container"
+        
+################################################################
+## expose the application ports
+################################################################        
+        port {
+          container_port = 8080
+        }
+      }
+#end##macro( Declare_K8_Containers )

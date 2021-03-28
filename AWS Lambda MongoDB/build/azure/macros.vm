@@ -1,0 +1,61 @@
+########################################################################
+## Azure Pipeline Macros
+########################################################################
+
+########################################################################
+## Azure_Pipeline_Var_Declarations
+########################################################################
+#macro( Azure_Pipeline_Var_Declarations )
+variables: # pipeline-level
+  DEFAULT_HOST_ADDRESS: '127.0.0.1'
+  DEFAULT_HOST_PORT: '27017'
+#end##macro( Azure_Pipeline_Var_Declarations )
+
+########################################################################
+## Azure_Pipeline_Steps
+########################################################################
+#macro( Azure_Pipeline_Steps )
+steps:
+- script: docker run -d --name=rm-test-mysql -e MYSQL_ROOT_PASSWORD=letmein2 mysql
+  displayName: 'installing latest mysql docker image'
+- task: Maven@3
+  displayName: 'using maven to build app and junit to test'
+  inputs:
+    mavenPomFile: 'pom-restful-api.xml'
+    mavenOptions: ''
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: yes
+    testResultsFiles: '**/TEST-*.xml'
+    goals: 'test'
+    
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom-aws-lambda.xml'
+    mavenOptions: '-DAWS_ACCESSKEY=${USER_AWS_ACCESSKEY} -DAWS_SECRETKEY=${USER_AWS_SECRETKEY}'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    goals: 'package lambda:delete-lambda lambda:deploy-lambda'
+#end##macro( Azure_Pipeline_Steps )
+
+
+
+pool:
+  vmImage: 'ubuntu-16.04'
+
+variables: # pipeline-level
+  DEFAULT_HOST_ADDRESS: '172.17.0.2'
+  DEFAULT_HOST_PORT: '27017'
+
+steps:
+- script: docker run -d --name=rm-test-mongo mongo
+  displayName: 'installing latest mongodb docker image'
+- task: Maven@3
+  displayName: 'using maven to build app and junit to test'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-DAWS_ACCESSKEY=${USER_AWS_ACCESSKEY} -DAWS_SECRETKEY=${USER_AWS_SECRETKEY}'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    goals: 'package lambda:delete-lambda lambda:deploy-lambda'
+    

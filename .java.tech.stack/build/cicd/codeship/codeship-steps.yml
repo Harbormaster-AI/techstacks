@@ -1,0 +1,22 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+- service: ${appName}Service
+  name: Build Project ${appName}
+  command: ./gitRoot/projectbuild.sh
+- service: adddocker
+  type: push
+  name: Docker Build and Push
+  image_name: realmethods/${appName}
+  image_tag: latest
+  registry: https://index.docker.io/v1/
+  encrypted_dockercfg_path: .dockercfg
+#if( ${aib.getParam("terraform.inUse")} == "true" )  
+- service: terraform
+  name: Terrform Execution
+  command: /code/gitRoot/terraform.sh
+  encrypted_env_file:
+    - aws.env.encrypted
+#end##if( ${aib.getParam("terraform.inUse")} == "true" )

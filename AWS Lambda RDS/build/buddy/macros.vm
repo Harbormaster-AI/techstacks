@@ -1,0 +1,30 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#set( $gitRepoName = $aib.getParam("git.repository") )
+########################################################################
+## Buddy Macros
+########################################################################
+
+########################################################################
+## Buddy_Actions
+########################################################################
+#macro( Buddy_Actions )
+  actions:
+  - action: "Execute: mvn clean install"
+    type: "BUILD"
+    working_directory: "/buddy/${gitRepoName}"
+    docker_image_name: "library/maven"
+    docker_image_tag: "3.3.9"
+    execute_commands:
+# first run test using JUnit
+    - mvn dependency:go-offline test -f pom-restful-api.xml
+
+# using maven to first package then to deploy the generated Lambda functions.  
+# Make sure the key vars (USER_AWS_ACCESSKEY and USER_AWS_SECRETKEY) are read in as env vars for the current project.
+# Either enter them in the UI console under 'Configuration-->Secrets' or following instructions at https://docs.semaphoreci.com/article/66-environment-variables-and-secrets
+    - mvn package lambda:delete-lambda lambda:deploy-lambda -f pom-aws-lambda.xml  -DAWS_ACCESSKEY=$USER_AWS_ACCESSKEY -DAWS_SECRETKEY=$USER_AWS_SECRETKEY # deploy the lambda functions 
+#end##macro( Buddy_Actions )
+

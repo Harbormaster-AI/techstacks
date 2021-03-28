@@ -1,0 +1,73 @@
+########################################################################
+## CircleCI Docker Image Output
+########################################################################
+#macro( CircleCI_OutputDockerImageDecl )        
+    docker: # run the steps with Docker
+      - image: circleci/python:3.7
+#end##macro( CircleCI_OutputDockerImageDecl )
+
+
+########################################################################
+## CircleCI Run Commands
+########################################################################
+#macro( CircleCI_RunCommands )
+      # changing ownership
+      - run: '[ $EUID == 0 ] && SUDO="" || SUDO=sudo && $SUDO chown -R circleci:circleci /usr/local/bin'
+      - run: '[ $EUID == 0 ] && SUDO="" || SUDO=sudo && $SUDO chown -R circleci:circleci /usr/local/lib/python3.7/site-packages'
+
+      # use pip to install pipenv
+      - run: 
+          name: Installing pipenv
+          command: |
+              pip install pipenv
+              pipenv install
+
+      # use pipenv to install Django
+      - run:  
+          name: Installing Django
+          command: |
+              pipenv install Django
+      
+#end###macro( CircleCI_RunCommands )
+
+########################################################################
+## CircleCI Save Repos
+########################################################################
+#macro( CircleCI_SaveRepo )
+      - save_cache: 
+          key: deps9-{{ .Branch }}-{{ checksum "pom.xml" }}
+          paths:
+              - ".venv"
+              - "/usr/local/bin"
+              - "/usr/local/lib/python3.6/site-packages"
+#end###macro( CircleCI_StoreTestResults )
+
+########################################################################
+## CircleCI Store Test Results
+########################################################################
+#macro( CircleCI_StoreTestResults )
+      # Upload test results for display in Test Summary:
+      # https://circleci.com/docs/2.0/collect-test-data/
+      - store_test_results: 
+          path: test-results
+#end###macro( CircleCI_StoreTestResults )
+
+########################################################################
+## CircleCI Store Artifact
+########################################################################
+#macro( CircleCI_StoreArtifacts )
+      # Upload test summary for display in Artifacts: 
+      # https://circleci.com/docs/2.0/artifacts/
+      - store_artifacts:
+          path: test-results
+          destination: tr1
+#end###macro( CircleCI_StoreArtifacts )
+
+########################################################################
+## CircleCI EnvVarAssignments
+########################################################################
+#macro( CircleCI_EnvVarAssignments )
+    # env var assignment section
+    environment:
+        PIPENV_VENV_IN_PROJECT: true  
+#end##macro( CircleCI_EnvVarAssignments )

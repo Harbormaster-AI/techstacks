@@ -1,0 +1,28 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+pipeline {
+    agent { docker { image 'node:8' } }
+        
+    stages {
+        stage('install') {
+            steps {
+                sh 'npm install -g @angular/cli'
+                sh 'mkdir -p $WORKSPACE/appRoot && cd $WORKSPACE/appRoot && ng new ${appName} --defaults'
+                sh 'cp -r $WORKSPACE/${appName}/. $WORKSPACE/appRoot/${appName}'
+$set( $deployDirective = "" )
+#if ( ${aib.getParam('jfrog.inUse')} == "true" || ${aib.getParam('nexus.inUse')} == "true" )
+$set( $deployDirective = "&& npm run deploy" )
+#end                      
+                sh 'cd $WORKSPACE/appRoot/${appName} && npm install --prod && npm run setup && ng build ${deployDirective}'
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'cd $WORKSPACE/appRoot/${appName} && ng build'
+            }
+        }
+    }
+}

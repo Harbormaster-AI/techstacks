@@ -1,0 +1,64 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+#set( $gitRepoName = $aib.getParam("git.repository") )
+########################################################################
+## Buddy Macros
+########################################################################
+
+########################################################################
+## Buddy_Actions
+########################################################################
+#macro( Buddy_Actions )
+  - action: "Execute: mvn clean install"
+    type: "BUILD"
+    working_directory: "/buddy/${gitRepoName}"
+    docker_image_name: "library/python"
+    docker_image_tag: "3.7"
+    execute_commands:
+    - pip install pipenv
+    - pipenv install
+    - pipenv install Django
+    - pipenv install pytest-django
+    - pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests    
+#end##macro( Buddy_Actions )
+
+########################################################################
+## Buddy_Variable_Declarations
+########################################################################
+#macro( Buddy_Variable_Declarations )
+    variables:
+    - key: "PIPENV_VENV_IN_PROJECT"
+      value: "true"
+      settable: true
+      description: "pipenv reqd decl var"
+#end##macro( Buddy_Variable_Declarations )
+
+########################################################################
+## Buddy_Service_Declarations
+########################################################################
+#macro( Buddy_Service_Declarations )
+    services:
+    - type: "MYSQL"
+      version: "5.7"
+      dump_path: ""
+      persistent: false
+      connection:
+        host: "mysql"
+        port: 3306
+        user: "root"
+        password: "root"
+        db: ""
+      login: "root"
+      password: "root"
+#end##macro( Buddy_Service_Declarations )
+
+########################################################################
+## Buddy_Cache_Declaration
+########################################################################
+#macro( Buddy_Cache_Declaration )
+    cached_dirs:
+    - "/root/.cache/pip"
+#end##macro( Buddy_Cache_Declaration )

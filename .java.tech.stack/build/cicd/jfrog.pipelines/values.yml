@@ -1,0 +1,20 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+gitRepo:
+  gitProvider: ${aib.getParam( "git.name" )}
+  path: ${aib.getParam( "git.username" )}/${aib.getParam( "git.repository" )}
+  TestDBUrl: ${aib.getParam("hibernate.connection.url")}
+  TestDBName: ${appName}_test_db
+  TestDBPassword: 
+  TestDBDialect: org.hibernate.dialect.MySQL8Dialect 
+  TestDBDriver: com.mysql.cj.jdbc.Driver
+#if ( ${aib.getParam( "docker.inUse" )}  == "true" )
+  DockerUserName: ${aib.getParam("docker.userName")}
+  DockerPassword: ${aib.getParam("docker.password")}
+  DockerOrgName: ${aib.getParam("docker.orgName")}
+  DockerRepo: ${aib.getParam("docker.repo")}
+  DockerTag: ${aib.getParam("docker.tag")}
+#end##if ( ${aib.getParam( "docker.inUse" )}  == "true" ))

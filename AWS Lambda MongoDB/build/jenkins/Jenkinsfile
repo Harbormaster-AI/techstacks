@@ -1,0 +1,16 @@
+node {
+    checkout scm
+    
+    docker.image('mongo:latest').withRun() { c ->
+        docker.image('maven:3.3.9').inside("--link ${c.id}:mongo \
+                                              -e 'DEFAULT_HOST_ADDRESS=mongo' \
+                                              -e 'DEFAULT_HOST_PORT=27017'") {
+            try {
+                /*   # You must assign the key vars (USER_AWS_ACCESSKEY and USER_AWS_SECRETKEY) as env vars for the current project.*/
+                sh 'mvn package lambda:delete-lambda lambda:deploy-lambda -f pom.xml -DAWS_ACCESSKEY=$USER_AWS_ACCESSKEY -DAWS_SECRETKEY=$USER_AWS_SECRETKEY'
+                junit 'target/surefire-reports/TEST-*.xml'
+            } finally {
+            }                                            
+        }
+    }
+}

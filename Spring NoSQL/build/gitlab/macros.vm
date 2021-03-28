@@ -1,0 +1,16 @@
+########################################################################
+## GitLab_Service_Declarations
+########################################################################
+#macro( GitLab_Service_Declarations )
+services:
+- mongo
+#end##macro( GitLab_Service_Declarations()
+
+########################################################################
+## GitLab_Variable_Declarations
+########################################################################
+#macro( GitLab_Variable_Declarations )
+variables:
+  DEFAULT_HOST_ADDRESS: "mongo"
+  DEFAULT_HOST_PORT: "27017"
+#end##macro( GitLab_Variable_Declarations()

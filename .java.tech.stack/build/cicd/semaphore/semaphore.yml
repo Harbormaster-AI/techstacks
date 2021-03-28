@@ -1,0 +1,12 @@
+version: v1.0
+name: Standard Java Build-Test Pipeline
+agent:
+#Semaphore_Machine_Declaration()
+    
+blocks:
+#Semaphore_Block_Name()
+    task:
+#Semaphore_Env_Vars()
+#Semaphore_Prologue()
+#Semaphore_Jobs()
+#Semaphore_Epilogue()

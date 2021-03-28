@@ -1,0 +1,24 @@
+#xmlHeader()
+
+<project name="gitpush.ant" default="all" basedir=".">
+
+  <target name="all" depends="gitpush"/>        
+  <property environment="os"/>
+
+  <target name="gitpush">
+    <exec executable="dos2unix" logError="true" failonerror="false" failifexecutionfails="false">
+      <arg value="gitpush.sh"/>
+    </exec>
+
+    <exec executable="chmod" logError="true" failonerror="false" failifexecutionfails="false">
+      <arg value="+x"/>
+      <arg value="gitpush.sh"/>
+    </exec>
+
+    <exec executable="sh" logError="true" failonerror="false" failifexecutionfails="false">
+      <arg value="--login"/>
+      <arg value="${project.basedir}/gitpush.sh"/>
+    </exec>
+  </target>
+                    
+</project>

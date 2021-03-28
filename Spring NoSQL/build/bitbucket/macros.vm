@@ -1,0 +1,49 @@
+########################################################################
+## Bitbucket_Pipeline_Image_Declaration
+########################################################################
+#macro( Bitbucket_Pipeline_Image_Declaration )
+image: maven:3.3.9
+#end##macro( Bitbucket_Pipeline_Image_Declaration )
+
+########################################################################
+## Bitbucket_Pipeline_Definitions
+########################################################################
+#macro( Bitbucket_Pipeline_Definitions )          
+definitions:
+  services:
+    mongo: 
+      image: mongo
+#end##macro( Bitbucket_Pipeline_Definitions )
+
+########################################################################
+## Bitbucket_Pipeline_Step
+########################################################################
+#macro( Bitbucket_Pipeline_Step )  
+  - step:
+      script:
+          - export DEFAULT_HOST_ADDRESS=127.0.0.1
+          - export DEFAULT_HOST_PORT=27017
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
+          - mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
+#else        
+          - mvn package
+#end##macro( Bitbucket_Pipeline_Step )  
+
+########################################################################
+## Bitbucket_Pipeline_Caches
+########################################################################
+#macro( Bitbucket_Pipeline_Caches )
+      caches:
+          - node
+#end##macro( Bitbucket_Pipeline_Caches )
+
+########################################################################
+## Bitbucket_Pipeline_Services
+########################################################################
+#macro( Bitbucket_Pipeline_Services )  
+      services:
+          - mongo
+#end##macro( Bitbucket_Pipeline_Services )

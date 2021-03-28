@@ -1,0 +1,80 @@
+########################################################################
+## Semaphore Macros
+########################################################################
+
+########################################################################
+## Semaphore_Machine_Declaration
+########################################################################
+#macro( Semaphore_Machine_Declaration )
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+#end##macro( Semaphore_Machine_Declaration )
+
+########################################################################
+## Semaphore_Block_Name
+########################################################################
+#macro( Semaphore_Block_Name )
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true"  )
+  - name: Build-Test-Deploy using Maven and JUnit5
+#else
+  - name: Build-Test using Maven and JUnit5
+#end##if ( ${aib.getParam('artifact-repo.inUse')} == "true"  )
+#end##macro( Semaphore_Block_Name )
+
+########################################################################
+## Semaphore_Env_Vars
+########################################################################
+#macro( Semaphore_Env_Vars )    
+      env_vars:
+        - name: DATABASE_USERNAME
+          value: "root"
+        - name: DATABASE_PASSWORD
+          value: ""
+        - name: DATABASE_DIALECT
+          value: "org.hibernate.dialect.MySQL8Dialect"
+        - name: DATABASE_DRIVER
+          value: "com.mysql.cj.jdbc.Driver"
+#end##macro( Semaphore_Env-Vars )
+
+########################################################################
+## Semaphore_Prologue
+########################################################################
+#macro( Semaphore_Prologue )
+      prologue:
+        commands:
+          - cache restore maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml)
+          - sem-service start mysql 8
+          - sudo apt-get install -y -qq mysql-client
+          - sem-service status mysql
+          - checkout          
+#end##macro( Semaphore_Prologue )
+
+########################################################################
+## Semaphore_Epilogue
+########################################################################
+#macro( Semaphore_Epilogue )
+#end##macro( Semaphore_Epilogue )
+
+########################################################################
+## Semaphore_Jobs
+########################################################################
+#macro( Semaphore_Jobs )
+      jobs:
+        - name: Running test using Junit
+          commands:
+            - cache restore maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml)      
+            - sem-service start mysql 8
+            - sudo apt-get install -y -qq mysql-client
+            - sem-service status mysql          
+            - checkout
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
+            - mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
+#else        
+            - mvn dependency:go-offline test
+#end    
+            - cache store maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml) ~/.m2
+#end##macro( Semaphore_Jobs )

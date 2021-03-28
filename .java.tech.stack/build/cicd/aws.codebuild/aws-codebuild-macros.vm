@@ -1,0 +1,108 @@
+########################################################################
+## AWS CodeBuild Macros
+########################################################################
+
+########################################################################
+## AWS Codebuild Env Var Declaration
+########################################################################
+#macro( AWS_CodeBuild_EnvVarsDeclaration )       
+    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+    DATABASE_USERNAME: "root"
+    DATABASE_PASSWORD: ""
+    DATABASE_DIALECT: "org.hibernate.dialect.MySQL5Dialect"
+#end##macro( AWS_CodeBuild_EnvVars() )
+
+########################################################################
+## AWS Codebuild runtime versions 
+########################################################################
+#macro( AWS_CodeBuild_Runtime_Versions )  
+    runtime-versions:
+        java: openjdk8  
+#end##macro( AWS_CodeBuild_Install_Phase_Commands ) 
+
+########################################################################
+## AWS Codebuild Install Phase Commands
+########################################################################
+#macro( AWS_CodeBuild_Install_Phase_Commands )
+    commands:
+      - echo Entered the install phase...
+      - apt-get update -y
+      - echo Installing Apache Maven...      
+      - apt-get install -y maven
+      - echo Installing MySQL...      
+      - apt-get install -y mysql-server
+      - su mysql -s /bin/bash -c "/usr/sbin/mysqld" &
+      - su mysql "CREATE USER root@localhost IDENTIFIED BY ''; GRANT ALL ON *.* TO root@localhost; FLUSH PRIVILEGES;" &
+    finally:
+      - echo Install phase complete...
+#end##macro( AWS_CodeBuild_Install_Phase_Commands )
+
+#######################################################################
+## AWS Codebuild Build Phase Commands
+########################################################################
+#macro( AWS_CodeBuild_Build_Phase_Commands )
+    commands:
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
+      - echo Entered the build/test/package/deploy phase...
+      - mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
+#else        
+      - echo Entered the build/test/package phase...
+      - mvn package
+#end    
+    finally:
+      - echo Build phase complete  
+#end##macro( AWS_CodeBuild_Build_Phase_Commands )
+
+########################################################################
+## AWS Codebuild Artifact Declaration
+########################################################################
+#macro( AWS_CodeBuild_Artifacts )
+  files:
+    - target/*jar
+  discard-paths: yes
+  cache:
+    paths:
+      - '/root/.m2/**/*'
+#end##macro( AWS_CodeBuild_Artifacts )
+
+########################################################################
+## AWS Docker image build and push
+########################################################################
+#macro( AWS_DockerImageDeclaration )
+#set( $dockerUserName = ${aib.getParam("docker.userName")} ) 
+#set( $dockerPassword = ${aib.getParam("docker.password")} )
+#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
+#set( $dockerRepo = ${aib.getParam("docker.repo")} )
+#set( $dockerTag = ${aib.getParam("docker.tag")} )
+      - echo Building Docker Image...
+      - cd ${CODEBUILD_SRC_DIR}
+      - docker login --username ${dockerUserName} --password ${dockerPassword}
+      - docker build -t ${dockerOrgName}/${dockerRepo}:${dockerTag} .
+      - docker push ${dockerOrgName}/${dockerRepo}:${dockerTag} 
+#end##macro( AWS_DockerImageDeclaration )
+
+########################################################################
+## Terraform job definition
+########################################################################
+#macro( AWS_TerraformJobDefinition )
+#if ( $aib.getParam( "kubernetes.inUse" ) == "true" )
+      - echo Installing Terraform...
+      - wget https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+      - unzip ./terraform_0.11.13_linux_amd64.zip -d /usr/local/bin/
+      - terraform -v
+      - echo Running Terraform plan...
+      - cd terraform
+      - terraform init --input=false 
+#if ( $aib.getParam( "kubernetes.hostTarget" ) == "google" )
+      - terraform plan --input=false --out=terraform.plan -var host=${aib.getParam("kubernetes.host")} -var username=${aib.getParam("google.username")} -var password=${aib.getParam("google.password")} -var region=${aib.getParam("google.region")}-${aib.getParam("google.zone")} -var project=${aib.getParam("google.project")} .
+#elseif ( $aib.getParam( "kubernetes.hostTarget" ) == "aws" )
+      - terraform plan -out=terraform.plan -var region=${aib.getParam("kubernetes.region")} -var aws-access-key=$USER_AWS_ACCESSKEY -var aws-secret-key=$USER_AWS_SECRETKEY
+#end##if ( $aib.getParam( "kubernetes.hostTarget" ) == "google" )
+      - terraform apply -auto-approve "terraform.plan"
+#end##if ( $aib.getParam( "kubernetes.inUse" ) == "true" )
+#end##macro( AWS_TerraformJobDefinition )
+
+

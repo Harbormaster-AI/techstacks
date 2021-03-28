@@ -1,0 +1,52 @@
+########################################################################
+## Azure Pipeline Macros
+########################################################################
+
+########################################################################
+## Azure_Pipeline_Var_Declarations
+########################################################################
+#macro( Azure_Pipeline_Var_Declarations )
+variables: # pipeline-level
+  BUILD_ENV: 'PROD'
+#end##macro( Azure_Pipeline_Var_Declarations )
+
+########################################################################
+## Azure_Pipeline_Steps
+########################################################################
+#macro( Azure_Pipeline_Steps )
+steps:
+- script: docker run -d --name=rm-test-mongo mongo
+  displayName: 'installing latest mongodb docker image'
+
+- script: sudo npm install -g @angular/cli
+  displayName: 'installing angular7 CLI'
+
+- script: |
+    sudo mkdir -p $(Build.SourcesDirectory)/appRoot
+    cd $(Build.SourcesDirectory)/appRoot
+    sudo ng new ${appName} --defaults
+  displayName: 'create ${appName} angular project'
+
+- script: |
+    ls $(Build.SourcesDirectory)
+    sudo cp -r $(Build.SourcesDirectory)/${appName}/. $(Build.SourcesDirectory)/appRoot/${appName}
+  displayName: 'laying generated ${appName} source over angular project'
+
+- script: |
+    cd $(Build.SourcesDirectory)/appRoot/${appName}
+    sudo npm install --${BUILD_ENV}
+    sudo npm audit fix
+  displayName: 'installing app depenedencies'
+
+- script: |
+    cd $(Build.SourcesDirectory)/appRoot/${appName}
+    sudo npm run setup
+  displayName: 'running mongoose/mongodb setup'
+
+- script: |
+    cd $(Build.SourcesDirectory)/appRoot/${appName}
+    sudo ng build
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+    sudo npm run deploy
+#end
+#end##macro( Azure_Pipeline_Steps )

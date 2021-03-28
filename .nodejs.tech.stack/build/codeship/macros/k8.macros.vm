@@ -1,0 +1,88 @@
+########################################################################
+## Expose_K8_Ports
+########################################################################
+#macro( Expose_K8_Ports )
+################################################################
+## expose the Mongoose port so the remote client 
+## can invoke actions on it
+################################################################
+    port {
+      name        = "mongoose-port"
+      port        = 4000
+      target_port = 4000
+    }
+    
+################################################################    
+## expose the MongoDB port for better remote client 
+## testing using tools like Robo3T
+################################################################
+    port {
+      name        = "mongo-port"
+      port        = 27017
+      target_port = 27017
+    }
+#end##macro( Expose_K8_Ports )
+
+########################################################################
+## Declare_K8_Containers
+########################################################################
+#macro( Declare_K8_Containers )
+################################################################
+## MongoDB container
+################################################################
+      container {
+        image = "mongo"
+        name  = "mongo"
+
+        port {
+          container_port = 27017
+        }
+
+        resources {
+          requests {
+            cpu    = "100m"
+            memory = "100Mi"
+          }
+        }
+      }
+
+################################################################
+## ${appName} container
+################################################################
+#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
+#set( $dockerRepo = ${aib.getParam("docker.repo")} )
+#set( $dockerTag = ${aib.getParam("docker.tag")} )      
+      container {
+        image = "${dockerOrgName}/${dockerRepo}:${dockerTag}"
+        name  = "app-container"
+        
+################################################################        
+## need to make the Mongoose host available to the app Docker image
+################################################################
+        env {
+          name  = "MONGOOSE_HOST_NAME"
+          value = kubernetes_service.app-master.load_balancer_ingress.0.ip    
+        }
+        
+################################################################
+## expose the application ports
+################################################################        
+        port {
+          container_port = 8080
+        }
+
+################################################################
+## expose the mongoose ports
+################################################################                        
+        port {
+          container_port = 4000
+        }
+
+        resources {
+          requests {
+            cpu    = "100m"
+            memory = "100Mi"
+          }
+        }
+      }
+#end##macro( Declare_K8_Containers )

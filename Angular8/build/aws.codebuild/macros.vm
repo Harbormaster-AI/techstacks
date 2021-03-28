@@ -1,0 +1,71 @@
+########################################################################
+## AWS Codebuild Env Var Declaration
+########################################################################
+#macro( AWS_CodeBuild_EnvVarsDeclaration )        
+    BUILD_ENV: "dev"
+#end##macro( AWS_CodeBuild_EnvVars() )
+
+########################################################################
+## AWS Codebuild runtime versions
+########################################################################
+#macro( AWS_CodeBuild_Runtime_Versions )  
+    runtime-versions:
+        nodejs: 10
+#end##macro( AWS_CodeBuild_Install_Phase_Commands )  
+
+
+########################################################################
+## AWS Codebuild Install Phase Commands
+########################################################################
+#macro( AWS_CodeBuild_Install_Phase_Commands ) 
+    commands:
+      - echo Entered the install phase...
+      - apt-get update -y
+      - apt-get -y install mongodb-server
+      - echo Starting mongodb server...
+      - service mongodb start
+      - echo Installing Angular CLI...
+      - npm install -g @angular/cli@7.2.3 > /dev/null
+      - mkdir -p ${CODEBUILD_SRC_DIR}/appRoot
+      - cd ${CODEBUILD_SRC_DIR}/appRoot
+      - echo Creating new Angular project ${appName}...      
+      - ng new ${appName} --defaults
+      - ls $CODEBUILD_SRC_DIR
+      - cp -r ${CODEBUILD_SRC_DIR}/${appName}/. $CODEBUILD_SRC_DIR/appRoot/${appName}
+      - cd $CODEBUILD_SRC_DIR/appRoot/${appName}
+      - echo install ${BUILD_ENV}...      
+      - npm install --${BUILD_ENV}
+      - echo Running setup...      
+      - npm run setup    
+    finally:
+      - echo Install phase complete...
+#end##macro( AWS_CodeBuild_Install_Phase_Commands )
+
+########################################################################
+## AWS Codebuild Build Phase Commands
+########################################################################
+#macro( AWS_CodeBuild_Build_Phase_Commands )
+    commands:
+      - echo Entered the build phase...
+      - ng build
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+      - npm run deploy
+#end
+#end##macro( AWS_CodeBuild_Build_Phase_Commands )
+
+########################################################################
+## AWS Codebuild Artifact Declaration
+########################################################################
+#macro( AWS_CodeBuild_Artifacts )
+  files:
+  - '**/*'
+  base-directory: 'dist*'
+  discard-paths: yes
+  cache:
+    paths:
+      - '/node_modules/**/*'
+
+    finally:
+      - echo Build phase complete
+#end##macro( AWS_CodeBuild_Artifacts )
+

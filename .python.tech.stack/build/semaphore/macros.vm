@@ -1,0 +1,55 @@
+########################################################################
+## Semaphore_Machine_Declaration
+########################################################################
+#macro( Semaphore_Machine_Declaration )
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+#end##macro( Semaphore_Machine_Declaration )
+
+########################################################################
+## Semaphore_Block_Name
+########################################################################
+#macro( Semaphore_Block_Name )
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true"  )
+  - name: Build-Test-Deploy using pipenv, Django, and pytest-django
+#else
+  - name: Build-Test using using pipenv, Django, and pytest-django
+#end##if ( ${aib.getParam('artifact-repo.inUse')} == "true"  )
+#end##macro( Semaphore_Block_Name )
+
+########################################################################
+## Semaphore_Env_Vars
+########################################################################
+#macro( Semaphore_Env_Vars )    
+      env_vars:
+        - name: PIPENV_VENV_IN_PROJECT
+          value: "true"
+#end##macro( Semaphore_Env_Vars )
+
+########################################################################
+## Semaphore_Prologue
+########################################################################
+#macro( Semaphore_Prologue )
+      prologue:
+        commands:
+          - sem-version python 3.7
+          - sudo apt update
+          - sudo pip install pipenv
+          - checkout          
+#end##macro( Semaphore_Prologue )
+
+########################################################################
+## Semaphore_Jobs
+########################################################################
+#macro( Semaphore_Jobs )
+      jobs:
+        - name: Running pytest-django with Junit output
+          commands:
+            - cache restore pip-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml)
+            - pipenv install
+            - pipenv install Django
+            - pipenv install pytest-django
+            - pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests
+            - cache store django-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml) .pip_cache
+#end##macro( Semaphore_Jobs )

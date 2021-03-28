@@ -1,0 +1,18 @@
+########################################################################
+## CircleCI Docker Image Output
+########################################################################
+#macro( CircleCI_OutputDockerImageDecl )        
+    # CircleCI Java8 image, installs Apache Maven
+    # mongo:4.0.5, run in a common network where ports exposed on 
+    #      the primary container are available on localhost.
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+      - image: mongo:4.0.5
+        command: [mongod, --smallfiles]
+#end##macro( CircleCI_OutputDockerImageDecl )
+
+########################################################################
+## CircleCI EnvVarAssignments
+########################################################################
+#macro( CircleCI_EnvVarAssignments )
+#end##macro( CircleCI_EnvVarAssignments )

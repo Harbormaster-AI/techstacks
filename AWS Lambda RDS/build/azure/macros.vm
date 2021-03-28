@@ -1,0 +1,31 @@
+########################################################################
+## Azure Pipeline Macros
+########################################################################
+
+########################################################################
+## Azure_Pipeline_Steps
+########################################################################
+#macro( Azure_Pipeline_Steps )
+steps:
+- script: docker run -d --name=rm-test-mysql -e MYSQL_ROOT_PASSWORD=letmein2 mysql
+  displayName: 'installing latest mysql docker image'
+- task: Maven@3
+  displayName: 'using maven to build app and junit to test'
+  inputs:
+    mavenPomFile: 'pom-restful-api.xml'
+    mavenOptions: ''
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: yes
+    testResultsFiles: '**/TEST-*.xml'
+    goals: 'test'
+    
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom-aws-lambda.xml'
+    mavenOptions: '-DAWS_ACCESSKEY=${USER_AWS_ACCESSKEY} -DAWS_SECRETKEY=${USER_AWS_SECRETKEY}'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    goals: 'package lambda:delete-lambda lambda:deploy-lambda'
+#end##macro( Azure_Pipeline_Steps )
+

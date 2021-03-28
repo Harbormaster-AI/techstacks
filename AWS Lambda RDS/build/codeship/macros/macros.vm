@@ -1,0 +1,7 @@
+########################################################################
+## Codeship_Build
+########################################################################
+#macro( Codeship_Build )
+mvn package lambda:delete-lambda lambda:deploy-lambda -DAWS_ACCESSKEY=$USER_AWS_ACCESSKEY -DAWS_SECRETKEY=$USER_AWS_SECRETKEY 
+#end##macro( Codeship_Build )
+

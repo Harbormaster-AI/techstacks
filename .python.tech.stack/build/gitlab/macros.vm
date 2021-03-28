@@ -1,0 +1,84 @@
+########################################################################
+## GitLab_Image_Declarations
+########################################################################
+#macro( GitLab_Image_Declarations )
+image: python:3.7
+#end##macro( GitLab_Image_Declarations()
+
+########################################################################
+## GitLab_Service_Declarations
+########################################################################
+#macro( GitLab_Service_Declarations )
+#end##macro( GitLab_Service_Declarations()
+
+########################################################################
+## GitLab_Variable_Declarations
+########################################################################
+#macro( GitLab_Variable_Declarations )
+variables:
+  DATABASE_USERNAME: "root"
+  DATABASE_PASSWORD: ""
+  DATABASE_DIALECT: "org.hibernate.dialect.MySQL8Dialect"
+  DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver"
+  DATABASE_URL: "jdbc:mysql://mysql:3306/gitlabtest?createDatabaseIfNotExist=true"
+  DATABASE_NAME: "gitlabtest"
+  MYSQL_ROOT_PASSWORD: ""
+  MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+#end##macro( GitLab_Variable_Declarations()
+
+########################################################################
+## GitLab_Cache_Declaration
+########################################################################
+#macro( GitLab_Cache_Declaration )
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+  - .cache/pip
+#end##macro( GitLab_Cache_Declaration )
+
+########################################################################
+## GitLab_StageDeclarations
+########################################################################
+#macro( GitLab_Stage_Declarations )
+stages:
+  - build
+#end##macro( GitLab_Stage_Declarations )
+
+########################################################################
+## GitLab_Before_Script
+########################################################################
+#macro( GitLab_Before_Script )
+#end##macro( GitLab_Before_Script )
+
+########################################################################
+## GitLab_After_Script
+########################################################################
+#macro( GitLab_After_Script )
+#end##macro( GitLab_After_Script )
+
+########################################################################
+## GitLab_Stage_Definitions
+########################################################################
+#macro( GitLab_Stage_Definitions )
+build:
+  stage: build
+  script: 
+      - export PIP_CACHE_DIR=.cache/pip
+      - pip install pipenv
+      - pipenv install
+      - pipenv install Django
+      - pipenv install pytest-django
+      - pip install pipenv
+      - pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests
+#end##macro( GitLab_Stage_Definitions )
+
+########################################################################
+## GitLab_Artifacts 
+########################################################################
+#macro( GitLab_Artifacts )
+  artifacts:
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml    
+#end##macro( GitLab_Artifacts )

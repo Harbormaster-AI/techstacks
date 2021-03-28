@@ -1,0 +1,34 @@
+########################################################################
+## Codeship macros
+########################################################################
+
+########################################################################
+## Codeship_From_Image default is a Maven 3 image with Java install
+########################################################################
+#macro( Codeship_From_Image  ) 
+FROM maven:3
+#end##macro( Codeship_From_Image  )
+
+########################################################################
+## Codeship_Install - default is a project using Maven
+########################################################################
+#macro( Codeship_Install  ) 
+# install the Angular CLI, pip to /dev/null to remove analytics invocation
+RUN apt-get update -y
+RUN apt-get install -y maven
+#end##macro( Codeship_Install  )
+
+########################################################################
+## Codeship_Build
+########################################################################
+#macro( Codeship_Build )
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
+mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
+#else        
+mvn package
+#end    
+  
+#end##macro( Codeship_Build )

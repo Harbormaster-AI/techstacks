@@ -1,0 +1,31 @@
+########################################################################
+## Azure Pipeline Macros
+########################################################################
+
+########################################################################
+## Azure_Pipeline_Var_Declarations
+########################################################################
+#macro( Azure_Pipeline_Var_Declarations )
+variables: # pipeline-level
+  DEFAULT_HOST_ADDRESS: '127.0.0.1'
+  DEFAULT_HOST_PORT: '27017'
+#end##macro( Azure_Pipeline_Var_Declarations )
+
+########################################################################
+## Azure_Pipeline_Steps
+########################################################################
+#macro( Azure_Pipeline_Steps )
+steps:
+- script: docker run -d --name=rm-test-mongo mongo
+  displayName: 'installing latest mongo docker image'
+- task: Maven@3
+  displayName: 'using maven to build/package the app, and junit to test'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: ''
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: yes
+    testResultsFiles: '**/TEST-*.xml'
+    goals: 'package'
+#end##macro( Azure_Pipeline_Steps )

@@ -1,0 +1,24 @@
+node {
+    checkout scm
+    
+    docker.image('mysql:5').withRun('-e "MYSQL_ROOT_PASSWORD=letmein2"') { c ->
+        docker.image('maven:latest').inside("--link ${c.id}:db \
+                                              -e 'DATABASE_USERNAME=root' \
+                                              -e 'DATABASE_PASSWORD=letmein2' \
+                                              -e 'DATABASE_DIALECT=org.hibernate.dialect.MySQL5Dialect' \
+                                              -e 'DATABASE_URL=jdbc:mysql://db:3306/jenkinstest?createDatabaseIfNotExist=true'") {
+            try {
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
+                sh 'mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}'
+#else        
+                sh 'mvn package'
+#end    
+                junit 'target/surefire-reports/TEST-*.xml'                
+            } finally {
+            }                                            
+        }
+    }
+}

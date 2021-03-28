@@ -1,0 +1,12 @@
+#set( $userName = ${aib.getParam( "docker.userName" )} )
+#set( $password = ${aib.getParam( "docker.password" )} )
+#set( $encodeStr = "$userName:$password" )
+#set( $emailAddress = ${aib.getParam( "application.email" )} )
+{
+  "auths": {
+    "https://index.docker.io/v1/": {
+      "auth": "$aib.encodeString($encodeStr)",
+      "email": "$emailAddress"
+    }
+  }
+}
