@@ -1,13 +1,18 @@
-# realMethods Tech Stack Package 
+# Harbormaster Techstacks
 
-This repository contains the available open source realMethods Tech Stack Packages.
+This repository contains the available open source Harbormaster Techstacks.  Other techstacks created by developers are available only through an instance of the Harbormaster Platform.
 
 ## Learn More
-To learn more about the concept of a Tech Stack Package, visit 
-[https://realmethods.com/home/techstacks/](https://realmethods.com/home/techstacks/) 
+To learn more about the concept of a Harbormaster Techstack visit 
+[https://harbormaster.ai/tech-stack-in-depth-details/](https://harbormaster.ai/tech-stack-in-depth-details/) 
+
+## Find Us
+
+* [http://harbormaster.ai](http://harbormaster.ai)
+* [On GitHub](https://github.com/Harbormaster-AI)
 
 
-## Become a Contributor
-Don't see what the tech stack you need?  No problem.  You can define a new Tech Stack Package or modify an existing.  After the validation process, if realMethods accepts your Tech Stack Package, you will receive an Enterprise license including platform source code, free of charge.
+## Become a Contributor and Earn Extra Cash!
+Don't see what the techstack you need?  No problem.  Create one!  After the validation process, if Harbormaster accepts your tech stack, you will receive compensation each time your tech stack is used.
 
-Contact us today to learn more[support@realmethods.com](support@realmethods.com)
+Contact us today to learn more[dev@harbormaster.ai](dev@harbormaster.ai)
