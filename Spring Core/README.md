@@ -1,10 +1,10 @@
-# realMethods Tech Stack Package Descriptor
+# Harbormaster Tech Stack Package Descriptor
 
 ## Name
 Spring Core
 
 ## Summary Image
-![alt text](http://www.realmethods.com/infopages/img/spring.rdbms.png)
+![alt text](http://www.Harbormaster.com/infopages/img/spring.rdbms.png)
 
 ## Intent
 To create an application that uses:
@@ -17,7 +17,7 @@ To create an application that uses:
 - Optional deployment to cloud native infrastructure or Kubernetes cluster
 
 ## Contents
-[https://github.com/realmethods-public/tech.stack.packages/tree/master/Spring%20Core](https://github.com/realmethods-public/tech.stack.packages/tree/master/Spring%20Core)
+[https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Spring%20Core](https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Spring%20Core)
 
 
 ## Usage

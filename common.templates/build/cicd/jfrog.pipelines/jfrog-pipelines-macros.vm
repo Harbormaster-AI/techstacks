@@ -1,0 +1,246 @@
+########################################################################
+## JFrog_Pipelines Macros
+########################################################################
+
+########################################################################
+## JFrog_Pipelines_Resource_Declaration
+########################################################################
+#macro( JFrog_Pipelines_Resource_Declaration )
+#set( $buildArtifactRepo = ${aib.getParam('artifact-repo.buildArtifactRepo')} )
+#set( $buildArtifactIntegration = ${aib.getParam('artifact-repo.buildArtifactIntegration')} )
+
+#set( $dockerArtifactRepo = ${aib.getParam('artifact-repo.dockerArtifactRepo')} )
+#set( $dockerArtifactIntegration = ${aib.getParam('artifact-repo.dockerArtifactIntegration')} )
+#set( $dockerRegistry = ${aib.getParam('artifact-repo.dockerRegistry')} )
+
+#set( $serverUrl = ${aib.getParam('artifact-repo.serverUrl')} )
+#set( $tag = ${aib.getParam('docker.tag')} )
+#set( $imageName = "${serverUrl}/${dockerArtifactRepo}/${appName}" )
+#set( $databaseUrl = ${aib.getParam('hibernate.hibernate.connection.url')} )
+# ==========================================================
+# Typically contain information needed for a step in a pipeline to execute and can also be used to store 
+# information produced by a step. Resources defined should be unique across all the pipelines. 
+# Because of that they also provide the way to link pipelines. 
+# ==========================================================
+resources:
+  
+  # ==========================================================
+  # GitRepo Resource
+  # ==========================================================
+  - name: git_repo                                           # Unique name <required>
+    type: GitRepo                                            # Git repo resource type <required>
+    
+    # ==========================================================
+    # Configurations related to the Git Repo in use
+    # ==========================================================
+    configuration:
+      
+      # ==========================================================
+      # SCM integration where the repository is located 
+      # ==========================================================
+      gitProvider: {{ .Values.gitRepo.gitProvider }}           # This will be replaced from values.yml
+  
+      # ==========================================================
+      # Repository path, including org name/repo name
+      # ==========================================================
+      path:        {{ .Values.gitRepo.path }}                   # This will be replaced from values.yml
+      
+      # ==========================================================
+      # Specifies which branches will trigger dependent steps  
+      # ==========================================================
+      branches:        
+        # ==========================================================
+        # Minimally includes the master branch
+        # ==========================================================
+        include:   master
+  
+  # ==========================================================
+  # Maven specific build information
+  # ==========================================================
+  - name: project_build_info                                  # Unique name <required>
+    type: BuildInfo                                           # Build information type <required>
+  
+    # ==========================================================
+    # Build configuration
+    # ==========================================================
+    configuration:
+      
+      sourceArtifactory:    ${buildArtifactIntegration}                 # The name of the Artifactory Integration <required>
+      buildName:            ${appName}Build                    # The name of the build to associate with this BuildInfo <optional>
+      buildNumber:          1                                  # The number of the build to associate with this BuildInfo <optional>
+      
+  # ==========================================================
+  # Docker specific build information
+  # ==========================================================
+  - name: docker_build_info                                  # Unique name <required>
+    type: BuildInfo                                          # Build information type <required>
+    
+    # ==========================================================
+    # Build configuration
+    # ==========================================================    
+    configuration:
+      
+      sourceArtifactory:    ${dockerArtifactIntegration}       # The name of the Artifactory Integration <required>
+      buildName:            ${appName}DockerBuild              # The name of the build to associate with this BuildInfo <optional>
+      buildNumber:          1                                  # The number of the build to associate with this BuildInfo <optional>
+
+  # ==========================================================
+  # Provides the details of files to download the application archive from Artifactory
+  # ==========================================================
+  - name: buildArchiveFile                                   # Unique name <required>
+    type: FileSpec                                           # File spec type <required> 
+    
+    # ==========================================================
+    # File spec configuration
+    # ========================================================== 
+    configuration:
+      
+      sourceArtifactory:   ${buildArtifactIntegration}           # The name of the Artifactory Integration <required>
+      pattern:             ${buildArtifactRepo}/**/**/${appName}*.jar    # Fhe application archive file to download <required>
+      target:              target/                             # Where to download the file to <optional for download>
+
+  # ==========================================================
+  # Used to add a reference to a Docker image to this pipeline
+  # ==========================================================
+  - name: docker_image_resource                              # Unique name <required>
+    type: Image                                              # Image type <required> 
+
+    # ==========================================================
+    # Docker image configuration
+    # ========================================================== 
+    configuration:
+    
+      registry:           ${dockerRegistry}                         # The name of a Docker Registry Integration <required>
+      sourceRepository:   ${dockerArtifactRepo}                     # The name of the repository in Artifactory to which the images will be published <required>
+      imageName:          ${serverUrl}/${dockerArtifactRepo}/${appName} # The file path of the Docker image, of the form imageRepo/imageName <equired>
+      imageTag:           ${tag}                                    # The version tag of the initial version of the Docker image <required>
+      autoPull:           false                                     # When true, the image is automatically pulled to the machine running the step <default:false>
+      
+#end##macro( JFrog_Pipelines_Resource_Declaration )
+
+########################################################################
+## JFrog_Pipelines_Pipeline_Declaration
+########################################################################
+#macro( JFrog_Pipelines_Pipeline_Declaration )
+pipelines:
+  - name: ${appName}Pipeline
+  
+## JFrog_Pipelines Steps declarations
+#JFrog_Pipelines_Steps_Declaration
+#end##macro( JFrog_Pipelines_Pipeline_Declaration )
+
+
+########################################################################
+## JFrog_Pipelines_Steps_Declaration
+########################################################################
+#macro( JFrog_Pipelines_Steps_Declaration )
+
+##Build the project
+#JFrog_Pipelines_Build_Step
+
+##Build the Docker image
+#JFrog_Pipelines_Docker_Build_Step
+
+##Push the Docker image
+#JFrog_Pipelines_Docker_Push_Step
+
+#end##macro( JFrog_Pipelines_Steps_Declaration )
+
+########################################################################
+## JFrog_Pipelines_Build_Step
+########################################################################
+#macro( JFrog_Pipelines_Build_Step )
+## THIS SHOULD BE IMPLEMENTED WITHIN A SPECIFIC TECH STACK SINCE IT IS LANGUAGE DEPENDENT  
+#end##macro( JFrog_Pipelines_Build_Step )
+
+########################################################################
+## JFrog_Pipelines_Docker_Build__Step 
+########################################################################
+#macro( JFrog_Pipelines_Docker_Build_Step )
+      # ======================================================= 
+      # Docker Build Step
+      # =======================================================   
+      - name: docker_build_step                               # Unique name <required>
+        type: DockerBuild                                     # Docker build type <requierd>
+
+        # ======================================================= 
+        # Step configuration
+        # ======================================================= 
+        configuration:
+        
+          dockerFileLocation:                  .                                        # Directory containing the Dockerfile, which is the file that has Docker build configuration. <required>
+          dockerFileName:                      Dockerfile                               # Name of the Dockerfile <required>
+          dockerImageName:                     ${imageName}                             # The name of the Docker image to create <required>
+          dockerImageTag:                      ${tag}                                   # The tag for the Docker image to create <required>
+          affinityGroup:                       shared_affinity_group                    # used to bind steps <optional>
+ 
+          integrations:
+            - name:                            ${dockerArtifactIntegration}             # Must specify an Artifactory Integration <required> 
+ 
+          inputResources:
+            - name:                            git_repo                                 # Git Repo containing the  Dockerfile
+            - name:                            buildArchiveFile                         # The archive file built during the previous build step
+
+          inputSteps:
+            - name:                            build_step                               # The required step of this one
+
+        # ======================================================
+        # execution sequences to apply before, during, and after step execution 
+        # ======================================================
+        execution:
+        
+          onStart:
+            - echo "Preparing for Docker image build..."
+            
+          onSuccess:
+            - echo "Docker image build was successful"
+            
+          onFailure:
+            - echo "uh oh, something went wrong with the Docker image build"
+#end###macro( JFrog_Pipelines_Docker_Build_Step )
+
+########################################################################
+## JFrog_Pipelines_Docker_Push__Step 
+########################################################################
+#macro( JFrog_Pipelines_Docker_Push_Step )
+      # ======================================================= 
+      # Docker Push Step
+      # =======================================================               
+      - name: docker_push_step                               # Unique name <required>
+        type: DockerPush                                     # Docker build type <requierd>
+        
+        # ======================================================= 
+        # Step configuration
+        # ======================================================= 
+        configuration:
+        
+          targetRepository:         ${dockerArtifactRepo}       # The name of the Docker repository in Artifactory <required>
+          affinityGroup:            shared_affinity_group       # used to bind steps <optional>
+          forceXrayScan:            true                        # Forces an Xray scan after publishing to Artifactory
+          failOnScan:               false                       # When set to  true, and  when the Xray Policy RuleFail Build  checkbox is checked, a failed Xray scan will result in a failure of the step
+          autoPublishBuildInfo:     true                        # Publishes build info with the Docker image
+ 
+          integrations:
+            - name:             ${dockerArtifactIntegration}    # Must specify an Artifactory Integration <required>
+            
+          inputSteps:
+            - name:             docker_build_step               # Must specify the named DockerBuild step in the same affinity group
+            
+          outputResources:            
+            - name:             docker_build_info               # required if autoPublishBuildInfo is true
+            - name:             docker_image_resource           # docker image resource
+            
+        # ======================================================
+        # execution sequences to apply before, during, and after step execution 
+        # ======================================================
+        execution:
+        
+          onStart:
+            - echo "Preparing for Docker image push..."
+            
+          onSuccess:
+            - echo "Docker image push was successful"
+            
+          onFailure:
+            - echo "uh oh, something went wrong with the Docker image push"
+#end###macro( JFrog_Pipelines_Docker_Push_Step )

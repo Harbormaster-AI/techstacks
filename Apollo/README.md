@@ -1,10 +1,10 @@
-# realMethods Tech Stack Package Descriptor
+# Harbormaster Tech Stack Package Descriptor
 
 ## Name
 Apollo GraphQL
 
 ## Summary Image
-![alt text](http://www.realmethods.com/infopages/img/apollo.png)
+![alt text](http://www.Harbormaster.com/infopages/img/apollo.png)
 
 ## Intent
 To create an application that uses:
@@ -17,7 +17,7 @@ To create an application that uses:
 - Optional deployment to cloud native infrastructure or Kubernetes cluster
 
 ## Contents
-[https://github.com/realmethods-public/tech.stack.packages/tree/master/Apollo](https://github.com/realmethods-public/tech.stack.packages/tree/master/Apollo)
+[https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Apollo](https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Apollo)
 
 
 ## Usage
@@ -28,7 +28,7 @@ In order to use the Apollo GraphQL Server, you first must create an account at [
 
 **Create a New Service**
 
-You next have to create a service within your account. When the service is created, you will be provided with an Apollo Engine API key of the form: _service:xxxxxxxxxx-9999:uygR3DDPKQ8EsexaUaPfVg_. You will need to provide this the engine-api-key input parameter to realMethods in order for it to be applied within the generated application files.
+You next have to create a service within your account. When the service is created, you will be provided with an Apollo Engine API key of the form: _service:xxxxxxxxxx-9999:uygR3DDPKQ8EsexaUaPfVg_. You will need to provide this the engine-api-key input parameter to Harbormaster in order for it to be applied within the generated application files.
 
 Also, apply the name of the service service as another input parameter. This is the text between the 2 colons (:) of the the engine-api-key
 
@@ -58,7 +58,7 @@ To run the Apollo Client from your browser, _http://localhost:4000_
 To start issuing queries using GraphQL, [click here](https://www.apollographql.com/docs/apollo-server/getting-started/#step-8-execute-your-first-query)
 
 ## External Doc Link
-[http://www.realmethods.com/infopages/apollo-info-page.html](http://www.realmethods.com/infopages/apollo-info-page.html)
+[http://www.Harbormaster.com/infopages/apollo-info-page.html](http://www.Harbormaster.com/infopages/apollo-info-page.html)
 
 ## Package Derived From
 None

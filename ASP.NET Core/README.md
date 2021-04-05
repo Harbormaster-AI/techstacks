@@ -1,10 +1,10 @@
-# realMethods Tech Stack Package Descriptor
+# Harbormaster Tech Stack Package Descriptor
 
 ## Name
 Microsoft ASP.NET
 
 ## Summary Image
-![alt text](http://www.realmethods.com/infopages/img/aspdotnet.png)
+![alt text](http://www.Harbormaster.com/infopages/img/aspdotnet.png)
 
 ## Intent
 To create an application that uses:
@@ -14,7 +14,7 @@ To create an application that uses:
 - A Git repository to commit application files
 
 ## Contents
-[https://github.com/realmethods-public/tech.stack.packages/tree/master/ASP.NET%20Core](https://github.com/realmethods-public/tech.stack.packages/tree/master/ASP.NET%20Core)
+[https://github.com/Harbormaster-public/tech.stack.packages/tree/master/ASP.NET%20Core](https://github.com/Harbormaster-public/tech.stack.packages/tree/master/ASP.NET%20Core)
 
 
 ## Usage
@@ -99,7 +99,7 @@ __Copy to Output__ to __Copy Always__.
 Build then run the project.  Visual Studio will launch the app in the browser.
 
 ## External Doc Link
-[http://www.realmethods.com/infopages/asp.net-info-page.html](http://www.realmethods.com/infopages/asp.net-info-page.html)
+[http://www.Harbormaster.com/infopages/asp.net-info-page.html](http://www.Harbormaster.com/infopages/asp.net-info-page.html)
 
 ## Package Derived From
 None

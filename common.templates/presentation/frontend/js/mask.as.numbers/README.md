@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
-# realMethods Confidential
+# Harbormaster Confidential
 # 
-# 2018 realMethods, Inc.
+# 2018 Harbormaster, Inc.
 # All Rights Reserved.
 # 
 # This file is subject to the terms and conditions defined in
 # file 'license.txt', which is part of this source code package.
 #  
 # Contributors :
-#       realMethods Inc - General Release
+#       Harbormaster Inc - General Release
 #-------------------------------------------------------------------------------
 # jquery-mask-as-number
 Simple mask jquery extension that ensures valid integer numbers in text inputs

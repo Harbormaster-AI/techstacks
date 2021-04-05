@@ -1,10 +1,10 @@
-# realMethods Tech Stack Package Descriptor
+# Harbormaster Tech Stack Package Descriptor
 
 ## Name
 Spark Micro Web Framework
 
 ## Summary Image
-![alt text](http://www.realmethods.com/infopages/img/spark.micro.png)
+![alt text](http://www.Harbormaster.com/infopages/img/spark.micro.png)
 
 ## Intent
 To create an application that uses:
@@ -18,7 +18,7 @@ To create an application that uses:
 - Optional deployment to cloud native infrastructure or Kubernetes cluster
 
 ## Contents
-[https://github.com/realmethods-public/tech.stack.packages/tree/master/Spark%20Micro%20Web%20Framework](https://github.com/realmethods-public/tech.stack.packages/tree/master/Spark%20Micro%20Web%20Framework)
+[https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Spark%20Micro%20Web%20Framework](https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Spark%20Micro%20Web%20Framework)
 
 
 ## Usage

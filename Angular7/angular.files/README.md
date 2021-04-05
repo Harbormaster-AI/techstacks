@@ -1,6 +1,6 @@
-# realMethods
+# Harbormaster
 
-This Angular/MongoDB (not AngularJS) project was generated with realMethods version ${aib.getPlatformVersion()}.
+This Angular/MongoDB (not AngularJS) project was generated with Harbormaster version ${aib.getPlatformVersion()}.
 
 The Angular technology stack package it was generated from has been tested with Angular version 7.2.0.
 
@@ -11,7 +11,7 @@ The following instructions assume NPM is installed.  If not, you can download it
 
 ### Install the Angular CLI
 
-The realMethods Angular technology stack was developed and tested for Angular 7.
+The Harbormaster Angular technology stack was developed and tested for Angular 7.
 
 If you have an older version of Angular, you should consider un-installing it in favor of Angular v7:
 

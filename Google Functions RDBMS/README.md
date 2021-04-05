@@ -1,13 +1,13 @@
-# realMethods Tech Stack Package Descriptor
+# Harbormaster Tech Stack Package Descriptor
 
 ## Name
 Google Functions (In Beta)
 
 ## Summary Image
-![alt text](http://www.realmethods.com/infopages/img/google.functions.png)
+![alt text](http://www.Harbormaster.com/infopages/img/google.functions.png)
 
 ## Intent
-Depending upon the complexity of the input entity model, realMethods will created 100s to 1000s of Google functions, each representing the fundamental unit of business functionality.  Therefore the deployment process will take some time.  Once a function is deployed, it is immediately available on GCP.
+Depending upon the complexity of the input entity model, Harbormaster will created 100s to 1000s of Google functions, each representing the fundamental unit of business functionality.  Therefore the deployment process will take some time.  Once a function is deployed, it is immediately available on GCP.
 
 To create an application that uses:
 
@@ -20,12 +20,12 @@ To create an application that uses:
 This package is in the process of being deployable through each of the major supported CI platforms including the execution of generated Terraform file(s).
 
 __In Progress__
-Along with a the generated Google functions, realMethods generates a separate deployable Data Access layer using the Spark Micro Web Framework.  This solves the problem whereby database connections need to be stateful yet for performance sake serverless functions should remain stateless.  By keeping the stateful db connections reusable and separate from the stateless serverless functions, the read/write performance of each Lambda function is optimized.`
+Along with a the generated Google functions, Harbormaster generates a separate deployable Data Access layer using the Spark Micro Web Framework.  This solves the problem whereby database connections need to be stateful yet for performance sake serverless functions should remain stateless.  By keeping the stateful db connections reusable and separate from the stateless serverless functions, the read/write performance of each Lambda function is optimized.`
 
-When realMethods is enabled to generate the Terraform file(s) for AWS, it will create a secure server with a running MySQL database instance.  It will SSH to that server instance to pull and run the Docker image of the Data Access layer.  Also, it will point each Google function to the URL of the Data Access layer in order to communicate with it as a RESTful API.  
+When Harbormaster is enabled to generate the Terraform file(s) for AWS, it will create a secure server with a running MySQL database instance.  It will SSH to that server instance to pull and run the Docker image of the Data Access layer.  Also, it will point each Google function to the URL of the Data Access layer in order to communicate with it as a RESTful API.  
 
 ## Contents
-[https://github.com/realmethods-public/tech.stack.packages/tree/master/Google%20Functions%20RDBMS](https://github.com/realmethods-public/tech.stack.packages/tree/master/Google%20Functions%20RDBMS)
+[https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Google%20Functions%20RDBMS](https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Google%20Functions%20RDBMS)
 
 
 ## Usage

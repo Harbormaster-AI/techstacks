@@ -1,0 +1,11 @@
+#macro( NPM_Install_Directive )
+npm install -g @angular/cli@8.3.24> /dev/null
+#end
+
+#macro( NODE_JS_Version )
+12#end
+
+#macro( Docker_NPM_Install_Directives )
+RUN npm install @angular-devkit/build-angular@0.803.19
+RUN npm install -g @angular/cli@8.3.21 > /dev/null
+#end

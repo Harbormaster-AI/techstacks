@@ -1,10 +1,10 @@
-# realMethods Tech Stack Package Descriptor
+# Harbormaster Tech Stack Package Descriptor
 
 ## Name
 Angular7 
 
 ## Summary Image
-![alt text](http://www.realmethods.com/infopages/img/angular.png)
+![alt text](http://www.Harbormaster.com/infopages/img/angular.png)
 
 ## Intent
 To create an application that uses:
@@ -18,7 +18,7 @@ To create an application that uses:
 - Optional deployment to cloud native infrastructure or Kubernetes cluster
 
 ## Contents
-[https://github.com/realmethods-public/tech.stack.packages/tree/master/Angular7](https://github.com/realmethods-public/tech.stack.packages/tree/master/Angular7)
+[https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Angular7](https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Angular7)
 
 
 ## Usage
@@ -73,7 +73,7 @@ to execute the unit tests via Karma.
 to execute the end-to-end tests via Protractor.
 
 ## External Doc Link
-[http://www.realmethods.com/infopages/angularjs-mongodb-info-page.html](http://www.realmethods.com/infopages/angularjs-mongodb-info-page.html)
+[http://www.Harbormaster.com/infopages/angularjs-mongodb-info-page.html](http://www.Harbormaster.com/infopages/angularjs-mongodb-info-page.html)
 
 ## Package Derived From
 None

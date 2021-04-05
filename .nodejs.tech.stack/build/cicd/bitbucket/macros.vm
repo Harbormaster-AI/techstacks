@@ -1,12 +1,8 @@
 ########################################################################
-## Bitbucket Pipeline Macros
-########################################################################
-
-########################################################################
 ## Bitbucket_Pipeline_Image_Declaration
 ########################################################################
 #macro( Bitbucket_Pipeline_Image_Declaration )
-image: maven:3.3.9
+image: node:#NODE_JS_Version()
 #end##macro( Bitbucket_Pipeline_Image_Declaration )
 
 ########################################################################
@@ -15,41 +11,39 @@ image: maven:3.3.9
 #macro( Bitbucket_Pipeline_Definitions )          
 definitions:
   services:
-    mysql:
-      image: mysql:5.7
-      variables: # for mysql
-        MYSQL_USER: 'root'
-        MYSQL_ROOT_PASSWORD: 'letmein2'
+    mongo: 
+      image: mongo
 #end##macro( Bitbucket_Pipeline_Definitions )
-
 
 ########################################################################
 ## Bitbucket_Pipeline_Step
 ########################################################################
 #macro( Bitbucket_Pipeline_Step )  
   - step:
+      name: install ${appName} dependencies and build
       script:
-          - export DATABASE_USERNAME=root
-          - export DATABASE_PASSWORD=letmein2
-          - export DATABASE_DIALECT=org.hibernate.dialect.MySQL5Dialect
-          - export DATABASE_DRIVER=com.mysql.cj.jdbc.Driver
-          - export DATABASE_URL=jdbc:mysql://localhost:3306/bitbuckettest?createDatabaseIfNotExist=true
-#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
-#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
-#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
-#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
-          - mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
-#else        
-          - mvn package
-#end##if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+        - expose FULL_APP_DIR=./appRoot/${appName}
+        - #NPM_Install_Directive()
+        - mkdir -p appRoot
+        - cd appRoot
+        - ng new ${appName} --defaults
+        - ls
+        - cp -r ./${appName}/. $FULL_APP_DIR
+        - cd $FULL_APP_DIR
+        - npm install --prod
+        - npm run setup
+        - ng build
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true"  )
+        - npm run deploy
+#end
 #end##macro( Bitbucket_Pipeline_Step )  
 
 ########################################################################
 ## Bitbucket_Pipeline_Caches
 ########################################################################
-#macro( Bitbucket_Pipeline_Caches )  
+#macro( Bitbucket_Pipeline_Caches )
       caches:
-          - maven
+          - node
 #end##macro( Bitbucket_Pipeline_Caches )
 
 ########################################################################
@@ -57,6 +51,5 @@ definitions:
 ########################################################################
 #macro( Bitbucket_Pipeline_Services )  
       services:
-          - mysql
+          - mongo
 #end##macro( Bitbucket_Pipeline_Services )
-          

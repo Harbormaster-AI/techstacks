@@ -3,6 +3,14 @@
 #else
 #set( $appName = $aib.getApplicationNameFormatted() )
 #end
+
 #Bitbucket_Pipeline_Image_Declaration()
-#Bitbucket_Pipeline_Pipelines()
+
+pipelines:
+  default:
+#Bitbucket_Pipeline_Step()
+#Bitbucket_Pipeline_Caches()  
+#Bitbucket_Pipeline_Services()  
+
 #Bitbucket_Pipeline_Definitions() 
+

@@ -9,7 +9,7 @@ Angular8
 ## Intent
 To create an application that uses:
 
-- Angular8 with an MVC design pattern
+- Angular10 with an MVC design pattern
 - Fully functional front-end with a mix of Material Design, HTML5, JQuery, Bootstrap, Javascript and Typescript
 - MongoDB for document based storage using Mongoose as an ORM front to MongoDB
 - A Git repository to commit all project files

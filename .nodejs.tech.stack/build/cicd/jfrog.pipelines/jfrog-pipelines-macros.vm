@@ -1,0 +1,47 @@
+########################################################################
+## JFrog_Pipelines Macros
+########################################################################
+
+########################################################################
+## JFrog_Pipelines_Build_Step - Implement for the common stack
+########################################################################
+#macro( JFrog_Pipelines_Build_Step )
+      # ======================================================= 
+      # Maven Build Step
+      # =======================================================    
+      - name:                             npm_build_step     # Unique name <required>
+        type:                             NpmBuild            # build type <required>  
+        
+        # ======================================================= 
+        # Step configuration
+        # ======================================================= 
+        configuration:      
+        
+          sourceLocation:                 ${appName}          # The source code starts at the root directory
+          repositoryName:                 ${buildArtifactRepo}    # optional, npm repository name on artifactory
+          resolverRepo:                   ${buildArtifactRepo}    # optional, npm repository name on artifactory
+          
+          inputResources:
+            - name:                       git_repo         # Use the git_repo resource   
+         
+          environmentVariables:
+              skipTests:                  "true"                # Determines if testing should be skipped or invoked during Maven packaging
+              DATABASE_URL:               ${databaseUrl}        # if skipTests set to false, make sure the host name or ip address to running MySQL instance
+              
+          integrations:
+            - name:                       ${buildArtifactIntegration}  # Must specify an Artifactory Integration <required>  
+        
+        execution:
+          
+          onStart:
+            - echo "Preparing for build using NPM..."
+
+          onSuccess:
+            - echo "build successful"
+          onFailure:
+            - echo "buld failed"
+          onComplete:                                  #always
+            - echo "build complete"
+            
+#end##macro( JFrog_Pipelines_Build_Step )
+

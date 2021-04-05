@@ -1,10 +1,10 @@
-# realMethods Tech Stack Package Descriptor
+# Harbormaster Tech Stack Package Descriptor
 
 ## Name
 Struts2 MVC Web Framework
 
 ## Summary Image
-![alt text](http://www.realmethods.com/infopages/img/struts.rdbms.png)
+![alt text](http://www.Harbormaster.com/infopages/img/struts.rdbms.png)
 
 ## Intent
 To create an application that uses:
@@ -17,7 +17,7 @@ To create an application that uses:
 - Optional deployment to cloud native infrastructure or Kubernetes cluster
 
 ## Contents
-[https://github.com/realmethods-public/tech.stack.packages/tree/master/Struts2](https://github.com/realmethods-public/tech.stack.packages/tree/master/Struts2)
+[https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Struts2](https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Struts2)
 
 
 ## Usage

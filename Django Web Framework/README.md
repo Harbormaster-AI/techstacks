@@ -1,10 +1,10 @@
-# realMethods Tech Stack Package Descriptor
+# Harbormaster Tech Stack Package Descriptor
 
 ## Name
 Django Web Framework
 
 ## Summary Image
-![alt text](http://www.realmethods.com/infopages/img/django-pip-pytest-pypa.png)
+![alt text](http://www.Harbormaster.com/infopages/img/django-pip-pytest-pypa.png)
 
 ## Intent
 django is a Python-based free and open-source web framework, which follows the model-view-template architectural pattern.
@@ -18,7 +18,7 @@ To create an application that uses:
 - Optional deployment to cloud native infrastructure or Kubernetes cluster
 
 ## Contents
-[https://github.com/realmethods-public/tech.stack.packages/tree/master/Django%20Web%20Framework](https://github.com/realmethods-public/tech.stack.packages/tree/master/Django%20Web%20Framework)
+[https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Django%20Web%20Framework](https://github.com/Harbormaster-public/tech.stack.packages/tree/master/Django%20Web%20Framework)
 
 
 ## Usage
