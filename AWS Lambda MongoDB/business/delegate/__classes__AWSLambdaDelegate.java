@@ -43,12 +43,13 @@ import ${aib.getRootPackageName()}.exception.SaveException;
 public class $fullClassName 
 #else
 public abstract class $fullClassName 
-#end
+#end##if ( $classObject.isAbstract() == false )
 #if ( $classObject.hasParent() == true )
 extends ${classObject.getParentName()}AWSLambdaDelegate
 #else
 extends BaseAWSLambdaDelegate
-#end{
+#end##if ( $classObject.hasParent() == true )
+{
 //************************************************************************
 // Public Methods
 //************************************************************************
@@ -58,9 +59,9 @@ extends BaseAWSLambdaDelegate
     public ${fullClassName}() {
 	}
 
-#if( ${aib.getParam("aws-lambda.crudDeclStrategy") == "methodsPerClass" )
+#if( $aib.getParam("aws-lambda.crudDeclStrategy") == "methodsPerClass" )
 #set( $exposeAPI = true )
-#elseif ${aib.getParam("aws-lambda.crudDeclStrategy") == "uberMethodPerClass" )
+#elseif( $aib.getParam("aws-lambda.crudDeclStrategy") == "uberMethodPerClass" )
     public static ${className} execute( 
 		@ApiParam(value = "name of action", required = true) String actionName,
 		@ApiParam(value = "input data to pass along as JSON", required = false) JsonObject jsonObjectData,
