@@ -1,13 +1,13 @@
 <tech-stack-package 
 	name="Apollo GraphQL" 
 	shortName="Apollo"
-	description="Apollo GraphQL server Warning: Not Yet Released" 
+	description="Apollo GraphQL Server" 
 	icon-url="./img/apollo-logo.png" 	
 	info-page-url="http://www.harbormaster.com/infopages/apollo-info-page.html"
     version="1.0"
     app-type="other"
     release-status="production"
-    derivedFrom="nodejs.tech.stack">
+    derivedFrom="Angular8">
 	<target-languages>
 		<target-language name="javascript"/>
 	</target-languages><!-- target language(s) supported by the template structure -->
