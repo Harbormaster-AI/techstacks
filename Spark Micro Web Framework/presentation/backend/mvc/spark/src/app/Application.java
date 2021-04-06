@@ -19,8 +19,6 @@ import static spark.Spark.post;
 
 import spark.servlet.SparkApplication;
 
-import $
-import main.java.com.harbormaster.server.action.GenerateAppAction;
 import ${aib.getRootPackageName(true)}.common.JsonTransformer;
 import ${aib.getRootPackageName(true)}.exception.ProcessingException;
 import ${aib.getRootPackageName(true)}.persistent.*;
@@ -186,7 +184,8 @@ public class Application //implements SparkApplication
     			}
 	    		else
 	    		{    			
-	    			LOGGER.warn( "Application.main() - failed to located package " + pkg + " in registry" );
+					final String msg = "Application.main() - failed to located package " + pkg + " in registry";
+	    			LOGGER.warning( msg );
 		    		return( msg );
 	    		}    		
 			}
