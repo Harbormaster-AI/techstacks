@@ -520,7 +520,7 @@
 #end##macro( outputMultipleAssociationCRUDCalls $classArg )
 
 
-#macro( outputCRUDCallsForClass( $class )
+#macro( outputCRUDCallsForClass $class )
         switch(${class.getName()}) { 
 #outputStdCRUDCalls( $class )
 #outputSingleAssociationCRUDCalls(  $class )
