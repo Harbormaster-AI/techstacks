@@ -31,16 +31,6 @@
 	
 </options>
 
-<!-- Docker -->
-<options name="docker" maxPerRow="1">
-	<option name="inUse"  value="true" required="true" description="using Docker" type="boolean"/>
-	<option name="userName"  value="tylertravismya" required="true" description="Docker repo ]user name" type="input"/>
-	<option name="password"  value="69cutlass" required="true" description="Docker repo password" type="input"/>
-	<option name="orgName"  value="harbormaster" required="true" description="organization name" type="input"/>
-	<option name="repo" value="angular7demo" required="true" description="Docker repository name" type="input"/>
-	<option name="tag"  value="latest" required="true" description="tag" type="input"/>
-</options>
-
 <!-- CI/CD Platform -->
 <options name="cicd" maxPerRow="1">
 	<option name="platform" value="codeship" 
