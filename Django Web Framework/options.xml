@@ -40,16 +40,6 @@
 
 </options>
 
-<!-- Docker -->
-<options name="docker" maxPerRow="1">
-	<option name="inUse"  value="true" required="true" description="using Docker" type="boolean"/>
-	<option name="userName"  value="" required="true" description="Docker repo ]user name" type="input"/>
-	<option name="password"  value="" required="true" description="Docker repo password" type="input"/>
-	<option name="orgName"  value="" required="true" description="organization name" type="input"/>
-	<option name="repo" value="" required="true" description="Docker repository name" type="input"/>
-	<option name="tag"  value="latest" required="true" description="tag" type="input"/>
-</options>
-
 <!-- CI/CD Platform -->
 <options name="cicd" maxPerRow="1">
 	<option name="platform" value="codeship" 
