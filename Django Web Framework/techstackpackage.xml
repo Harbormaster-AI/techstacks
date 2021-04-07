@@ -7,8 +7,8 @@
     version="1.0"
     app-type="webapp"
     release-status="production"
-    derivedFrom="python.tech.stack">
-
+    derivedFrom="python.tech.stack"
+	supportsDocker="true">
 	<target-languages>
 		<target-language name="python"/>
 		<target-language name="javascript"/>

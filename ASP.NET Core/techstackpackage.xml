@@ -6,7 +6,8 @@
 	info-page-url="http://www.harbormaster.com/infopages/asp.net-info-page.html"	
     version="1.0"
     app-type="webapp"
-    release-status="production">
+    release-status="production"
+	supportsDocker="false">
 	<target-languages>
 		<target-language name="C#"/>
 		<target-language name="javascript"/>

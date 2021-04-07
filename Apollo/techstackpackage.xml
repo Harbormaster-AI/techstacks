@@ -7,7 +7,8 @@
     version="1.0"
     app-type="other"
     release-status="production"
-    derivedFrom="Angular8">
+    derivedFrom="Angular8"
+	supportsDocker="true">
 	<target-languages>
 		<target-language name="javascript"/>
 	</target-languages><!-- target language(s) supported by the template structure -->

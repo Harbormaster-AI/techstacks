@@ -6,8 +6,8 @@
 	info-page-url="http://www.harbormaster.com/infopages/google-functions-info-page.html"
     version="1.0"
     app-type="serverless"
-    release-status="production">
-
+    release-status="production"
+	supportsDocker="false">
 	<target-languages>
 		<target-language name="nodejs8"/>
 		<target-language name="java"/>
