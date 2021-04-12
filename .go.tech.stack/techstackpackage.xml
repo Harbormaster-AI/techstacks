@@ -7,6 +7,7 @@
     version="1.0"
     app-type="webapp"
     release-status="production"
+    derivedFrom=".common.tech.stack
     visible="false">
 	<target-languages>
 		<target-language name="go"/>

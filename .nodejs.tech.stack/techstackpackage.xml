@@ -7,7 +7,8 @@
     version="1.0"
     app-type="webapp"
     release-status="production"
-    visible="false">
+    visible="false"
+    derivedFrom=".common.tech.stack>
 	<target-languages>
 		<target-language name="javascript"/>
 	</target-languages><!-- target language(s) supported by the template structure -->
