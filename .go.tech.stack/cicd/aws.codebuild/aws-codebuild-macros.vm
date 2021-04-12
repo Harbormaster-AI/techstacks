@@ -1,0 +1,56 @@
+########################################################################
+## AWS CodeBuild Macros
+########################################################################
+
+########################################################################
+## AWS Codebuild Env Var Declaration
+########################################################################
+#macro( AWS_CodeBuild_EnvVarsDeclaration )       
+#end##macro( AWS_CodeBuild_EnvVars() )
+
+########################################################################
+## AWS Codebuild runtime versions 
+########################################################################
+#macro( AWS_CodeBuild_Runtime_Versions )  
+    runtime-versions:
+        golang: 1.15  
+#end##macro( AWS_CodeBuild_Install_Phase_Commands ) 
+
+########################################################################
+## AWS Codebuild Install Phase Commands
+########################################################################
+#macro( AWS_CodeBuild_Install_Phase_Commands )
+    commands:
+      - echo Install dependencies...
+      - go get -u github.com/golang/lint/golint
+    finally:
+      - echo Install phase complete...
+#end##macro( AWS_CodeBuild_Install_Phase_Commands )
+
+#######################################################################
+## AWS Codebuild Build Phase Commands
+########################################################################
+#macro( AWS_CodeBuild_Build_Phase_Commands )
+    commands:
+      - echo Build/Test...
+      - golint -set_exit_status
+      - go build -o app
+      - go test         
+    finally:
+      - echo Build/Test phase complete  
+#end##macro( AWS_CodeBuild_Build_Phase_Commands )
+
+########################################################################
+## AWS Codebuild Artifact Declaration
+########################################################################
+#macro( AWS_CodeBuild_Artifacts )
+artifacts:
+  files:
+    - app
+    - buildspec.yml
+#end##macro( AWS_CodeBuild_Artifacts )
+
+
+
+
+

@@ -1,0 +1,19 @@
+<tech-stack-package 
+    name="Base Go Tech Stack"
+    shortName=".go.tech.stack"
+    description="The base for all Go related tech stacks" 
+    icon-url=""
+ 	info-page-url=""
+    version="1.0"
+    app-type="webapp"
+    release-status="production"
+    visible="false">
+	<target-languages>
+		<target-language name="go"/>
+		<target-language name="javascript"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+	    <tech-stack-component name="build" description="ci/cd templates " app-layer="build"/>
+	    <tech-stack-component name="data" description="postgres" app-layer="data"/>
+	</tech-stack>
+</tech-stack-package>

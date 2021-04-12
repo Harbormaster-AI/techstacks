@@ -1,0 +1,91 @@
+########################################################################
+## GitLab Macros
+########################################################################
+
+########################################################################
+## GitLab_Image_Declarations
+########################################################################
+#macro( GitLab_Image_Declarations )
+image: golang:latest
+#end##macro( GitLab_Image_Declarations()
+
+########################################################################
+## GitLab_Service_Declarations
+########################################################################
+#macro( GitLab_Service_Declarations )
+services:
+- postgres:latest
+#end##macro( GitLab_Service_Declarations()
+
+########################################################################
+## GitLab_Variable_Declarations
+########################################################################
+#macro( GitLab_Variable_Declarations )
+variables:
+  POSTGRES_USERNAME: "root"
+  POSTGRES_PASSWORD: "letmein2"
+  POSTGRES_DB: "${appName}DB"
+  REPO_NAME: gitlab.com/${aib.getParam('git.userName')}/${aib.getParam('git.repo')}
+  GOPATH: $CI_PROJECT_DIR/.go
+#end##macro( GitLab_Variable_Declarations()
+
+########################################################################
+## GitLab_Cache_Declaration
+########################################################################
+#macro( GitLab_Cache_Declaration )
+  cache:
+    paths:
+      - .go/pkg/mod/
+#end##macro( GitLab_Cache_Declaration )
+
+########################################################################
+## GitLab_StageDeclarations
+########################################################################
+#macro( GitLab_Stage_Declarations )
+stages:
+  - test
+  - build
+#end##macro( GitLab_Stage_Declarations )
+
+########################################################################
+## GitLab_Before_Script
+########################################################################
+#macro( GitLab_Before_Script )
+  before_script:
+    - mkdir -p .go
+#end##macro( GitLab_Before_Script )
+
+########################################################################
+## GitLab_After_Script
+########################################################################
+#macro( GitLab_After_Script )
+#end##macro( GitLab_After_Script )
+
+########################################################################
+## GitLab_Stage_Definitions
+########################################################################
+#macro( GitLab_Stage_Definitions )
+test:
+  stage: test
+  script:
+    - go fmt $(go list ./... | grep -v /vendor/)
+    - go vet $(go list ./... | grep -v /vendor/)
+    - go test -race $(go list ./... | grep -v /vendor/)
+
+build:
+  stage: build
+  script:
+    - go build -race -ldflags "-extldflags '-static'" -o $CI_PROJECT_DIR/${appName}Binary
+  artifacts:
+    paths:
+      - ${appName}Binary
+#end##macro( GitLab_Stage_Definitions )
+
+########################################################################
+## GitLab_Artifacts 
+########################################################################
+#macro( GitLab_Artifacts )
+  artifacts:
+    paths:
+      - mybinary
+#end##macro( GitLab_Artifacts )

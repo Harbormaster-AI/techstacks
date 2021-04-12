@@ -1,0 +1,26 @@
+########################################################################
+## Jenkins Macros
+########################################################################
+
+########################################################################
+## Jenkinsfile_Docker_App_Image - default is empty, should be overridden
+########################################################################
+#macro( Jenkinsfile_Docker_App_Image )
+golang#end##macro( Jenkinsfile_Docker_App_Image )
+
+#######################################################################
+## Jenkinsfile_Install_Steps - default is empty, should be overridden
+########################################################################
+#macro( Jenkinsfile_Install_Steps )
+                sh 'echo Install dependencies...'
+                sh 'go get -u github.com/golang/lint/golint'
+#end##macro( Jenkinsfile_Install_Steps )
+                                              
+#######################################################################
+## Jenkinsfile_Build_Steps - default is empty, should be overridden
+########################################################################
+#macro( Jenkinsfile_Build_Steps )
+                sh 'echo Build/Test...'
+                sh 'go build -race'
+#end##macro( Jenkinsfile_Build_Steps )
+

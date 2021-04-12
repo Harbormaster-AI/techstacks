@@ -1,0 +1,21 @@
+########################################################################
+## GitHubActions_Steps_Uses
+########################################################################
+#macro( GitHubActions_Steps_Uses )
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.13.1' # The Go version to download (if necessary) and use.
+#end##macro( GitHubActions_Steps_Uses )
+
+########################################################################
+## GitHubActions_Steps
+########################################################################
+#macro( GitHubActions_Steps )
+    - name: Install dependencies
+      run: go get -u github.com/golang/lint/golint
+    - name: Run build then test
+      run: golint -set_exit_status
+      run: go build -o app
+      run: go test        
+#end##macro( GitHubActions_Steps )

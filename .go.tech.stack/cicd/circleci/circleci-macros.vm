@@ -1,0 +1,44 @@
+########################################################################
+## CircleCI Macros
+########################################################################
+
+########################################################################
+## CircleCI Docker Image Output
+########################################################################
+#macro( CircleCI_OutputDockerImageDecl )        
+    # CircleCI Golang
+    # Postgres image
+    docker:
+      - image: circleci/golang:1.12
+      - image: postgres
+        # required env vars
+        environment:
+            POSTGRES_DB: ${appName}DB
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: letmein2 
+#end##macro( CircleCI_OutputDockerImageDecl )
+
+########################################################################
+## CircleCI Run Commands
+########################################################################
+#macro( CircleCI_RunCommands )
+      - run: 
+          name: Install dependencies...
+          command: go get -u github.com/golang/lint/golint
+          
+          name: Build/Test...
+          command: golint -set_exit_status
+          command: go build -o app
+          command: go test   
+#end###macro( CircleCI_RunCommands )
+
+########################################################################
+## CircleCI EnvVarAssignments
+########################################################################
+#macro( CircleCI_EnvVarAssignments )
+    environment:
+        POSTGRES_DB: ${appName}DB
+        POSTGRES_USER: root
+        POSTGRES_PASSWORD: letmein2 
+        TEST_RESULTS: /tmp/test-results # path to where test results will be saved
+#end##macro( CircleCI_EnvVarAssignments )
