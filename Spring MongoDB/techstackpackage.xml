@@ -7,7 +7,7 @@
     version="1.1"
     release-status="production"
     app-type="restfulapi"
-    derivedFrom="java.tech.stack"
+    derivedFrom=".java.tech.stack"
 	supportsDocker="true">
 	<target-languages>
 		<target-language name="java"/>
