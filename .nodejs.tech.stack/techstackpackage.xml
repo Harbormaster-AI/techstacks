@@ -9,7 +9,6 @@
     release-status="production"
     visible="false">
 	<target-languages>
-		<target-language name="nodejs"/>
 		<target-language name="javascript"/>
 	</target-languages><!-- target language(s) supported by the template structure -->
 	<tech-stack>
