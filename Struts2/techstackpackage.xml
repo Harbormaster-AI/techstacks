@@ -7,7 +7,7 @@
     version="1.4"
     app-type="webapp"
     release-status="production"
-    derivedFrom="java.tech.stack"
+    derivedFrom=".java.tech.stack"
 	supportsDocker="true">
 	<target-languages>
 		<target-language name="java"/>

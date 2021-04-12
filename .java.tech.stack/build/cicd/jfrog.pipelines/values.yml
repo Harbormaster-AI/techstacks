@@ -6,6 +6,11 @@
 gitRepo:
   gitProvider: ${aib.getParam( "git.name" )}
   path: ${aib.getParam( "git.username" )}/${aib.getParam( "git.repository" )}
+  TestDBUrl: ${aib.getParam("hibernate.connection.url")}
+  TestDBName: ${appName}_test_db
+  TestDBPassword: 
+  TestDBDialect: org.hibernate.dialect.MySQL8Dialect 
+  TestDBDriver: com.mysql.cj.jdbc.Driver
 #if ( ${aib.getParam( "docker.inUse" )}  == "true" )
   DockerUserName: ${aib.getParam("docker.userName")}
   DockerPassword: ${aib.getParam("docker.password")}

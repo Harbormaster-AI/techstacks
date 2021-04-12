@@ -1,6 +1,6 @@
 <tech-stack-package 
     name="Base Java Tech Stack"
-    shortName="java.tech.stack"
+    shortName=".java.tech.stack"
     description="The base for all Java related tech stacks" 
     icon-url=""
  	info-page-url=""

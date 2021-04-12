@@ -1,0 +1,53 @@
+########################################################################
+## GitHubActions_Strategy - default should be overriden in versions
+########################################################################
+#macro( GitHubActions_Strategy )
+    strategy:
+      matrix:
+        node-version: [7.x, 8.x, 9.x, 10.x, 11.x]
+#end##macro( GitHubActions_Strategy )
+
+########################################################################
+## GitHubActions_Steps_Uses
+########################################################################
+#macro( GitHubActions_Steps_Uses )
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+#end
+
+########################################################################
+## GitHubActions_Steps
+########################################################################
+#macro( GitHubActions_Steps )
+
+    - name: assign vars for Git
+      run: 'export EMAIL=github@github.com'
+      run: 'export GIT_AUTHOR_NAME=GitHub'
+      run: 'export GIT_COMMITTER_NAME=GitHub'
+      
+    - install the Angular CLI, pip to /dev/null to remove analytics invocation
+      run: 'sudo #NPM_Install_Directive()'
+
+    - create an appRoot directory to install into 
+      run: mkdir /home/github/appRoot
+
+    - create a new Angular project shell
+      run: cd /home/github/appRoot && ng new ${appName} --defaults
+
+    - copy the application files from the working directory
+      run: cp -r -n /home/github/appRoot/${appName}/ /home/github/gitRoot/
+
+    - setup the application, copies generated app files to the project directory
+      run: cd /home/github/gitRoot/${appName} && npm install --prod && npm run setup
+
+    - perform the build into a directory called angular under the dist directory
+      run: cd /home/github/gitRoot/${appName} && ng build #--base-href /${appName}/
+      
+#if ( ${aib.getParam('jfrog.inUse')} == "true" || ${aib.getParam('nexus.inUse')} == "true" )
+    - deploy to target repo
+      run: npm run deploy
+#end##if ( ${aib.getParam('jfrog.inUse')} == "true" || ${aib.getParam('nexus.inUse')} == "true" )
+#end

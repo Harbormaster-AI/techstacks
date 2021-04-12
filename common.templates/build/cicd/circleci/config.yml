@@ -5,6 +5,8 @@
 #end
 version: 2.1
 
+#CircleCI_Orb_Declarations()
+
 references:
 #CircleCI_DeclareCommonReferences()
 #CircleCI_TerraformReferences()

@@ -9,3 +9,12 @@ npm install -g @angular/cli@11.2.7> /dev/null
 RUN npm install @angular-devkit/build-angular@0.1102.7
 RUN npm install -g @angular/cli@11.2.7- > /dev/null
 #end
+
+########################################################################
+## GitHubActions_Strategy 
+########################################################################
+#macro( GitHubActions_Strategy )
+    strategy:
+      matrix:
+        node-version: [11.x]
+#end##macro( GitHubActions_Strategy )

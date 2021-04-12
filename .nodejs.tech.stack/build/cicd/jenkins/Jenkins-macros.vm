@@ -1,0 +1,31 @@
+########################################################################
+## Jenkins Macros
+########################################################################
+
+########################################################################
+## Jenkinsfile_Docker_App_Image - default is empty, should be overridden
+########################################################################
+#macro( Jenkinsfile_Docker_App_Image )
+nodejs:#NODE_JS_Version()#end##macro( Jenkinsfile_Docker_App_Image )
+
+#######################################################################
+## Jenkinsfile_Install_Steps - default is empty, should be overridden
+########################################################################
+#macro( Jenkinsfile_Install_Steps )
+                sh '#NPM_Install_Directive()'
+                sh 'mkdir -p $WORKSPACE/appRoot && cd $WORKSPACE/appRoot && ng new ${appName} --defaults'
+                sh 'cp -r $WORKSPACE/${appName}/. $WORKSPACE/appRoot/${appName}'
+$set( $deployDirective = "" )
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+$set( $deployDirective = "&& npm run deploy" )
+#end                      
+                sh 'cd $WORKSPACE/appRoot/${appName} && npm install --prod && npm run setup && ng build ${deployDirective}'
+#end##macro( Jenkinsfile_Install_Steps )
+                                              
+#######################################################################
+## Jenkinsfile_Build_Steps - default is empty, should be overridden
+########################################################################
+#macro( Jenkinsfile_Build_Steps )
+                sh 'cd $WORKSPACE/appRoot/${appName} && ng build'
+#end##macro( Jenkinsfile_Build_Steps )
+

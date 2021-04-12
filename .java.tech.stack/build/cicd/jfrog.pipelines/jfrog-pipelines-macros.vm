@@ -9,7 +9,7 @@
       # ======================================================= 
       # Maven Build Step
       # =======================================================    
-      - name:                             maven_build_step    # Unique name <required>
+      - name:                             build_step    # Unique name <required>
         type:                             MvnBuild            # build type <required>  
         
         # ======================================================= 
@@ -27,7 +27,7 @@
           affinityGroup:                  shared_affinity_group # used to bind steps <optional>
           
           outputResources:
-            - name:                       maven_build_info  # Uses the defined Maven build info resource               
+            - name:                       build_info  # Uses the defined Maven build info resource               
           
           inputResources:
             - name:                       git_repo         # Use the git_repo resource   
@@ -50,3 +50,17 @@
             
 #end##macro( JFrog_Pipelines_Build_Step )
 
+########################################################################
+## JFrog_Pipelines_Build_Archive_FileSpec_Configuration
+########################################################################
+
+#macro( JFrog_Pipelines_Build_Archive_FileSpec_Configuration )
+    # ==========================================================
+    # File spec configuration
+    # ========================================================== 
+    configuration:
+      
+      sourceArtifactory:   ${buildArtifactIntegration}           # The name of the Artifactory Integration <required>
+      pattern:             ${buildArtifactRepo}/**/**/${appName}*.jar    # Fhe application archive file to download <required>
+      target:              target/                             # Where to download the file to <optional for download>
+#end##macro( JFrog_Pipelines_Build_Archive_FileSpec_Configuration )

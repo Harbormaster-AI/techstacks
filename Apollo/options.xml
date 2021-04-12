@@ -1,0 +1,39 @@
+<!--
+  Harbormaster
+  
+  2021 Harbormaster, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        Harbormaster Dev Team - General Release
+-->
+<options name="apollo">
+
+	<option name="service" value="" required="true" 
+		description="the name of your service created online by the Apollo Engine (service:YOUR_SERVICE_NAME:THE_TOKEN)" 
+		type="input"/>
+
+	<option name="engine-api-key" value="" required="true" 
+		description="secret credentials to communicate with an Apollo server instance" 
+		type="input"/>
+
+	<option name="pageSize" value="20" required="true" 
+		description="Size of page for pagination" 
+		type="input"/>
+						
+	<option name="clientType" value="react" 
+		selections="react,angular"
+		required="true"
+		description="client type" 
+		type="select"/>	
+
+
+	<option name="includeClient" value="true" required="true" 
+		description="" type="boolean"/>
+						
+	<option name="cacheInMemory" value="true" required="true" 
+		description="" type="boolean"/>		
+</options>

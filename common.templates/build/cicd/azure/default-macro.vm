@@ -1,0 +1,39 @@
+########################################################################
+## Azure_Pipeline_Pool_Declaration
+########################################################################
+#macro( Azure_Pipeline_Pool_Declaration )
+pool:
+  vmImage: 'ubuntu-16.04'
+#end##macro( Azure_Pipeline_Pool_Declaration )
+
+########################################################################
+## Azure_Pipeline_Var_Declarations
+########################################################################
+#macro( Azure_Pipeline_Var_Declarations )
+#end##macro( Azure_Pipeline_Var_Declarations )
+
+########################################################################
+## Azure_Pipeline_Var_Declarations
+########################################################################
+#macro( Azure_Pipeline_Docker_Steps )
+#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
+#set( $dockerRepo = ${aib.getParam("docker.repo")} )
+#set( $dockerTag = ${aib.getParam("docker.tag")} )
+#set( $dockerHost = ${aib.getParam("docker.host")} )
+#set( $dockerImageName = "${dockerOrgName}/${dockerRepo}" )
+- task: Docker@2
+  displayName: Build Docker image
+  inputs:
+    repository: ${dockerImageName}
+    command: build
+    Dockerfile: ./Dockerfile
+- task: Docker@2
+  displayName: Push Docker image
+  inputs:
+    containerRegistry: |
+      $(dockerHost)
+    repository: $(imageName)
+    command: push
+    tags: |
+      $dockerTag    
+#end##macro( Azure_Pipeline_Var_Declarations )

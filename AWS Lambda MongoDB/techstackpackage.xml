@@ -7,7 +7,7 @@
     version="1.0"
     app-type="serverless"
     release-status="production"
-    derivedFrom="java.tech.stack"
+    derivedFrom=".java.tech.stack"
 	supportsDocker="false">
 	<target-languages>
 		<target-language name="java"/>

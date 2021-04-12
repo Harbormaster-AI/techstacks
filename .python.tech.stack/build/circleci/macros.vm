@@ -71,3 +71,16 @@
     environment:
         PIPENV_VENV_IN_PROJECT: true  
 #end##macro( CircleCI_EnvVarAssignments )
+
+########################################################################
+## CircleCI CircleCI_DeclareCommonReferences
+########################################################################
+#macro( CircleCI_DeclareCommonReferences )
+#end##macro( CircleCI_DeclareCommonReferences )
+
+
+########################################################################
+## CircleCI CircleCI_TerraformReferences
+########################################################################
+#macro( CircleCI_TerraformReferences )
+#end##macro( CircleCI_TerraformReferences )

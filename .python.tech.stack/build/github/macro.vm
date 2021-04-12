@@ -1,0 +1,36 @@
+########################################################################
+## GitHubActions_Strategy 
+########################################################################
+#macro( GitHubActions_Strategy )
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8]
+#end##macro( GitHubActions_Strategy )
+
+
+########################################################################
+## GitHubActions_Steps_Uses
+########################################################################
+#macro( GitHubActions_Steps_Uses )
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+#end##macro( GitHubActions_Steps_Uses )
+
+########################################################################
+## GitHubActions_Steps
+########################################################################
+#macro( GitHubActions_Steps )
+      - name: Export PIP Cache Dir
+        run: export PIP_CACHE_DIR=.cache/pip
+      - name: install dependencies
+        run: pip install pipenv
+        run: pipenv install
+        run: pipenv install Django
+        run: pipenv install pytest-django
+        run: pip install pipenv
+      - name: test ${appName} using pytest outputting results to ${appName}/tests
+        run: pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests
+#end##macro( GitHubActions_Steps )

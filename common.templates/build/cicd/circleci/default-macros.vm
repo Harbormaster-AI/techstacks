@@ -1,0 +1,269 @@
+########################################################################
+## CircleCI Macros
+########################################################################
+
+########################################################################
+## CircleCI Orb Declarations - Empty by default
+########################################################################
+#macro( CircleCI_Orb_Declarations )
+#end##macro( CircleCI_Orb_Declarations )
+
+########################################################################
+## CircleCI common references
+########################################################################
+#macro( CircleCI_DeclareCommonReferences )
+
+working_directory: &working_directory
+  /home/circleci/gitRoot/
+
+repo_cache_key: &repo_cache_key
+  v1-repo-{{ .Branch }}-{{ .Revision }}
+
+# Step to restore repository from cache
+restore_repo: &restore_repo
+  restore_cache:
+    key: *repo_cache_key
+
+save_repo: &save_repo
+  save_cache:
+    key: *repo_cache_key
+    paths:
+        - *working_directory
+#end##macro( CircleCI_DeclareCommonReferences )
+
+########################################################################
+## CircleCI Docker image
+########################################################################
+#macro( CircleCI_DockerImageDeclaration )
+#set( $dockerUserName = ${aib.getParam("docker.username")} ) 
+#set( $dockerPassword = ${aib.getParam("docker.password")} )
+#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
+#set( $dockerRepo = ${aib.getParam("docker.repo")} )
+#set( $dockerTag = ${aib.getParam("docker.tag")} )
+#set( $dockerHost = ${aib.getParam("docker.host")} )
+
+  docker_build:
+    # assign the working directory
+    working_directory: *working_directory
+
+    docker: # run the steps with Docker, this image is not used and therefore ignored
+      - image: circleci/python:3.7  
+      
+    steps:
+      - *restore_repo
+      - setup_remote_docker
+      - run:
+          name: creating docker image requiring project env vars DOCKER_USER and DOCKER_PASS
+          command: |
+            docker login --username ${dockerUserName} --password ${dockerPassword} ${dockerHost}
+            docker build -t ${dockerOrgName}/${dockerRepo}:${dockerTag} .
+            docker push ${dockerOrgName}/${dockerRepo}:${dockerTag}
+
+#end##macro( CircleCI_DockerImageDeclaration )
+
+
+########################################################################
+## CircleCI build_test_project Declaration
+########################################################################
+#macro( CircleCI_BuiltTestProjectDeclaration )
+  # core job
+  build_test_project:
+
+#CircleCI_AssignWorkingDirectory()
+        
+    # run the steps with Docker as the primary container
+    # job commands run in this container
+#CircleCI_OutputDockerImageDecl()        
+
+    # env var assignments
+#CircleCI_EnvVarAssignments()
+
+    # steps the core build test job
+    steps:
+
+#CircleCI_Checkout()
+#CircleCI_RestoreRepo()
+#CircleCI_RunCommands()
+#CircleCI_SaveRepo()
+#CircleCI_StoreTestResults()
+#CircleCI_StoreArtifacts()
+
+#end##macro( CircleCI_BuiltTestProjectDeclaration )
+
+########################################################################
+## dockerjob declaration macro
+########################################################################
+#macro( CircleCI_DockerJobDeclaration )
+#if( ${aib.getParam("docker.inUse")} == "true" )
+      - docker_build:
+          requires:
+            - build_test_project
+#end
+#end##macro( terraformJobDeclaration )
+
+########################################################################
+## terraform job declaration macro
+########################################################################
+#macro( CircleCI_TerraformJobDeclaration )
+#if( ${aib.getParam("terraform.inUse")} == "true" )
+      - terraform:
+          requires:
+            - docker_build
+#end
+#end##macro( terraformJobDeclaration )
+
+########################################################################
+## terraform references macro
+########################################################################
+#macro( CircleCI_TerraformReferences )
+#if( ${aib.getParam("terraform.inUse")} == "true" )      
+  
+base_terraform_image: &base_terraform_image
+  hashicorp/terraform:0.11.14
+  
+terraform_config: &terraform_config
+  docker:
+    - image: *base_terraform_image
+      environment:
+          TERRAFORM_DIR: terraform
+  working_directory: *working_directory
+  environment:
+    BASH_ENV: /root/.bashrc
+
+terraform_init: &terraform_init
+  run:
+    name: terraform init
+    command: |
+      cd /home/circleci/gitRoot/terraform
+      terraform init
+#end
+#end##macro( terraformReferenceDeclaration )
+
+########################################################################
+## Terraform job definition
+########################################################################
+#macro( CircleCI_TerraformJobDefinition )
+#if( ${aib.getParam("terraform.inUse")} == "true" )
+#set( $fingerprint = ${aib.getParam("cicd.ssh-fingerprint")} )
+  terraform:
+    <<: *terraform_config
+    steps:
+      - *restore_repo
+      - *terraform_init
+      - add_ssh_keys: # fingerprint is returned when the private SSH key is applied to this CircleCI project
+          fingerprints:
+            - "${fingerprint}"
+      - run:
+          name: terraform plan
+          command: |
+            cd /home/circleci/gitRoot/terraform
+            terraform plan -out=terraform.plan -var aws-access-key=$USER_AWS_ACCESSKEY -var aws-secret-key=$USER_AWS_SECRETKEY
+            terraform apply -auto-approve "terraform.plan"
+#end##if( ${aib.getParam("terraform.inUse")} == "true" )            
+#end##macro( CircleCI_TerraformJobDefinition )
+
+########################################################################
+## CircleCI Workflow definition
+########################################################################
+#macro( CircleCI_WorkflowsDeclaration )
+# simple workflow to build out the environment
+workflows:
+  version: 2
+  build_test_deploy_workflow:
+    jobs:
+      - build_test_project
+#CircleCI_DockerJobDeclaration()
+#CircleCI_TerraformJobDeclaration()
+#end##macro( CircleCI_WorkflowsDeclaration )
+
+########################################################################
+## CircleCI Checkout definition
+########################################################################
+#macro( CircleCI_Checkout )
+      # check out source code to working directory
+      - checkout
+#end##macro( CircleCI_CheckoutDecl )
+
+########################################################################
+## CircleCI Assign Working Directory
+########################################################################
+#macro( CircleCI_AssignWorkingDirectory )
+    # assign the working directory
+    working_directory: *working_directory
+#end##macro( CircleCI_AssignWorkingDirectory()
+
+########################################################################
+## CircleCI Restore Repo Declaration
+########################################################################
+#macro( CircleCI_RestoreRepo )
+      # restore the saved cache after the first run or if `pom.xml` has changed
+      # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+      - *restore_repo
+#end##macro( CircleCI_RestoreRepoDecl )
+
+########################################################################
+## CircleCI Restore Repo Declaration
+########################################################################
+#macro( CircleCI_SaveRepo )
+      # cache the entire project 
+      - *save_repo
+#end##macro( CircleCI_SaveRepoDecl )
+
+########################################################################
+## CircleCI Store Test Results
+########################################################################
+#macro( CircleCI_StoreTestResults )
+      # Upload test results for display in Test Summary:
+      # https://circleci.com/docs/2.0/collect-test-data/
+      - store_test_results:
+          path: ~/test-results
+#end###macro( CircleCI_StoreTestResults )
+
+########################################################################
+## CircleCI Store Artifact
+########################################################################
+#macro( CircleCI_StoreArtifacts )
+      # Upload test summary for display in Artifacts:
+      # https://circleci.com/docs/2.0/artifacts/
+      - store_artifacts:
+          path: ~/test-results/junit
+#end###macro( CircleCI_StoreArtifacts )
+
+########################################################################
+## CircleCI Docker Image Output - Default is empty, should be overridden
+########################################################################
+#macro( CircleCI_OutputDockerImageDecl )        
+#end##macro( CircleCI_OutputDockerImageDecl )
+
+########################################################################
+## CircleCI Run Commands
+########################################################################
+#macro( CircleCI_RunCommands )
+      - run: 
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
+          name: Running test using Junit and deploy to Nexus Repo
+          command: mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
+#else        
+          name: compiling, running test using Junit, the create a deployable war file
+          command: mvn package
+#end    
+
+      # save the results from the testing that occurred during
+      # the maven packaging in the prior step
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+
+#end###macro( CircleCI_RunCommands )
+
+########################################################################
+## CircleCI EnvVarAssignments - empty by default
+########################################################################
+#macro( CircleCI_EnvVarAssignments )
+#end##macro( CircleCI_EnvVarAssignments )

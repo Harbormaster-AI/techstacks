@@ -1,6 +1,6 @@
 <tech-stack-package 
     name="Base Python Tech Stack"
-    shortName="python.tech.stack"
+    shortName=".python.tech.stack"
     description="The base for all Python related tech stacks" 
     icon-url=""
  	info-page-url=""

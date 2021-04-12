@@ -7,7 +7,7 @@
     version="1.0"
     app-type="mobile"
     release-status="production"
-    derivedFrom="nodejs.tech.stack"
+    derivedFrom=".nodejs.tech.stack"
 	supportsDocker="true">
 	<target-languages>
 		<target-language name="typescript"/>

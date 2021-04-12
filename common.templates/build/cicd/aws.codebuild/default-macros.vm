@@ -1,0 +1,36 @@
+########################################################################
+## AWS Docker image build and push
+########################################################################
+#macro( AWS_DockerImageDeclaration )
+#set( $dockerUserName = ${aib.getParam("docker.userName")} ) 
+#set( $dockerPassword = ${aib.getParam("docker.password")} )
+#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
+#set( $dockerRepo = ${aib.getParam("docker.repo")} )
+#set( $dockerTag = ${aib.getParam("docker.tag")} )
+      - echo Building Docker Image...
+      - cd ${CODEBUILD_SRC_DIR}
+      - docker login --username ${dockerUserName} --password ${dockerPassword}
+      - docker build -t ${dockerOrgName}/${dockerRepo}:${dockerTag} .
+      - docker push ${dockerOrgName}/${dockerRepo}:${dockerTag} 
+#end##macro( AWS_DockerImageDeclaration )
+
+########################################################################
+## Terraform job definition
+########################################################################
+#macro( AWS_TerraformJobDefinition )
+#if ( $aib.getParam( "kubernetes.inUse" ) == "true" )
+      - echo Installing Terraform...
+      - wget https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+      - unzip ./terraform_0.11.13_linux_amd64.zip -d /usr/local/bin/
+      - terraform -v
+      - echo Running Terraform plan...
+      - cd terraform
+      - terraform init --input=false 
+#if ( $aib.getParam( "kubernetes.hostTarget" ) == "google" )
+      - terraform plan --input=false --out=terraform.plan -var host=${aib.getParam("kubernetes.host")} -var username=${aib.getParam("google.username")} -var password=${aib.getParam("google.password")} -var region=${aib.getParam("google.region")}-${aib.getParam("google.zone")} -var project=${aib.getParam("google.project")} .
+#elseif ( $aib.getParam( "kubernetes.hostTarget" ) == "aws" )
+      - terraform plan -out=terraform.plan -var region=${aib.getParam("kubernetes.region")} -var aws-access-key=$USER_AWS_ACCESSKEY -var aws-secret-key=$USER_AWS_SECRETKEY
+#end##if ( $aib.getParam( "kubernetes.hostTarget" ) == "google" )
+      - terraform apply -auto-approve "terraform.plan"
+#end##if ( $aib.getParam( "kubernetes.inUse" ) == "true" )
+#end##macro( AWS_TerraformJobDefinition )

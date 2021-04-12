@@ -9,3 +9,12 @@ npm install -g @angular/cli@8.3.24> /dev/null
 RUN npm install @angular-devkit/build-angular@0.803.19
 RUN npm install -g @angular/cli@8.3.21 > /dev/null
 #end
+
+########################################################################
+## GitHubActions_Strategy 
+########################################################################
+#macro( GitHubActions_Strategy )
+    strategy:
+      matrix:
+        node-version: [8.x]
+#end##macro( GitHubActions_Strategy )

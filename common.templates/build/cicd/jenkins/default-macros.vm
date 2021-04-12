@@ -1,0 +1,30 @@
+########################################################################
+## Jenkinsfile_Docker_App_Image - default is empty, should be overridden
+########################################################################
+#macro( Jenkinsfile_Docker_App_Image )
+#end##macro( Jenkinsfile_Docker_App_Image )
+
+#######################################################################
+## Jenkinsfile_Install_Agent - default is empty, optional overridden
+########################################################################
+#macro( Jenkinsfile_Install_Agent )
+#end##macro( Jenkinsfile_Install_Agent )
+
+#######################################################################
+## Jenkinsfile_Install_Steps - default is empty, should be overridden
+########################################################################
+#macro( Jenkinsfile_Install_Steps )
+#end##macro( Jenkinsfile_Install_Steps )
+
+#######################################################################
+## Jenkinsfile_Build_Agent - default is empty, optional overridden
+########################################################################
+#macro( Jenkinsfile_Build_Agent )
+#end##macro( Jenkinsfile_Build_Agent )
+                                              
+#######################################################################
+## Jenkinsfile_Build_Steps - default is empty, should be overridden
+########################################################################
+#macro( Jenkinsfile_Build_Steps )
+#end##macro( Jenkinsfile_Build_Steps )
+                                              

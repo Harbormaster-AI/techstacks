@@ -1,0 +1,26 @@
+#macro( GitLab_Image_Declarations )
+#end
+
+#macro( GitLab_Service_Declarations )
+#end
+
+#macro( GitLab_Variable_Declarations )
+#end
+
+#macro( GitLab_Cache_Declaration )
+#end
+
+#macro( GitLab_Stage_Declarations )
+#end
+
+#macro( GitLab_Before_Script )
+#end
+
+#macro( GitLab_Stage_Definitions )
+#end
+
+#macro( GitLab_After_Script )
+#end
+
+#macro( GitLab_Artifacts )
+#end

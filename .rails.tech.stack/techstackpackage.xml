@@ -1,7 +1,7 @@
 <tech-stack-package 
-    name="Base NodeJS Tech Stack"
-    shortName=".nodejs.tech.stack"
-    description="The base for all NodeJS related tech stacks" 
+    name="Base Rails Tech Stack"
+    shortName=".rails.tech.stack"
+    description="The base for all Rails related tech stacks" 
     icon-url=""
  	info-page-url=""
     version="1.0"
@@ -9,10 +9,11 @@
     release-status="production"
     visible="false">
 	<target-languages>
-		<target-language name="nodejs"/>
+		<target-language name="rails"/>
 		<target-language name="javascript"/>
 	</target-languages><!-- target language(s) supported by the template structure -->
 	<tech-stack>
 	    <tech-stack-component name="build" description="ci/cd templates " app-layer="build"/>
+	    <tech-stack-component name="data" description="postgres" app-layer="data"/>	    
 	</tech-stack>
 </tech-stack-package>
