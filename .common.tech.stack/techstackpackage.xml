@@ -1,6 +1,6 @@
 <tech-stack-package 
     name="the base tech stack of all tech stacks...never to be used directly during project generation"
-    shortName="common.tech.stack"
+    shortName=".common.tech.stack"
     description="Common files likely used by most to all tech stacks" 
     icon-url=""
  	info-page-url=""
