@@ -1,10 +1,7 @@
 # Harbormaster Tech Stack Package Descriptor
 
-## Name
-Microsoft ASP.NET
+For details, please refer to [ASP.NET Core tech stack documentation](https://github.com/Harbormaster-AI/techstacks/tree/main/ASP.NET%20Core)
 
-## Summary Image
-![alt text](http://www.Harbormaster.com/infopages/img/aspdotnet.png)
 
 ## Intent
 To create an application that uses:
