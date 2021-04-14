@@ -1,5 +1,7 @@
 # Harbormaster Tech Stack Package Descriptor
 
+For details, please refer to [Spark Java Micro Web tech stack documentation](https://harbormaster.ai/spark-micro-tech-stack/)
+
 ## Name
 Spark Micro Web Framework
 

@@ -1,5 +1,7 @@
 # Harbormaster Tech Stack Package Descriptor
 
+For details, please refer to [Spring Core MongoDB tech stack documentation](https://harbormaster.ai/spring-core-mongodb-tech-stack/)
+
 ## Name
 Spring Core using MongoDB
 

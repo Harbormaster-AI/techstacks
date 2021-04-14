@@ -1,5 +1,7 @@
 # Harbormaster Tech Stack Package Descriptor
 
+For details, please refer to [AWS Lambda NoSQL tech stack documentation](https://harbormaster.ai/AWS-Lambda-NoSQL-tech-stack/)
+
 ## Name
 AWS Lambda MongoDB 
 

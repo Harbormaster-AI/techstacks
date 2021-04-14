@@ -1,5 +1,7 @@
 # Harbormaster Tech Stack Package Descriptor
 
+For details, please refer to [Google Functions tech stack documentation](https://harbormaster.ai/google-functions-tech-stack/)
+
 ## Name
 Google Functions (In Beta)
 

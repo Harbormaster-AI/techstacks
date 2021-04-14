@@ -1,7 +1,9 @@
 # Harbormaster Tech Stack Package Descriptor
 
+For details, please refer to [Struts2 tech stack documentation](https://harbormaster.ai/struts2-tech-stack/)
+
 ## Name
-Struts2 MVC Web Framework
+Struts2 
 
 ## Summary Image
 ![alt text](http://www.Harbormaster.com/infopages/img/struts.rdbms.png)
