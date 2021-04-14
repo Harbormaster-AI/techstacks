@@ -7,7 +7,7 @@
     version="1.0"
     app-type="other"
     release-status="production"
-    derivedFrom="Angular8"
+    derivedFrom=".nodejs.tech.stack"
 	supportsDocker="true">
 	<target-languages>
 		<target-language name="javascript"/>
