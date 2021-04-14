@@ -3,7 +3,7 @@
 	shortName="Angular8"
 	description="Uses Angular8 with MongoDB and Mongoose" 
 	icon-url="./img/angular8.png" 	
-	info-page-url="http://www.harbormaster.com/infopages/angularjs-mongodb-info-page.html"
+	info-page-url="http://www.harbormaster.ai/Angular8.tech.stack"
     version="1.0"
     app-type="mobile"
     release-status="alpha"
