@@ -3,7 +3,7 @@
     shortName=".common.tech.stack"
     description="Common files likely used by most to all tech stacks" 
     icon-url=""
- 	info-page-url=""
+ 	info-page-url="http://www.harbormaster.ai/common.tech.stack"
     version="1.0"
     app-type="webapp"
     release-status="production"

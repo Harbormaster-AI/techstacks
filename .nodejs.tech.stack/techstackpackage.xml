@@ -1,7 +1,7 @@
 <tech-stack-package 
     name="Base NodeJS Tech Stack"
     shortName=".nodejs.tech.stack"
-    description="The base for all NodeJS related tech stacks" 
+    description="http://www.harbormaster.ai/.nodejs.tech.stack" 
     icon-url=""
  	info-page-url=""
     version="1.0"

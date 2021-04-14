@@ -3,7 +3,7 @@
     shortName=".python.tech.stack"
     description="The base for all Python related tech stacks" 
     icon-url=""
- 	info-page-url=""
+ 	info-page-url="http://www.harbormaster.ai/.python.tech.stack"
     version="1.0"
     app-type="webapp"
     release-status="production"
