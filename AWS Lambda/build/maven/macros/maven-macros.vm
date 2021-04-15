@@ -1,0 +1,10 @@
+#################################################################
+## awsLambdaFuncDeclEnvVars
+#################################################################
+#macro( awsLambdaFuncDeclEnvVars )
+  environment {
+    variables = {
+      delegateDAOHost = "${esc.dollar}{aws_instance.web.public_ip}"
+      delegateDAOPort = "8080"
+    }
+#end#awsLambdaFuncDeclEnvVars
