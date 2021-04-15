@@ -1,0 +1,30 @@
+<!--
+  Harbormaster
+  
+  2021 Harbormaster, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        Harbormaster Dev Team - General Release
+-->
+
+<!-- Google options -->
+<options name="google" maxPerRow="1">
+	<option name="inUse"  value="false" required="true" description="using AWS" type="boolean"/>
+	<option name="userName"  value="admin" required="true" description="user name" type="input"/>
+	<option name="password"  value="5UhfcIPAPsiPXklT" required="true" description="random user password" type="input"/>
+	<option name="project"  value="" required="true" description="Google project name" type="input"/>
+    <option name="region" value="us-central1" 
+		selections="asia-east1,asia-east2,asia-northeast1,asia-northeast2,asia-south1,asia-southeast1,australia-southeast1,europe-north1,europe-west1,europe-west2,europe-west3,europe-west4,europe-west6,northamerica-northeast1,southamerica-east1,us-central1,us-east1,us-east4,us-west1,us-west2"
+		required="true"
+		description="Available Google Regions" 
+		type="select"/>	
+    <option name="zone" value="a" 
+		selections="a,b,c,d,f"
+		required="true"
+		description="Available Google Zones" 
+		type="select"/>	
+</options>
