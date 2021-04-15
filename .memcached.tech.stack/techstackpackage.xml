@@ -1,0 +1,17 @@
+<tech-stack-package 
+    name="memcached tech stack"
+    shortName=".memcached.tech.stack"
+    description="Common configuration to be used for tech stacks leveraging Memcached" 
+    icon-url=""
+ 	info-page-url="http://www.harbormaster.ai/memcached.tech.stack"
+    version="1.0"
+    app-type="webapp"
+    release-status="production"
+    visible="false">
+	<target-languages>
+		<target-language name="N/A"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+	    <tech-stack-component name="cache" description="caching layer" app-layer="cache"/>
+	</tech-stack>
+</tech-stack-package>

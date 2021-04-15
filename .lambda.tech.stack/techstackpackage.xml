@@ -1,0 +1,20 @@
+<tech-stack-package 
+    name="Base Lambda Tech Stack"
+    shortName=".lambda.tech.stack"
+    description="The base for all AWS Lambda tech stacks" 
+    icon-url=""
+ 	info-page-url="http://www.harbormaster.ai/.lambda.tech.stack"
+    version="1.0"
+    app-type="webapp"
+    release-status="production"
+    visible="false"
+    derivedFrom=".common.tech.stack,.aws.tech.stack">
+	<target-languages>
+		<target-language name="java"/>
+		<target-language name="nodejs"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+	    <tech-stack-component name="build" description="ci/cd, maven, docker, git, ant templates " app-layer="build"/>
+		<tech-stack-component name="persistence" description="ORM framework for object persistence" app-layer="data"/>	    
+	</tech-stack>
+</tech-stack-package>

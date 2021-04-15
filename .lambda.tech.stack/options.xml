@@ -1,0 +1,46 @@
+<!--
+  Harbormaster
+  
+  2021 Harbormaster, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        Harbormaster Dev Team - General Release
+-->
+
+<!-- aws-lambda options -->
+<options name="aws-lambda">
+	<option name="s3Bucket" value="cloudmigratedemobucket" required="true" description="S3 Bucket Name" type="input"/>
+	<option name="runtime" value="java8" required="true" description="runtime lang" type="select"
+		selections="java8,nodejs6.10,nodejs8.10"/>
+	<option name="lambdaRoleArn"  value="arn:aws:iam::xxxxxxxx:role/service-role/myRoleName" required="true" description="AWS Lambda Role ARN" type="input"/> 
+	<option name="timeout" value="30" required="true" description="timeout" type="input"/>
+	<option name="memorySize" value="512" required="true" description="memory size" type="input"/>
+	<option name="forceUpdate" value="true" description="force update" type="boolean"/>
+	<option name="publish" value="true" description="publish" type="boolean" />
+	<option name="vpcSubnetIds" value="" description="VPC Subnet Ids" type="input" />
+	<option name="vpcSecurityGroupIds" value="" description="VPC Security Group Ids" type="input" />	
+	<option name="crudDeclStrategy" value="uberMethodPerClass" required="true" description="lamba crud declaration strategy" type="select"
+		selections="methodsPerClass, uberMethodPerClass, uberMethod"/>
+</options>
+
+<!--  swagger options -->
+<options name="swagger">
+
+	<option name="host" value="" required="true" description="API host" type="input"/>
+	<option name="basepath" value="/" required="true" description="API host" type="input"/>
+	<option name="contact name" value="" required="false" description="contact name" type="input"/>
+	<option name="contact email" value="" required="false" description="contact email address" type="input"/>
+	<option name="contact url" value="" required="false" description="contact url" type="input"/>
+	<option name="license url" value="http://www.apache.org/licenses/LICENSE-2.0.html" required="false" description="license url" type="input"/>
+	<option name="license name" value="Apache 2.0" required="false" description="license name" type="input"/>
+	<option name="title" value="add a title" required="false" description="title" type="input"/>
+	<option name="version" value="v1.0" required="false" description="version" type="input"/>
+	<option name="description" value="" required="false" description="description" type="input"/>
+	<option name="terms of service" value="" required="false" description="terms of service" type="input"/>
+	<option name="output formats"  value="json" selections="json,yaml" type="select"/> 	
+</options>
+
