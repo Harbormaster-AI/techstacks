@@ -7,7 +7,7 @@
     version="2.0"
     app-type="serverless"
     release-status="production"
-    derivedFrom=".java.tech.stack,.lambda.tech.stack"
+    derivedFrom=".java.tech.stack,.lambda.tech.stack,.hibernate.tech.stack"
 	supportsDocker="false"
 	supportsKubernetes="false">
 	<target-languages>
