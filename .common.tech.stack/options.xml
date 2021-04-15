@@ -72,22 +72,7 @@
 			type="select"/>	
 </options>
 
-<!-- Kubernetes options 
-<options name="kubernetes" maxPerRow="1">
-    <option name="inUse"  value="true" required="true" description="using Kubernetes" type="boolean"/>
-	<option name="host"  value="" required="true" description="kubernetes host IP" type="input"/>
-	<option name="hostTarget" value="google" 
-		selections="google,aws,azure,openstack,local"
-		required="true"
-		description="host location of the k8 cluster" 
-		type="select"/>	
-	<option name="exposeAsService"  value="true" required="true" description="expose as service" type="boolean"/>
-	<option name="serviceType"  value="LoadBalancer" required="true" 
-				selections="LoadBalancer,NodePort,ClusterIP"
-				description="type of service" type="select"/>
-	<option name="useSessionAffinity"  value="true" required="true" description="using session affinity" type="boolean"/>
-</options>
--->
+
 
 <!-- resources -->
 <options name="resources" maxPerRow="1">
