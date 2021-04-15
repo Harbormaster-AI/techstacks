@@ -1,0 +1,25 @@
+<!--
+  Harbormaster
+  
+  2021 Harbormaster, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        Harbormaster Dev Team - General Release
+-->
+
+<options name="aws" maxPerRow="1">
+	<option name="inUse"  value="false" required="true" description="using AWS" type="boolean"/>
+	<option name="access-key"  value="ASSIGN_AS_ENV_VAR_WITH_CI_PROVIDER" required="true" description="aws access key" type="input"/>
+	<option name="secret-key"  value="ASSIGN_AS_ENV_VAR_WITH_CI_PROVIDER" required="true" description="aws secret key" type="input"/>
+	<option name="vpc"  value="vpc-c422e2a0" required="true" description="default VPC to leverage for Terraform, etc..." type="input"/>
+	<option name="ec2-instance-type"  value="t2.small" required="true" description="EC2 instance type" type="input"/>
+    <option name="region" value="us-east-1" 
+		selections="us-west-1, us-west-2, ap-east-1, ap-south-1, ap-northeast-3, ap-northeast-2, ap-southeast-1, ap-southeast-2, ap-northeast-1,ca-central-1,cn-north-1,cn-northwest-1,eu-central-1,eu-west-1,eu-west-2,eu-west-3,eu-north-1,me-south-1,sa-east-1,us-gov-east-1,us-gov-west-1"
+		required="true"
+		description="Available AWS Regions" 
+		type="select"/>	
+</options>
