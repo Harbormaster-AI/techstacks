@@ -8,7 +8,8 @@
     app-type="mobile"
     release-status="production"
     derivedFrom=".nodejs.tech.stack"
-	supportsDocker="true">
+	supportsDocker="true"
+	supportsKubernetes="true">
 	<target-languages>
 		<target-language name="typescript"/>
 		<target-language name="javascript"/>

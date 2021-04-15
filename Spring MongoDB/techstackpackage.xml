@@ -7,8 +7,9 @@
     version="1.1"
     release-status="production"
     app-type="restfulapi"
-    derivedFrom=".java.tech.stack"
-	supportsDocker="true">
+    derivedFrom=".java.tech.stack,mongodb.tech.stack"
+	supportsDocker="true"
+	supportsKubernetes="true">
 	<target-languages>
 		<target-language name="java"/>
 	</target-languages><!-- target language(s) supported by the template structure -->
