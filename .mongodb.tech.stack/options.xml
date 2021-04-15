@@ -28,7 +28,7 @@
 <!-- MongoDB -->
 <options name="mongodb">
 	<option name="server addresses" value="127.0.0.1:27017"></option>
-	<option name="database name" placeholder="leave blank for one per entity" value="appcreate"></option>
+	<option name="database name" placeholder="leave blank for one per entity" value="mydatabase"></option>
 	<option name="credentials" value=""></option> 
 	<option name="search size" value="10" min="10" max="500" step="5" type="spinner"></option>
     <option name="default collection name" value="default_collection"></option>
