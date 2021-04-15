@@ -1,0 +1,9 @@
+#################################################################
+## awsLambdaFuncDeclEnvVars
+#################################################################
+#macro( awsLambdaFuncDeclEnvVars )
+  environment {
+    variables = {
+      mongoDbServerAddresses = "${esc.dollar}{aws_instance.mongodb.public_ip}:27017"
+    }
+#end#awsLambdaFuncDeclEnvVars

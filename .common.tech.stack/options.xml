@@ -1,0 +1,101 @@
+<!--
+  Harbormaster
+  
+  2021 Harbormaster, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        Harbormaster Dev Team - General Release
+-->
+
+<!-- application options -->
+<options name="application">
+	<option name="name" value="demo" required="true" 
+		description="app display name" type="input"/>
+	<option name="description" value="" required="false"
+		description="app description" type="input"/>
+	<option name="author" value="" required="false"
+		description="app's author" type="input"/>
+	<option value="logoUrl" required="" name="corporate logo URL"
+		description="link to company logo" type="input"/>
+	<option value="./img/turnstone.biologics.png" required="false" name="application logo URL"
+		description="link to app logo" type="input"/>
+	<option value="Turnstone Biologics" required="true" modifiable="false" name="company name"
+		description="your company name" type="input"/>
+	<option value="1.0.0" required="true" name="version"
+		description="app version" type="input"/>		
+	<option name="package name" value="com.occulue" modifiable="false" required="true"
+		description="package prefix to apply(com.xyz format)" type="input"/>
+</options>
+
+<!-- CI/CD Platform options -->
+<options name="cicd" maxPerRow="1">
+	<option name="platform" value="codeship" 
+		selections="jenkins,codeship,circleci,jfrog.pipelines,travis,aws,azure,bitbucket,gitlab,semaphore,shippable,buddy"
+		required="true"
+		description="CI/CD Platform" 
+		type="select"/>	
+	<option name="AES key" value="" required="true"
+		description="CodeShip AES key value" type="input"/>
+	<option name="ssh-fingerprint" value="" required="true"
+		description="SSH Fingerprint for CircleCI" type="input"/>
+</options>
+
+<!-- Artifact repository options -->
+<options name="artifact-repo" maxPerRow="1">
+	<option name="inUse"  value="false" required="true" description="using sonatype nexus" type="boolean"/>
+	<option name="type" value="jfrog" 
+		selections="jfrog,nexus"
+		required="true"
+		description="CI/CD Platform" 
+		type="select"/>	
+	<option name="userName"  value="" required="true" description="repo user name" type="input"/>
+	<option name="password"  value="" required="true" description="repo password" type="input"/>
+	<option name="email"  value="" required="true" description="email address assigned with nexus"
+		placeHolder="email address asigned to nexus account" type="input"/>
+	<option name="publishRepoKey"  value="" required="true" description="key in repository to reference"
+		placeHolder="key in repository to reference" type="input"/>
+	<option name="serverUrl" value="http://127.0.0.1/repository/npm-repo" 
+		required="true" description="nexus server url" type="input"/>
+</options>
+
+<!-- Terraform options -->
+<options name="terraform" maxPerRow="1">
+	<option name="inUse"  value="true" required="true" description="using hashicorp terraform" type="boolean"/>
+	<option name="provider" value="google" 
+			selections="aws,azure,google,nutanix,local"
+			required="true"
+			description="Available Terraform providers" 
+			type="select"/>	
+</options>
+
+<!-- Kubernetes options 
+<options name="kubernetes" maxPerRow="1">
+    <option name="inUse"  value="true" required="true" description="using Kubernetes" type="boolean"/>
+	<option name="host"  value="" required="true" description="kubernetes host IP" type="input"/>
+	<option name="hostTarget" value="google" 
+		selections="google,aws,azure,openstack,local"
+		required="true"
+		description="host location of the k8 cluster" 
+		type="select"/>	
+	<option name="exposeAsService"  value="true" required="true" description="expose as service" type="boolean"/>
+	<option name="serviceType"  value="LoadBalancer" required="true" 
+				selections="LoadBalancer,NodePort,ClusterIP"
+				description="type of service" type="select"/>
+	<option name="useSessionAffinity"  value="true" required="true" description="using session affinity" type="boolean"/>
+</options>
+-->
+
+<!-- resources -->
+<options name="resources" maxPerRow="1">
+	<option name="available" value=""></option>
+</options>
+
+
+
+
+
+

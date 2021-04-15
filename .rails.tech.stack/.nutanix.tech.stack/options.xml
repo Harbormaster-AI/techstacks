@@ -1,0 +1,32 @@
+<!--
+  Harbormaster
+  
+  2021 Harbormaster, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        Harbormaster Dev Team - General Release
+-->
+<!-- Nutanix options -->
+<options name="nutanix" maxPerRow="1">
+    <option name="inUse"  value="false" required="true" description="using Nutanix as a provider" type="boolean"/>
+	<option name="userName"  value="" required="true" description="user name" type="input"/>
+	<option name="password"  value="" required="true" description="password" type="input"/>
+	<option name="endpoint"  value="" required="true" description="ip address of AHV instance or cluster" type="input"/>
+    <option name="insecure"  value="true" required="true" description="" type="boolean"/>
+	<option name="port"  value="9440" required="true" description="port number" type="input"/>
+	<option name="clusterId"  value="" required="true" description="Id of AHV cluster" type="input"/>
+	<option name="email"  value="" required="true" description="email address assigned with nexus"
+		placeHolder="email address asigned to nexus account" type="input"/>
+    <option name="vmUserName"  value="" required="true" description="userName of virtual machine" type="input"/>
+    <option name="vmPassword"  value="" required="true" description="password of virtual machine" type="input"/>
+    <option name="vmHost"  value="" required="true" description="host IP of virtual machine" type="input"/>
+	<option name="vmOS" value="linux" 
+		selections="linux,windows(not-yet-supported)"
+		required="true"
+		description="os type of VM" 
+		type="select"/>	
+</options>

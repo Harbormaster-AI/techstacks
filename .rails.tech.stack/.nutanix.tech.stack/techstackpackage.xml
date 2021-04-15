@@ -1,0 +1,17 @@
+<tech-stack-package 
+    name="nutanix tech stack"
+    shortName=".nutanix.tech.stack"
+    description="Common files to be used for tech stacks leveraging the Nutanix cloud" 
+    icon-url=""
+ 	info-page-url="http://www.harbormaster.ai/nutanix.tech.stack"
+    version="1.0"
+    app-type="webapp"
+    release-status="production"
+    visible="false">
+	<target-languages>
+		<target-language name="N/A"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+	    <tech-stack-component name="build" description="options related" app-layer="build"/>
+	</tech-stack>
+</tech-stack-package>
