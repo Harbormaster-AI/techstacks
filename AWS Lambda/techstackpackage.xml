@@ -3,12 +3,13 @@
     shortName="Lambda"
     description="Tech stack using AWS Lambda as the service layer, and Spark web framework with Hibernate as a Restful DAO persistence layer" 
     icon-url="./img/lambda.full.circle.png"
-    info-page-url="http://www.harbormaster.com/infopages/aws-lambda-rds-info-page.html"
+    info-page-url="https://github.com/Harbormaster-AI/cli/blob/main/samples/yamls/project.as.code/springboot-rdbms-project-as-code.yml"
     version="2.0"
     app-type="serverless"
     release-status="production"
-    derivedFrom=".java.tech.stack"
-	supportsDocker="false">
+    derivedFrom=".java.tech.stack,.lambda.tech.stack"
+	supportsDocker="false"
+	supportsKubernetes="false">
 	<target-languages>
 		<target-language name="java"/>
 		<target-language name="node.js"/>

@@ -1,5 +1,5 @@
 <tech-stack-package 
-    name="the base tech stack of all tech stacks...never to be used directly during project generation"
+    name="common tech stack"
     shortName=".common.tech.stack"
     description="Common files likely used by most to all tech stacks" 
     icon-url=""
@@ -10,8 +10,6 @@
     visible="false">
 	<target-languages>
 		<target-language name="nodejs"/>
-		<target-language name="javascript"/>
-		<target-language name="java"/>
 	</target-languages><!-- target language(s) supported by the template structure -->
 	<tech-stack>
 	    <tech-stack-component name="build" description="ant, maven, ci/cd, header/footer, and others" app-layer="build"/>

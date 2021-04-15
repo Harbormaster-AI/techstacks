@@ -4,11 +4,13 @@
     description="Tech stack using AWS Lambda as the service layer and MongoDB/Morpheus as the NoSQL persistence layer" 
     icon-url="./img/lambda.circle.png"
 	info-page-url="http://www.harbormaster.com/infopages/aws-lambda-nosql-info-page.html"
+	sample-project-as-code-yaml-url="https://github.com/Harbormaster-AI/cli/blob/main/samples/yamls/project.as.code/springboot-mongodb-project-as-code.yml"
     version="1.0"
     app-type="serverless"
     release-status="production"
-    derivedFrom=".java.tech.stack"
-	supportsDocker="false">
+    derivedFrom=".java.tech.stack,.lambda.tech.stack"
+	supportsDocker="false"
+	supportsKubernetes="false">
 	<target-languages>
 		<target-language name="java"/>
 	</target-languages>

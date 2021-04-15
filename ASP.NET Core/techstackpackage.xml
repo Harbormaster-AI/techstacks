@@ -8,6 +8,7 @@
     app-type="webapp"
     release-status="production"
 	supportsDocker="false"
+	supportsKubernetes="false"
 	derivedFrom=".common.tech.stack">
 	<target-languages>
 		<target-language name="C#"/>
