@@ -22,11 +22,7 @@
               pip install pipenv
               pipenv install
 
-      # use pipenv to install Django
-      - run:  
-          name: Installing Django
-          command: |
-              pipenv install Django
+#Pipenv_Component_Install()
       
 #end###macro( CircleCI_RunCommands )
 

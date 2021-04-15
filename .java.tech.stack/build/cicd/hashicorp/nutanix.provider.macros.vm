@@ -40,4 +40,4 @@ resource "null_resource" "cluster" {
 }
 
 
-#end
+#end##macro( outputAsNutanixProvider )

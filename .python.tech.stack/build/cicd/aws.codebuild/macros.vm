@@ -17,9 +17,7 @@
       - apt update
       - pip install --upgrade pip
       - pip install pipenv
-      - pipenv install
-      - pipenv install Django==2.0
-      - pipenv install pytest-django
+#Pipenv_Component_Install()
     finally:
       - echo Install phase complete...
 #end##macro( AWS_CodeBuild_Install_Phase_Commands )
@@ -46,3 +44,9 @@
     paths:
       - '/root/.cache/pip'
 #end##macro( AWS_CodeBuild_Artifacts )
+
+########################################################################
+## Pipenv_Component_Install
+########################################################################
+#macro( Pipenv_Component_Install )
+#end##macro( Pipenv_Component_Install )

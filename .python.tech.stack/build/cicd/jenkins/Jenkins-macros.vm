@@ -13,9 +13,7 @@ python:3.7#end##macro( Jenkinsfile_Docker_App_Image )
 ########################################################################
 #macro( Jenkinsfile_Install_Steps )
                 sh 'pip install pipenv'
-                sh 'pipenv install'
-                sh 'pipenv install Django'
-                sh 'pipenv install pytest-django'
+#Pipenv_Component_Install()                  
 #end##macro( Jenkinsfile_Install_Steps )
                                               
 #######################################################################
