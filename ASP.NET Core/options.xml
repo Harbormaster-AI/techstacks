@@ -16,7 +16,7 @@
 	<option name="userName" value="" required="true" description="" type="input"/>
 	<option name="password" value="" required="true" description="" type="password"/>	
 	<option name="serverUrl" value="" 
-		required="true" description="context Url" placeHolder="ex: http://localhost:8081/artifactory, etc.." type="input"/>		
+		required="true" description="server Url" placeHolder="ex: http://localhost:8081/artifactory, etc.." type="input"/>		
 	<option name="repoKey" value="" placeHolder="local-nuget-repo" required="false" description="repository key" type="input"/>	
 	<option name="licenseUrl" value="" required="true" 
 		description="License file Url" type="input"/>
@@ -26,7 +26,7 @@
 		description="URL of the application icon" type="input"/>
 	<option name="releaseNotes" value="" required="true" 
 		description="release notes" type="textarea"/>
-	<option name="copyRight" value="Copyright 2019" required="true" 
+	<option name="copyRight" value="" required="true" 
 		description="application copyright phrase" type="input"/>
 	<option name="tags" value="" required="true" 
 		description="meta tags used to help search for this app pkg" type="input"/>
