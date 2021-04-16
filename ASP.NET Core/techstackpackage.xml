@@ -3,13 +3,13 @@
 	shortName="ASPNETCore" 
 	description="Uses ASP.NET framework for an MVC design pattern, jQuery/HTML5/CSS3/.cshtml for view adornment, and nHibernate for storage to build ASP.NET Core Web Applications" 
 	icon-url="./img/asp.net.mvc.png" 	
-	info-page-url="http://www.harbormaster.com/infopages/asp.net-info-page.html"	
+	info-page-url="http://www.harbormaster.ai/infopages/asp.net.tech.stack"	
     version="1.0"
     app-type="webapp"
     release-status="production"
 	supportsDocker="false"
 	supportsKubernetes="false"
-	derivedFrom=".common.tech.stack">
+	derivedFrom=".common.tech.stack,.hibernate.tech.stack">
 	<target-languages>
 		<target-language name="C#"/>
 		<target-language name="javascript"/>
