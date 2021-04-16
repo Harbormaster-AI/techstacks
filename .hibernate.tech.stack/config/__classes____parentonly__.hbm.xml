@@ -1,0 +1,9 @@
+#xmlHeader()
+
+#hibernateMappingDeclaration()
+
+<!-- AIB : \#hibernateClassDeclaration() -->        
+#hibernateClassDeclaration()
+<!-- ~AIB -->
+
+</hibernate-mapping>
