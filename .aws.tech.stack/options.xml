@@ -12,22 +12,12 @@
 -->
 
 
-<options name="nutanix" maxPerRow="1">
-    <option name="inUse"  value="false" required="true" description="using Nutanix as a provider" type="boolean"/>
-	<option name="userName"  value="" required="true" description="user name" type="input"/>
-	<option name="password"  value="" required="true" description="password" type="input"/>
-	<option name="endpoint"  value="" required="true" description="ip address of AHV instance or cluster" type="input"/>
-    <option name="insecure"  value="true" required="true" description="" type="boolean"/>
-	<option name="port"  value="9440" required="true" description="port number" type="input"/>
-	<option name="clusterId"  value="" required="true" description="Id of AHV cluster" type="input"/>
-	<option name="email"  value="" required="true" description="email address"
-		placeHolder="email address" type="input"/>
-    <option name="vmUserName"  value="" required="true" description="userName of virtual machine" type="input"/>
-    <option name="vmPassword"  value="" required="true" description="password of virtual machine" type="input"/>
-    <option name="vmHost"  value="" required="true" description="host IP of virtual machine" type="input"/>
-	<option name="vmOS" value="linux" 
-		selections="linux,windows(not-yet-supported)"
-		required="true"
-		description="os type of VM" 
-		type="select"/>	
+<options name="aws" maxPerRow="1">
+	<option name="access-key"  value="xxxxxxxxxxxxxxxxxxx" required="true" description="AWS Access Key" type="input"/>
+	<option name="secret-Key" value="xxxxxxxxxxxxxxxxxxx"  required="true" description="AWS Secret Key" type="input"/>
+	<option name="region" value="us-east-2" required="true" description="regions" type="select"
+		selections="us-east-1,us-east-2,us-west-1,us-west-2,ap-northeast-2,ap-south-1,
+			ap-southeast-1,ap-southeast-2,ap-northeast-1,eu-central-1,eu-west-1,eu-west-2"/>
+	<option name="ec2-instance-type" value="t2-small"  required="true" description="AWS EC2 Instance Type" type="input"/>
+	<option name="vpc" value=""  required="true" description="default VPC to leverage for Terraform, etc…" type="input"/>			
 </options>
