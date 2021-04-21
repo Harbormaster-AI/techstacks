@@ -1,3 +1,6 @@
+#########################################################################
+## macro( outputAWSLambdaCRUDs $className $exposeAPI )
+#########################################################################
 #macro( outputAWSLambdaCRUDs $className $exposeAPI )
 #set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
 
@@ -20,9 +23,9 @@
     	throws CreationException {
     	
 		if ( businessObject == null ) {
-            String errMsg = "Null ${className} provided but not allowed " + getContextDetails(context);
-            context.getLogger().log( errMsg );
-            throw new CreationException( errMsg ); 
+            processingMsg = "Null ${className} provided but not allowed " + getContextDetails(context);
+            context.getLogger().log( processingMsg );
+            throw new CreationException( processingMsg ); 
         }
       
         // return value once persisted
@@ -32,11 +35,13 @@
             businessObject = dao.create${className}( businessObject );
         }
         catch (Exception exc) {
-        	String errMsg = "${className}AWSLambdaDelegate:create${className}() - Unable to create ${className}" + getContextDetails(context) + exc;
-        	context.getLogger().log( errMsg );
-            throw new CreationException( errMsg );
+        	processingMsg = "${className}AWSLambdaDelegate:create${className}() - Unable to create ${className}" + getContextDetails(context) + exc;
+        	context.getLogger().log( processingMsg );
+        	callFailed = true;
+            throw new CreationException( processingMsg );
         }
         finally {
+            putRecordToKinesis( context, new RecordData( businessObject, "Create", "${className}", processingMsg ) );        
             release${className}DAO( dao );            
         }        
          
@@ -69,11 +74,12 @@
         	businessObject = dao.find${className}( key );
         }
         catch( Exception exc ) {
-            String errMsg = "Unable to locate ${className} with key " + key.toString() + " - " + getContextDetails(context) + exc;
-            context.getLogger().log( errMsg );
-            throw new NotFoundException( errMsg );
+            String processingMsg = "Unable to locate ${className} with key " + key.toString() + " - " + getContextDetails(context) + exc;
+            context.getLogger().log( processingMsg );
+            throw new NotFoundException( processingMsg );
         }
         finally {
+            putRecordToKinesis( context, new RecordData( businessObject, "Get", "${className}", processingMsg ) );   
             release${className}DAO( dao );
         }        
         
@@ -98,9 +104,9 @@
     	throws SaveException {
 
     	if ( businessObject == null ) {
-            String errMsg = "Null ${className} provided but not allowed " + getContextDetails(context);
-            context.getLogger().log( errMsg );
-            throw new SaveException( errMsg ); 
+            String processingMsg = "Null ${className} provided but not allowed " + getContextDetails(context);
+            context.getLogger().log( processingMsg );
+            throw new SaveException( processingMsg ); 
         }
     	
         // --------------------------------
@@ -115,18 +121,19 @@
                 businessObject = (${className})dao.save${className}( businessObject );
             }
             catch (Exception exc) {
-                String errMsg = "Unable to save ${className}" + getContextDetails(context) + exc;
-                context.getLogger().log( errMsg );
-                throw new SaveException( errMsg );
+                String processingMsg = "Unable to save ${className}" + getContextDetails(context) + exc;
+                context.getLogger().log( processingMsg );
+                throw new SaveException( processingMsg );
             }
             finally {
+                putRecordToKinesis( context, new RecordData( businessObject, "Save", "${className}", processingMsg ) );   
             	release${className}DAO( dao );
             }
         }
         else {
-            String errMsg = "Unable to create ${className} due to it having a null ${className}PrimaryKey."; 
-            context.getLogger().log( errMsg );
-            throw new SaveException( errMsg );
+            String processingMsg = "Unable to create ${className} due to it having a null ${className}PrimaryKey."; 
+            context.getLogger().log( processingMsg );
+            throw new SaveException( processingMsg );
         }
 		        
         return( businessObject );
@@ -155,11 +162,12 @@
             array = dao.findAll${className}();
         }
         catch( Exception exc ) {
-            String errMsg = "failed to getAll${className} - " + getContextDetails(context) + exc.getMessage();
-            context.getLogger().log( errMsg );
-            throw new NotFoundException( errMsg );
+            String processingMsg = "failed to getAll${className} - " + getContextDetails(context) + exc.getMessage();
+            context.getLogger().log( processingMsg );
+            throw new NotFoundException( processingMsg );
         }
         finally{
+            putRecordToKinesis( context, new RecordData( array, "GetAll", "${className}", processingMsg ) );  
         	release${className}DAO( dao );
         }        
         
@@ -185,9 +193,9 @@
     	throws DeletionException {    	
 
     	if ( key == null ) {
-            String errMsg = "Null key provided but not allowed " + getContextDetails(context) ;
-            context.getLogger().log( errMsg );
-            throw new DeletionException( errMsg );
+            String processingMsg = "Null key provided but not allowed " + getContextDetails(context) ;
+            context.getLogger().log( processingMsg );
+            throw new DeletionException( processingMsg );
         }
 
         ${className}DAO dao  = get${className}DAO();
@@ -198,11 +206,12 @@
             deleted = dao.delete${className}( key );
         }
         catch (Exception exc) {
-        	String errMsg = "Unable to delete ${className} using key = "  + key + ". " + getContextDetails(context) + exc;
-        	context.getLogger().log( errMsg );
-            throw new DeletionException( errMsg );
+        	String processingMsg = "Unable to delete ${className} using key = "  + key + ". " + getContextDetails(context) + exc;
+        	context.getLogger().log( processingMsg );
+            throw new DeletionException( processingMsg );
         }
         finally {
+			putRecordToKinesis( context, new RecordData( key, "Delete", "${className}", processingMsg ) );   
             release${className}DAO( dao );
         }
          		
@@ -231,9 +240,21 @@
 	public static $childName get${roleName}( ${className}PrimaryKey parentKey, Context context )
 		throws NotFoundException {
 		
-		$className $lowercaseClassName 	= get${className}( parentKey, context );
-		${childName}PrimaryKey childKey = ${lowercaseClassName}.get${roleName}().get${childName}PrimaryKey(); 
-		${childName} child 				= ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
+		${childName} child = null;
+		
+		try {
+			$className $lowercaseClassName 	= get${className}( parentKey, context );
+			${childName}PrimaryKey childKey = ${lowercaseClassName}.get${roleName}().get${childName}PrimaryKey(); 
+			child							= ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
+        }
+        catch (Exception exc) {
+        	String processingMsg = "Unable to get${roleName} using parentKey = "  + parentKey + ". " + getContextDetails(context) + exc;
+        	context.getLogger().log( processingMsg );
+            throw new DeletionException( processingMsg );
+        }
+        finally {
+			putRecordToKinesis( context, new RecordData( parentKey, "Get${roleName}", "${className}", processingMsg ) );   
+		}
 		
 		return( child );
 	}
@@ -258,14 +279,25 @@
 												Context context)
 		throws SaveException, NotFoundException {
 		
-		$className $lowercaseClassName 	= get${className}( parentKey, context );
-		${childName} child 				= ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
-
-		// assign the ${roleName}
-		${lowercaseClassName}.set${roleName}( child );
+		try {
+			$className $lowercaseClassName 	= get${className}( parentKey, context );
+			${childName} child 				= ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
 	
-		// save the ${className} 
-		${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+			// assign the ${roleName}
+			${lowercaseClassName}.set${roleName}( child );
+		
+			// save the ${className} 
+			${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+        }
+        catch (Exception exc) {
+        	String processingMsg = "Unable to save${roleName} using parentKey = "  + parentKey + ". " + getContextDetails(context) + exc;
+        	context.getLogger().log( processingMsg );
+            throw new DeletionException( processingMsg );
+        }
+        finally {
+			putRecordToKinesis( context, new RecordData( parentKey, "Save${roleName}", "${className}", processingMsg ) );   
+		}
+		
 		
 		return( $lowercaseClassName );
 	}
@@ -289,16 +321,26 @@
 	throws DeletionException, NotFoundException, SaveException {
 
 		$className $lowercaseClassName 	= get${className}( parentKey, context );
-		
-		if ( ${lowercaseClassName}.get${roleName}() != null ) {
-			${childName}PrimaryKey pk = ${lowercaseClassName}.get${roleName}().get${childName}PrimaryKey();
-			
-			// first null out the ${childName} on the parent so there's no constraint during deletion
-			${lowercaseClassName}.set${roleName}( null );
-			${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
-			
-			// now it is safe to delete the ${roleName} 
-			${childName}AWSLambdaDelegate.delete${childName}( pk, context );
+
+		try {		
+			if ( ${lowercaseClassName}.get${roleName}() != null ) {
+				${childName}PrimaryKey pk = ${lowercaseClassName}.get${roleName}().get${childName}PrimaryKey();
+				
+				// first null out the ${childName} on the parent so there's no constraint during deletion
+				${lowercaseClassName}.set${roleName}( null );
+				${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+				
+				// now it is safe to delete the ${roleName} 
+				${childName}AWSLambdaDelegate.delete${childName}( pk, context );
+        }
+        catch (Exception exc) {
+        	String processingMsg = "Unable to save${roleName} using parentKey = "  + parentKey + ". " + getContextDetails(context) + exc;
+        	context.getLogger().log( processingMsg );
+            throw new DeletionException( processingMsg );
+        }
+        finally {
+			putRecordToKinesis( context, new RecordData( parentKey, "Delete${roleName}", "${className}", processingMsg ) );   
+		}
 		}
 
 		return( $lowercaseClassName );
@@ -347,16 +389,26 @@
 									${childName}PrimaryKey childKey, 
 									Context context )
 	throws SaveException, NotFoundException {
-		$className $lowercaseClassName 	= get${className}( parentKey, context );
+			$className $lowercaseClassName 	= get${className}( parentKey, context );
 
-		// find the ${childName}
-		${childName} child = ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
-		
-		// add it to the ${roleName} 
-		${lowercaseClassName}.get${roleName}().add( child );				
-		
-		// save the ${className}
-		${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+		try {	
+			// find the ${childName}
+			${childName} child = ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
+			
+			// add it to the ${roleName} 
+			${lowercaseClassName}.get${roleName}().add( child );				
+			
+			// save the ${className}
+			${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+	    }
+        catch (Exception exc) {
+        	String processingMsg = "Unable to save${roleName} using parentKey = "  + parentKey + ". " + getContextDetails(context) + exc;
+        	context.getLogger().log( processingMsg );
+            throw new DeletionException( processingMsg );
+        }
+        finally {
+			putRecordToKinesis( context, new RecordData( parentKey, "Add${roleName}", "${className}", processingMsg ) );   
+		}		
 
 		return ( ${lowercaseClassName} );
 	}
@@ -380,28 +432,38 @@
 											Context context )
 		throws SaveException, NotFoundException {
 
-		$className $lowercaseClassName 	= get${className}( parentKey, context );
-		
-		// clear out the ${roleName} 
-		${lowercaseClassName}.get${roleName}().clear();
-		
-		// finally, find each child and add
-		if ( childKeys != null )
-		{
-			${childName} child = null;
-			for( ${childName}PrimaryKey childKey : childKeys )
+		try {
+			$className $lowercaseClassName 	= get${className}( parentKey, context );
+			
+			// clear out the ${roleName} 
+			${lowercaseClassName}.get${roleName}().clear();
+			
+			// finally, find each child and add
+			if ( childKeys != null )
 			{
-				// retrieve the ${childName}
-				child = ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
-
-				// add it to the ${roleName} List
-				${lowercaseClassName}.get${roleName}().add( child );
+				${childName} child = null;
+				for( ${childName}PrimaryKey childKey : childKeys )
+				{
+					// retrieve the ${childName}
+					child = ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
+	
+					// add it to the ${roleName} List
+					${lowercaseClassName}.get${roleName}().add( child );
+				}
 			}
-		}
-		
-		// save the ${className}
-		${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+			
+			// save the ${className}
+			${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
 
+        }
+        catch (Exception exc) {
+        	String processingMsg = "Unable to assign${roleName} using parentKey = "  + parentKey + ". " + getContextDetails(context) + exc;
+        	context.getLogger().log( processingMsg );
+            throw new DeletionException( processingMsg );
+        }
+        finally {
+			putRecordToKinesis( context, new RecordData( parentKey, "Assign${roleName}", "${className}", processingMsg ) );   
+		}
 		return( ${lowercaseClassName} );
 	}
 
@@ -424,32 +486,43 @@
 											List<${childName}PrimaryKey> childKeys, 
 											Context context )
 		throws DeletionException, NotFoundException, SaveException {		
-		$className $lowercaseClassName 	= get${className}( parentKey, context );
-
-		if ( childKeys != null ) {
-			Set<${childName}> children	= ${lowercaseClassName}.get${roleName}();
-			${childName} child 			= null;
-			
-			for( ${childName}PrimaryKey childKey : childKeys ) {
-				try {
-					// first remove the relevant child from the list
-					child = ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
-					children.remove( child );
-					
-					// then safe to delete the child				
-					${childName}AWSLambdaDelegate.delete${childName}( childKey, context );
+		
+		try {
+			$className $lowercaseClassName 	= get${className}( parentKey, context );
+	
+			if ( childKeys != null ) {
+				Set<${childName}> children	= ${lowercaseClassName}.get${roleName}();
+				${childName} child 			= null;
+				
+				for( ${childName}PrimaryKey childKey : childKeys ) {
+					try {
+						// first remove the relevant child from the list
+						child = ${childName}AWSLambdaDelegate.get${childName}( childKey, context );
+						children.remove( child );
+						
+						// then safe to delete the child				
+						${childName}AWSLambdaDelegate.delete${childName}( childKey, context );
+					}
+					catch( Exception exc ) {
+						String processingMsg = "Deletion failed - " + exc.getMessage();
+						context.getLogger().log( processingMsg );
+						throw new DeletionException( processingMsg );
+					}
 				}
-				catch( Exception exc ) {
-					String errMsg = "Deletion failed - " + exc.getMessage();
-					context.getLogger().log( errMsg );
-					throw new DeletionException( errMsg );
-				}
+				
+				// assign the modified list of ${childName} back to the ${lowercaseClassName}
+				${lowercaseClassName}.set${roleName}( children );			
+				// save it 
+				${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
 			}
-			
-			// assign the modified list of ${childName} back to the ${lowercaseClassName}
-			${lowercaseClassName}.set${roleName}( children );			
-			// save it 
-			${lowercaseClassName} = ${className}AWSLambdaDelegate.save${className}( ${lowercaseClassName}, context );
+		}
+        catch (Exception exc) {
+        	String processingMsg = "Unable to delete${roleName} using parentKey = "  + parentKey + ". " + getContextDetails(context) + exc;
+        	context.getLogger().log( processingMsg );
+            throw new DeletionException( processingMsg );
+        }
+        finally {
+			putRecordToKinesis( context, new RecordData( parentKey, "Delete${roleName}", "${className}", processingMsg ) );   
 		}
 		
 		return ( ${lowercaseClassName} );
@@ -472,7 +545,7 @@
         dao = null;
     }
 
-#end##macro( outputAWSLambdaCRUDs $className )
+#end##macro( outputAWSLambdaCRUDs $className $exposeAPI )
 
 #macro( outputStdCRUDCalls  $classArg )
 #set( $className = $classArg.getName() )
@@ -520,7 +593,11 @@
 #end##macro( outputMultipleAssociationCRUDCalls $classArg )
 
 
+#########################################################################
+## macro( outputCRUDCallsForClass $class )
+#########################################################################
 #macro( outputCRUDCallsForClass $class )
+
         switch(${class.getName()}) { 
 #outputStdCRUDCalls( $class )
 #outputSingleAssociationCRUDCalls(  $class )
@@ -529,3 +606,4 @@
 					break;
 		}
 #end##macro( outputCRUDCallsForClass( $class )
+
