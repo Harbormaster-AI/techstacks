@@ -1,0 +1,131 @@
+####################################################################
+## declare required imports
+####################################################################
+#macro( declareImports )
+//    "time"
+    "gorm.io/gorm"
+#end##macro( declareImports )
+
+####################################################################
+## declare a const for each enum declared in the model
+####################################################################
+#macro( declareEnums )
+#foreach ( $enum in $aib.getEnumClassesToGenerate() )
+#set( $enumName = $enum.getName() )
+
+//==============================================================  
+// $enumName Declaration
+//==============================================================
+type $enumName int
+const (
+#set( $attributes = $enum.getAttributes() )
+#foreach ( $attribute in $attributes )
+#if ( $velocityCount == 1 )
+    ${attribute.getName()} $enumName = iota
+#else
+	${attribute.getName()}
+#end##if ( $velocityCount == 1 )
+#end##foreach ( $attribute in $attributes )
+)
+
+#end##foreach ( $enum in $aib.getEnumClassesToGenerate() )
+#end##macro( declareEnums )
+
+####################################################################
+## declare for each struct per model entity
+####################################################################
+#macro( declareStructs $class )
+#set( $className = $class.getName() )
+//==============================================================
+// $className Declaration
+//==============================================================	
+type $className struct {
+    gorm.Model
+#declareStructFields( $class )
+}
+
+#end##macro( declareStructs )
+
+####################################################################
+## declare fields for a given entity
+####################################################################
+#macro( declareStructFields $class )
+#set( $includePrimaryKeys = false ) ##Go ORM model handles defining an Id field
+#set( $attributes = ${class.getAttributesOrderedInHierarchy( $includePrimaryKeys )} )
+#foreach( $attribute in $attributes )
+#if ( $attribute.isFromAssociation() == false )
+#set( $attributeName = $attribute.getName() )
+#else
+## use the role name
+#set( $attributeName = ${attribute.getAssociation().getRoleName()} )
+#end##if ( $attribute.isFromAssociation() == false )
+    $attributeName            #mapToGoType( $attribute )
+#end##foreach( $attribute in $attributes )
+######################################################################
+## need to output a foreign key for each association this class is a sibling of
+######################################################################
+#set( $classes = $aib.getClassesToGenerate() )
+#foreach( $loopClass in $classes )
+#foreach( $association in $loopClass.getAssociations() )
+#if( $association.getType().lastIndexOf( $class.getName() ) > -1 )
+    ${loopClass.getName()}Id    uint
+#end##if( $association.getClassObject().getName().equalsIgnoreCase( $class.getName() ) )
+#end##foreach( $association in $class.getAssociations())
+#end##foreach( $class in $classes )
+#end##macro( declareStructs $className )
+
+####################################################################
+## maps an attibute model type to a Golang type
+####################################################################
+#macro( mapToGoType $attribute )
+#set( $name = $attribute.getName() )
+#set( $type = $attribute.getType() )
+######################################################################
+## need to coerce a model type into a mongoose supported type
+######################################################################
+######################################################################
+## handle associations and non-associations differently
+######################################################################
+#if ( $attribute.isFromAssociation() == false )
+######################################################################
+## handle enums and non-enums differently
+######################################################################
+#if ( $attribute.isFromEnumerator() == false )
+#if( $type.equalsIgnoreCase("string") )
+#set( $type = "string" )
+#elseif( $type.equalsIgnoreCase("float") )
+#set( $type = "float32" )
+#elseif( $type.equalsIgnoreCase("boolean") )
+#set( $type = "bool" )
+#elseif( $type.equalsIgnoreCase("char") )
+#set( $type = "byte" )
+#elseif( $type.equalsIgnoreCase("java.sql.Date") || $type.equalsIgnoreCase("Date") )
+#set( $type = "time" )
+#elseif( $type.equalsIgnoreCase("int") || $type.equalsIgnoreCase("integer") )
+#set( $type = "int32" )
+#elseif( $type.equalsIgnoreCase("double") )
+#set( $type = "int64" )
+#elseif( $type.equalsIgnoreCase("short") )
+#set( $type = "int16" )
+#else
+#set( $type = "string" )
+#end##if( $type.equalsIgnoreCase("string") )
+#else ## attribute is an enumeration
+#set( $type = $type ) ## no_op
+#end##if ( $attribute.isFromEnumerator() == false )
+${type}
+#else## attribute is from an association
+######################################################################
+## handle attribute as a single association
+######################################################################
+#if ( $attribute.isFromSingleValueAssociation() == true )
+#set( $type = $type )
+######################################################################
+## handle attribute as a multiple association
+######################################################################
+#else ## attribute is from a multiple assoication
+#set( $type = "[]${attribute.getAssociation().getType()}" )
+#end##if ( $attribution.isFromSingleValueAssociation() == true )
+${type}
+#end##if ( $attribute.isFromAssociation() == false )
+#end##macro( mapToGoType $attribute )

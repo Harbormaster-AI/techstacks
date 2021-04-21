@@ -1,0 +1,29 @@
+<!--
+  Harbormaster
+  
+  2021 Harbormaster, Inc.
+  All Rights Reserved.
+  
+  This file is subject to the terms and conditions defined in
+  file 'license.txt', which is part of this source code package.
+   
+  Contributors :
+        Harbormaster Dev Team - General Release
+-->
+
+<!-- Golang options -->
+<options name="go" maxPerRow="1">
+	<option name="appPort"  value="8088" required="true" description="port for Go app to listen on" type="input"/>   
+    <option name="dbType" value="mysql" 
+		selections="mysql,postgres,sqlite,sqlserver"
+		required="true"
+		description="supported database types" 
+		type="select"/>	
+	<option name="dbUserName"  value="admin" required="true" description="database name" type="input"/>
+	<option name="dbPassword"  value="letmein2" required="true" description="database password" type="input"/>
+	<option name="dbName"  value="appdb" required="true" description="database name" type="input"/>
+	<option name="dbHost"  value="127.0.0.1" required="true" description="database host" type="input"/>
+	<option name="dbPort"  value="3306" required="true" description="database port" type="input"/>
+	<option name="dbArgs"  value="charset=utf8&parseTime=True&loc=Local" required="true" description="database args to append to connection statement" type="input"/>
+	<option name="dbDisableForeignKeyConstraintWhenMigrating" value="true" description="keep to true if model involves associations", type="boolean"/>
+</options>
