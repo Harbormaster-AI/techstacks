@@ -1,13 +1,6 @@
 ########################################################################
 ## CircleCI Macros
 ########################################################################
-
-########################################################################
-## CircleCI Orb Declarations - Empty by default
-########################################################################
-#macro( CircleCI_Orb_Declarations )
-#end##macro( CircleCI_Orb_Declarations )
-
 ########################################################################
 ## CircleCI common references
 ########################################################################
@@ -230,40 +223,11 @@ workflows:
 #end###macro( CircleCI_StoreArtifacts )
 
 ########################################################################
-## CircleCI Docker Image Output - Default is empty, should be overridden
+## CircleCI_Orb_Declarations
 ########################################################################
-#macro( CircleCI_OutputDockerImageDecl )        
-#end##macro( CircleCI_OutputDockerImageDecl )
+#macro( CircleCI_Orb_Declarations )
+#end###macro( CircleCI_Orb_Declarations )
 
-########################################################################
-## CircleCI Run Commands
-########################################################################
-#macro( CircleCI_RunCommands )
-      - run: 
-#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
-#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
-#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
-#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
-          name: Running test using Junit and deploy to Nexus Repo
-          command: mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
-#else        
-          name: compiling, running test using Junit, the create a deployable war file
-          command: mvn package
-#end    
 
-      # save the results from the testing that occurred during
-      # the maven packaging in the prior step
-      - run:
-          name: Save test results
-          command: |
-            mkdir -p ~/test-results/junit/
-            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
-          when: always
 
-#end###macro( CircleCI_RunCommands )
 
-########################################################################
-## CircleCI EnvVarAssignments - empty by default
-########################################################################
-#macro( CircleCI_EnvVarAssignments )
-#end##macro( CircleCI_EnvVarAssignments )
