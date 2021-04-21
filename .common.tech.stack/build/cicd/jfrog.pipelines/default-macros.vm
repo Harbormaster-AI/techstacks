@@ -138,12 +138,6 @@ pipelines:
 
 #end##macro( JFrog_Pipelines_Steps_Declaration )
 
-########################################################################
-## JFrog_Pipelines_Build_Step
-########################################################################
-#macro( JFrog_Pipelines_Build_Step )
-## THIS SHOULD BE IMPLEMENTED WITHIN A SPECIFIC TECH STACK SINCE IT IS LANGUAGE DEPENDENT  
-#end##macro( JFrog_Pipelines_Build_Step )
 
 ########################################################################
 ## JFrog_Pipelines_Docker_Build__Step 
@@ -237,8 +231,4 @@ pipelines:
             - echo "uh oh, something went wrong with the Docker image push"
 #end###macro( JFrog_Pipelines_Docker_Push_Step )
 
-########################################################################
-## JFrog_Pipelines_Resource_Declaration - should be overriden
-########################################################################
-#macro ( JFrog_Pipelines_Build_Archive_FileSpec_Configuration )
-#end##macro ( JFrog_Pipelines_Build_Archive_FileSpec_Configuration ) 
+ 
