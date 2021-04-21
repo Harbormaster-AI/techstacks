@@ -12,6 +12,18 @@ import java.net.URL;
 
 import com.google.gson.*;
 
+#if ( ${aib.getParam('aws-lambda.use kinesis')} == "true" ) 
+import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.kinesis.KinesisClient;
+import software.amazon.awssdk.services.kinesis.model.PutRecordRequest;
+import software.amazon.awssdk.services.kinesis.model.KinesisException;
+import software.amazon.awssdk.services.kinesis.model.DescribeStreamRequest;
+import software.amazon.awssdk.services.kinesis.model.DescribeStreamResponse;
+#end ##if ( ${aib.getParam('aws-lambda.use kinesis')} == "true" )
+
+import ${aib.getRootPackageName(true)}.#getPrimaryKeyPackageName().BasePrimaryKey;
+
 
 /**
  * Base class for AWS Lambda business delegates.
@@ -51,10 +63,40 @@ public class BaseAWSLambdaDelegate
         return GoogleJson;
     }
 
+    protected void putRecordToKinesis( RecordData record) {
+#if ( ${aib.getParam('aws-lambda.use kinesis')} == "true" ) 
+    	String streamName 	= System.getEnv("kinesisStreamName");	// provider to the function as an env var
+        Region region 		= ${aib.getParam("aws.region")};
+        
+        KinesisClient kinesisClient = KinesisClient.builder()
+                .region(region)
+                .build();
+
+        byte[] bytes = record.toString().getBytes();
+
+        PutRecordRequest request = PutRecordRequest.builder()
+                .partitionKey(record.target) // We use the ticker symbol as the partition key, explained in the Supplemental Information section below.
+                .streamName(streamName)
+                .data(SdkBytes.fromByteArray(bytes))
+                .build();
+        
+        try {
+            // put the data as a record
+        	kinesisClient.putRecord(request);
+        } catch (KinesisException e) {
+            e.getMessage();
+        } finally {
+            // close the kinesis client
+            kinesisClient.close();        	
+        }
+#end##if ( ${aib.getParam('aws-lambda.use kinesis')} == "true" ) 
+    	
+    }
+    
     static String call(String packageName, String actionName, Object arg)
         throws IOException {
     	String urlStr = DELEGATE_DAO_URL 
-    						+ "/" + packageName + "/" + actionName;
+    						+ "/" spackageName + "/" + actionName;
     	
     	if ( arg != null )
     		urlStr = urlStr + "?" + toJson( arg ); 
@@ -81,10 +123,40 @@ public class BaseAWSLambdaDelegate
         return sb.toString();
     }
     
+
+    
 // attributes
     private static Context context 					= null;
     final private static Gson GoogleJson 			= new Gson();
     protected final static String DELEGATE_DAO_URL 	= java.lang.System.getenv("delegateDAOHost") + ":" + java.lang.System.getenv("delegateDAOPort");
-  
+
+// inner class
+    public class RecordData {
+    	public RecordData( BasePrimaryKey parentKey, String action, String target, String msg ) {
+    		this.parentKey = parentKey.keys().toString();
+    		this.action = action;
+    		this.target = target;
+    		this.= msg;
+    	}
+    	
+    	public String toString() {
+    		StringBuilder builder = new StringBuilder();
+    		builder.append("parentKey:");
+    		builder.append(parentKey);
+    		builder.append(", action:");
+    		builder.append(action);
+    		builder.append(", target:");
+    		builder.append(target);
+    		builder.append(", msg:");
+    		builder.append(msg);
+
+    	}
+    	
+    	// attributres 
+    	public String parentKey;
+    	public String action;
+    	public String target;
+    	public String msg;
+    }
 }
 
