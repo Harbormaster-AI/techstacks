@@ -40,19 +40,13 @@
           name: Change to the app directory
           command: cd src/${appName} 
       - run:          
-          name: Initalize the project itself (go.sum, go.mod)
+          name: Initalize, build, and test
           command: |
+            cd src/${appName} 
             go mod init ${appName}
             go mod tidy
-      - run:          
-          name: Append the current directory to the GOPATH
-          command: env GOPATH=$(PWD);$(GOPATH)
-      - run:
-          name: Build the app          
-          command: go build
-      - run:          
-          name: Test the app
-          command: go test   
+            go build
+            go test   
 #end###macro( CircleCI_RunCommands )
 
 ########################################################################
