@@ -186,5 +186,12 @@ resource "aws_lambda_function" "${funcNameToExpose}" {
 	      <artifactId>aws-lambda-java-core</artifactId>
 	      <version>1.2.0</version>
 	    </dependency>
+#if ( ${aib.getParam('aws-lambda.use kinesis')} == "true" )	    
+		<dependency>
+  			<groupId>software.amazon.kinesis</groupId>
+  			<artifactId>amazon-kinesis-client</artifactId>
+  			<version>2.0.0</version>
+		</dependency>
+#end##if ( ${aib.getParam('aws-lambda.use kinesis')} == "true" )		
 #end##macro( awsLambdaDependencies )
 

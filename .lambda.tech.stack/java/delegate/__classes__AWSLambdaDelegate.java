@@ -14,7 +14,7 @@ import javax.ws.rs.*;
 import io.swagger.annotations.*;
 
 import com.amazonaws.services.lambda.runtime.Context;
-
+ 	
 #set( $imports = [ "#getPrimaryKeyPackageName()", "#getDAOPackageName()", "#getBOPackageName()"] )
 #importStatements( $imports )
 
@@ -82,5 +82,6 @@ extends BaseAWSLambdaDelegate
 //************************************************************************
 
 //    private static final Logger LOGGER = Logger.getLogger(${fullClassName}.class.getName());
+	private String processingMsg = "Success";
 }
 
