@@ -1,29 +1,51 @@
+## ------------------------------------------------------------
 ## Specify the base image needed for ${appName}
-## go application
+## ------------------------------------------------------------
 FROM #Go_Lang_Image()
 
+## ------------------------------------------------------------
+## Install git to fetch dependencies
+## ------------------------------------------------------------
+RUN apk update && apk add --no-cache git
 
-## Create an /app directory within the
-## image to hold the application source
-## files
-RUN mkdir /app
+## ------------------------------------------------------------
+## Install dependencies
+## ------------------------------------------------------------
+RUN go get github.com/gorilla/mux
+RUN go get -u gorm.io/gorm
+RUN go get github.com/joho/godotenv
+#set( $dbType = ${aib.getParam( "go.dbType" )} )     
+RUN go get -u gorm.io/driver/${dbType}
 
-## Copy everything in the root directory
-## into the /app directory
-ADD . /app
+## ------------------------------------------------------------
+## Copy the current directory to the working Directory inside the container
+## ------------------------------------------------------------ 
+COPY . .
 
-## Specify to execute 
-## any further commands inside the /app
-## directory
-WORKDIR /app
+## ------------------------------------------------------------
+## Change the working directory to src/${appName}
+## ------------------------------------------------------------
+WORKDIR cd src/${appName}
 
-## Run go build to compile the binary
-## executable of our Go program
-RUN go build -o main .
+## ------------------------------------------------------------
+## Initialize to create the go.mod and go.sum files
+## ------------------------------------------------------------
+RUN go mod init ${appName}
+RUN go mod tidy
 
-# Expose port 8080 to the outside world
-EXPOSE 8080
+## ------------------------------------------------------------
+## Run go build to compile the binary executable of our Go program
+## ------------------------------------------------------------
+RUN go build
 
+## ------------------------------------------------------------
+## Expose port 8080 to the outside world
+## ------------------------------------------------------------
+EXPOSE ${aib.getParam("db.AppPort")}
+
+## ------------------------------------------------------------
 ## The start command which kicks off
 ## a newly created binary executable
-CMD ["/app/main"]
+## ------------------------------------------------------------
+#Command to run the executable
+CMD ["./${appName}"]
