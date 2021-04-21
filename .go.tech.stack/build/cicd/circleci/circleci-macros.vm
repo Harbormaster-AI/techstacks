@@ -2,6 +2,7 @@
 ## CircleCI Macros
 ########################################################################
 
+
 ########################################################################
 ## CircleCI Docker Image Output
 ########################################################################
@@ -9,7 +10,7 @@
     # CircleCI Golang
     # Postgres image
     docker:
-      - image: circleci/golang:1.12
+      - image: circleci/golang:1.16
       - image: postgres
         # required env vars
         environment:
@@ -22,13 +23,35 @@
 ## CircleCI Run Commands
 ########################################################################
 #macro( CircleCI_RunCommands )
-      - run: 
-          name: Install dependencies...
-          command: go get -u github.com/golang/lint/golint
-          
-          name: Build/Test...
-          command: golint -set_exit_status
-          command: go build -o app
+      - run:        
+          name: Install Gorilla Mux for as Router
+          command: go get github.com/gorilla/mux 
+      - run:                  
+          name: Install Go ORM...
+          command: go get -u gorm.io/gorm
+      - run:          
+          name: Install Go ORM database type...
+#set( $dbType = ${aib.getParam( "go.dbType" )} )     
+          command: go get -u gorm.io/driver/$dbType
+      - run:          
+          name: Install .env reader
+          command: go get github.com/joho/godotenv
+      - run:          
+          name: Change to the app directory
+          command: cd src/${appName} 
+      - run:          
+          name: Initalize the project itself (go.sum, go.mod)
+          command: |
+            go mod init ${appName}
+            go mod tidy
+      - run:          
+          name: Append the current directory to the GOPATH
+          command: env GOPATH=$(PWD);$(GOPATH)
+      - run:
+          name: Build the app          
+          command: go build
+      - run:          
+          name: Test the app
           command: go test   
 #end###macro( CircleCI_RunCommands )
 
