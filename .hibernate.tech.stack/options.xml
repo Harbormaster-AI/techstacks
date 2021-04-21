@@ -42,7 +42,7 @@
 		required="true">
 	</option>
 	<option name="hibernate.max.fetch.depth" value="1" min="1" max="5" step="1" type="spinner"></option>
-	<option name="hibernate.connection.url" value="jdbc:mysql://35.238.135.228:3306/cloudMigrate?createDatabaseIfNotExist=true"></option>
+	<option name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/myDB?createDatabaseIfNotExist=true"></option>
 </options>
 
 <!-- c3p0  -->
