@@ -19,8 +19,8 @@
 		required="true"
 		description="supported database types" 
 		type="select"/>	
-	<option name="dbUserName"  value="admin" required="true" description="database name" type="input"/>
-	<option name="dbPassword"  value="letmein2" required="true" description="database password" type="input"/>
+	<option name="dbUserName"  value="" required="true" description="database user name" type="input"/>
+	<option name="dbPassword"  value="" required="true" description="database password" type="input"/>
 	<option name="dbName"  value="appdb" required="true" description="database name" type="input"/>
 	<option name="dbHost"  value="127.0.0.1" required="true" description="database host" type="input"/>
 	<option name="dbPort"  value="3306" required="true" description="database port" type="input"/>
