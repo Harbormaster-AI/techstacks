@@ -9,22 +9,8 @@ import (
 )
 
 
-
-//----------------------------------------------------------------------------
-// function initialization
-//----------------------------------------------------------------------------
 func init() {
-
-	//----------------------------------------------------------------------------
-  	// Migrate the schema
-  	//----------------------------------------------------------------------------
-  	err := utils.GetDB().AutoMigrate(&model.${className}{}).Error
-  	
-  	if  (err == nil ) {
-  		fmt.Println( strings.ToTitle( "Finished AutoMigrate on ${className}" ) )
-  	} else {
-  	    fmt.Println( strings.ToTitle( "Failed to AutoMigrate on ${className}" ), err )
-  	}
+	fmt.Println( strings.ToTitle( "Initializing ${className}DAO..." ) )
 }
 
 //----------------------------------------------------------------------------
