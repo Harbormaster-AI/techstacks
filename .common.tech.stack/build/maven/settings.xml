@@ -1,4 +1,4 @@
-#set( artifact.repo.type ="${aib.getParam('artifact-repo.type')}")
+#set( $artifact.repo.type ="${aib.getParam('artifact-repo.type')}")
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
