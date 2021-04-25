@@ -2,8 +2,17 @@
 ## declare required imports
 ####################################################################
 #macro( declareImports )
-//    "time"
-    "gorm.io/gorm"
+#set( $classes = $aib.getClassesToGenerate() )
+#set( $includePrimaryKeys = false )
+#set( $includeTypes = true )
+#set( $includeAssociations = false )
+#set( $delim = "" )
+#set( $suffix = "" )
+#foreach( $class in $classes )
+#set( $types = $class.getAttributesAsString( $includePrimaryKeys, $includeTypes, $includeAssociations, $delim, $suffix ) )
+#isTypeTime( $types )
+#break    
+#end##foreach( $class in $classes )  
 #end##macro( declareImports )
 
 ####################################################################
@@ -54,10 +63,10 @@ type $className struct {
 #set( $attributes = ${class.getAttributesOrderedInHierarchy( $includePrimaryKeys )} )
 #foreach( $attribute in $attributes )
 #if ( $attribute.isFromAssociation() == false )
-#set( $attributeName = $attribute.getName() )
+#set( $attributeName = "${Utils.capitalizeFirstLetter(${attribute.getName()})}" )
 #else
 ## use the role name
-#set( $attributeName = ${attribute.getAssociation().getRoleName()} )
+#set( $attributeName = "${Utils.capitalizeFirstLetter(${attribute.getAssociation().getRoleName()})}" )
 #end##if ( $attribute.isFromAssociation() == false )
     $attributeName            #mapToGoType( $attribute )
 #end##foreach( $attribute in $attributes )
@@ -81,9 +90,6 @@ type $className struct {
 #set( $name = $attribute.getName() )
 #set( $type = $attribute.getType() )
 ######################################################################
-## need to coerce a model type into a mongoose supported type
-######################################################################
-######################################################################
 ## handle associations and non-associations differently
 ######################################################################
 #if ( $attribute.isFromAssociation() == false )
@@ -91,25 +97,28 @@ type $className struct {
 ## handle enums and non-enums differently
 ######################################################################
 #if ( $attribute.isFromEnumerator() == false )
-#if( $type.equalsIgnoreCase("string") )
+#if( $type.contains("tring") )
 #set( $type = "string" )
-#elseif( $type.equalsIgnoreCase("float") )
+#elseif( $type.contains("loat") )
 #set( $type = "float32" )
-#elseif( $type.equalsIgnoreCase("boolean") )
+#elseif( $type.contains("oolean") )
 #set( $type = "bool" )
 #elseif( $type.equalsIgnoreCase("char") )
 #set( $type = "byte" )
-#elseif( $type.equalsIgnoreCase("java.sql.Date") || $type.equalsIgnoreCase("Date") )
-#set( $type = "time" )
-#elseif( $type.equalsIgnoreCase("int") || $type.equalsIgnoreCase("integer") )
+#elseif( $type.equalsIgnoreCase("int") || $type.contains("nteger") )
 #set( $type = "int32" )
-#elseif( $type.equalsIgnoreCase("double") )
+#elseif( $type.contains("ouble") )
 #set( $type = "int64" )
-#elseif( $type.equalsIgnoreCase("short") )
+#elseif( $type.contains("hort") )
 #set( $type = "int16" )
 #else
+#set( $isTimeType = "#isTypeTime( $type )" )
+#if ( $isTimeType.length() > 0 )
+#set( $type = "time.Time" )
+#else
 #set( $type = "string" )
-#end##if( $type.equalsIgnoreCase("string") )
+#end##if ( $isTimeType.length() > 0 )
+#end
 #else ## attribute is an enumeration
 #set( $type = $type ) ## no_op
 #end##if ( $attribute.isFromEnumerator() == false )
@@ -129,3 +138,54 @@ ${type}
 ${type}
 #end##if ( $attribute.isFromAssociation() == false )
 #end##macro( mapToGoType $attribute )
+
+####################################################################
+## outputs all class attributes to a default value
+####################################################################
+#macro ( defaultTestStructOutput $class )
+#set( $defaults = "{" )
+#set( $attributes = $class.getAttributesOnly(false, false) )
+#set( $attributesSize = $attributes.size() )
+#foreach( $attribute in $attributes )
+#set( $type = $attribute.getType() )
+#set( $attributeName = "${Utils.capitalizeFirstLetter( $attribute.getAsArgument() )}" )
+#set( $defaultValue = "${esc.quote}test value${esc.quote}" )
+#if ( $attribute.isFromEnumerator() == false )
+#if( $type.contains("tring") )
+#set( $defaultValue = "${esc.quote}test value for ${attributeName}${esc.quote}" )
+#elseif( $type.contains("loat") )
+#set( $defaultValue = "1000" )
+#elseif( $type.contains("oolean") )
+#set( $defaultValue = "true" )
+#elseif( $type.equalsIgnoreCase("char") )
+#set( $defaultValue = "A" )
+#elseif( $type.equalsIgnoreCase("int") || $type.contains( "nteger") )
+#set( $defaultValue = "100" )
+#elseif( $type.contains("ouble") )
+#set( $defaultValue = "10" )
+#elseif( $type.contains("hort") )
+#set( $defaultValue = "1" )
+#else
+#set( $isTypeTime = "#isTypeTime( $type )" )
+#if( $isTypeTime.length() > 0 )
+#set( $defaultValue = "time.Now()" )
+#else
+#set( $type = "${esc.quote}test value${esc.quote}" )
+#end##if( $type.equalsIgnoreCase("string") )
+#end
+#else ## attribute is an enumeration
+#set( $defaultValue = "0" )
+#end##if ( $attribute.isFromEnumerator() == false )
+#set( $defaults = "${defaults}${attributeName}:${defaultValue}" )
+#if( $velocityCount < $attributesSize )
+#set( $defaults = "${defaults},") 
+#end##if ( $velocityCount < $attributesSize )
+#end## foreach $attribute in $attributes
+$defaults}
+#end##macro ( defaultTestStructutput )
+
+#macro ( isTypeTime $type )
+#if ( $type.contains("time") || $type.contains("Time") || $type.contains("Date") || $type.contains("java.util.Date") || $type.contains("java.sql.Date") )
+    "time"
+#end##if ( $types.contains("time") || $types.contains("Time") || $types.contains("Date") )
+#end##macro( isTimeType )
