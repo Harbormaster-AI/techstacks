@@ -179,7 +179,7 @@ func Assign${roleName}(w http.ResponseWriter, r *http.Request) {
 	//----------------------------------------------------------------------------		
 	// Retrieve the id params
 	//----------------------------------------------------------------------------		
-	${lowercaseClassName}Id,_ := strconv.ParseUint( vars["id"], 10, 64)
+	${lowercaseClassName}Id,_ := strconv.ParseUint( vars["parentId"], 10, 64)
 	${lowercaseRoleName}Id,_ := strconv.ParseUint( vars["${lowercaseRoleName}Id"], 10, 64)
 
 	//----------------------------------------------------------------------------		
@@ -206,7 +206,7 @@ func Unassign${roleName}( w http.ResponseWriter, r *http.Request ) {
 	//----------------------------------------------------------------------------		
 	// Retrieve the id params
 	//----------------------------------------------------------------------------		
-	${lowercaseClassName}Id,_ := strconv.ParseUint( vars["id"], 10, 64)
+	${lowercaseClassName}Id,_ := strconv.ParseUint( vars["parentId"], 10, 64)
 
 	//----------------------------------------------------------------------------		
 	// Delegate to the ${parentName} DAO
@@ -240,7 +240,7 @@ func Add${roleName}(w http.ResponseWriter, r *http.Request)  {
 	//----------------------------------------------------------------------------		
 	// Retrieve the id and child ids
 	//----------------------------------------------------------------------------		
-	${lowercaseClassName}Id,_ := strconv.ParseUint( vars["id"], 10, 64)
+	${lowercaseClassName}Id,_ := strconv.ParseUint( vars["parentId"], 10, 64)
 	${lowercaseRoleName}Ids,_ := vars["${lowercaseRoleName}Ids"]
 
 	//----------------------------------------------------------------------------		
@@ -267,7 +267,7 @@ func Remove${roleName}(w http.ResponseWriter, r *http.Request)  {
 	//----------------------------------------------------------------------------		
 	// Retrieve the id and child ids
 	//----------------------------------------------------------------------------		
-	${lowercaseClassName}Id,_ := strconv.ParseUint( vars["id"], 10, 64)
+	${lowercaseClassName}Id,_ := strconv.ParseUint( vars["parentId"], 10, 64)
 	${lowercaseRoleName}Ids,_ := vars["${lowercaseRoleName}Ids"]
 
 	//----------------------------------------------------------------------------		
