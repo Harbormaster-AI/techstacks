@@ -2,6 +2,7 @@ package model
 
 import (
 #declareImports()
+    "gorm.io/gorm"
 )
 
 #declareEnums()
