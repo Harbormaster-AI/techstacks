@@ -2,16 +2,17 @@
 package utils
 
 import (
-    "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 	"gorm.io/gorm"
   	"gorm.io/driver/${dbType}"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"log"
 	"fmt"
 	"strconv"
+	"log"
+	"${appName}/api/model"
 )
 
 //----------------------------------------------------------------------------
@@ -27,11 +28,13 @@ type RequestResult struct {
 }
 
 //----------------------------------------------------------------------------
-// function initialization
+// function initialze the database and environment
 //----------------------------------------------------------------------------
-func init() {
+func InitializeEnvironment() {
 
+	//----------------------------------------------------------------------------
     // load .env file
+    //----------------------------------------------------------------------------
     err := godotenv.Load()
 
     if err != nil {
@@ -76,22 +79,18 @@ func init() {
         						os.Getenv("DB_ARGS") )
 	}
 	
+	fmt.Println( "Connecting to the database using DSN ", dsn )
+		
 	disableFKConstraint,_ := strconv.ParseBool(os.Getenv("DB_DISABLE_FK_CONSTRAINTS"));
 	
-	tmpDB, err := gorm.Open(${dbType}.Open(dsn),&gorm.Config{
+	db, _ = gorm.Open(${dbType}.Open(dsn),&gorm.Config{
   							DisableForeignKeyConstraintWhenMigrating: disableFKConstraint,
 					})
 
-  	if err != nil {
-    	panic("failed to connect database")
-  	}
-
-    //----------------------------------------------------------------------------  	
-  	// assign tmpDB for global usage
-  	//----------------------------------------------------------------------------
-  	
-  	db = tmpDB
-
+	//----------------------------------------------------------------------------
+	// Handle schema creation or update
+	//----------------------------------------------------------------------------
+	AutoMigrate()
 }
 
 //----------------------------------------------------------------------------
@@ -111,4 +110,14 @@ func ParseBody(r *http.Request, x interface{}) {
 			return
 		}
 	}
+}
+
+//----------------------------------------------------------------------------
+// Handler to AutoMigrate schema to gorm for each model struct
+//----------------------------------------------------------------------------
+func AutoMigrate() {
+#set( $classes = $aib.getClassesToGenerate() )    
+#foreach( $class in $classes )  
+    GetDB().AutoMigrate(&model.${class.getName()}{})
+#end
 }
