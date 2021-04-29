@@ -29,15 +29,14 @@
 
 <!--  swagger options -->
 <options name="swagger">
-
 	<option name="host" value="" required="true" description="API host" type="input"/>
-	<option name="basepath" value="/" required="true" description="API host" type="input"/>
+	<option name="basepath" value="/" required="true" description="base path to swagger file" type="input"/>
 	<option name="contact name" value="" required="false" description="contact name" type="input"/>
 	<option name="contact email" value="" required="false" description="contact email address" type="input"/>
 	<option name="contact url" value="" required="false" description="contact url" type="input"/>
 	<option name="license url" value="http://www.apache.org/licenses/LICENSE-2.0.html" required="false" description="license url" type="input"/>
 	<option name="license name" value="Apache 2.0" required="false" description="license name" type="input"/>
-	<option name="title" value="add a title" required="false" description="title" type="input"/>
+	<option name="title" value="" required="false" description="title" type="input"/>
 	<option name="version" value="v1.0" required="false" description="version" type="input"/>
 	<option name="description" value="" required="false" description="description" type="input"/>
 	<option name="terms of service" value="" required="false" description="terms of service" type="input"/>
