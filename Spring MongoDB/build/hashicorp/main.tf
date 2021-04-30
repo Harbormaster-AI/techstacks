@@ -135,7 +135,7 @@ resource "aws_instance" "web" {
   
   tags = { Name = "${appName} instance" } 
 
-  # standard realmethods community AMI with docker pre-installed
+  # standard Harbormaster community AMI with docker pre-installed
   ami = "ami-05033408e5e831fb0"
 
   # The name of the  SSH keypair you've created and downloaded
@@ -148,11 +148,11 @@ resource "aws_instance" "web" {
   # Our Security group to allow HTTP and SSH access
   vpc_security_group_ids = ["${aws_security_group.web.id}"]
 
-#set( $dockerUserName = ${aib.getParam("terraform.docker-username")} ) 
-#set( $dockerPassword = ${aib.getParam("terraform.docker-password")} )
-#set( $dockerOrgName = ${aib.getParam("terraform.docker-org-name")} )
-#set( $dockerRepo = ${aib.getParam("terraform.docker-repo")} )
-#set( $dockerTag = ${aib.getParam("terraform.docker-tag")} )
+#set( $dockerUserName = ${aib.getParam("docker.username")} ) 
+#set( $dockerPassword = ${aib.getParam("docker.password")} )
+#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
+#set( $dockerRepo = ${aib.getParam("docker.repo")} )
+#set( $dockerTag = ${aib.getParam("docker.tag")} )
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get -y update",
