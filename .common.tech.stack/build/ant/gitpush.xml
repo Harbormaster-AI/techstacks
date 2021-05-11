@@ -15,9 +15,9 @@
       <arg value="gitpush.sh"/>
     </exec>
 
-    <exec executable="sh" logError="true" failonerror="false" failifexecutionfails="false">
+    <exec executable="bash" logError="true" failonerror="false" failifexecutionfails="false">
       <arg value="--login"/>
-      <arg value="${project.basedir}/gitpush.sh"/>
+      <arg value="${project.basedir}/gitpush.sh ${project.basedir}"/>
     </exec>
   </target>
                     
