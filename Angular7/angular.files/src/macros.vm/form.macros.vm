@@ -136,9 +136,10 @@
 #end##foreach ( $attribute = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )
 #set( $includePrimaryKeys = false )
 #set( $includeType = false )
+#set( $includeAssociations = false )
 #set( $delim = ", " )
 #set( $suffix = ".value" )
-#set( $argsAsString = ${classObject.getAttributesAsString( ${includePrimaryKeys}, ${includeType}, ${delim}, ${suffix} )} )
+#set( $argsAsString = ${classObject.getAttributesAsString( ${includePrimaryKeys}, ${includeType}, ${includeAssociations}, ${delim}, ${suffix} )} )
 ###################################################
 ## disable button for all invalidated controls
 ###################################################
