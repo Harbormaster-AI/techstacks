@@ -1,4 +1,4 @@
-#set( $artifact.repo.type ="${aib.getParam('artifact-repo.type')}")
+#set( $artifactRepoType = ${aib.getParam( 'artifact-repo.type' )} )
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
@@ -132,7 +132,7 @@ under the License.
     </server>
     -->
 	<server>
-	  <id>${artifact.repo.type}</id>
+	  <id>${artifactRepoType}</id>
       <username>${repo_username}</username>
       <password>${repo_password}</password>
 	</server>
@@ -164,7 +164,7 @@ under the License.
      -->
 	<mirror>
       <!--This sends everything else to /public -->
-      <id>${artifact.repo.type}</id>
+      <id>${artifactRepoType}</id>
       <mirrorOf>*</mirrorOf>
       <url>${repo_url}</url>
     </mirror>
@@ -258,7 +258,7 @@ under the License.
     -->
 
     <profile>
-      <id>${artifact.repo.type}</id>
+      <id>${artifactRepoType}</id>
       <!--Enable snapshots for the built in central repo to direct -->
       <!--all requests to nexus via the mirror -->
       <repositories>
@@ -290,6 +290,6 @@ under the License.
   -->
   <activeProfiles>
     <!--make the profile active all the time -->
-    <activeProfile>${artifact.repo.type}</activeProfile>
+    <activeProfile>${artifactRepoType}</activeProfile>
   </activeProfiles>
 </settings>
