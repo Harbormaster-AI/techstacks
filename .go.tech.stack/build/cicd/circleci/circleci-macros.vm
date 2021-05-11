@@ -2,7 +2,6 @@
 #set( $dbName = ${aib.getParam( "go.dbName" )} )
 #set( $dbUserName = ${aib.getParam( "go.dbUserName" )} )
 #set( $dbPassword = ${aib.getParam( "go.dbPassword" )} )
-
 ########################################################################
 ## CircleCI Macros
 ########################################################################
