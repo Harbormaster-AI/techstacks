@@ -2,6 +2,7 @@ code_gen_catch_all/
 target/
 .git/
 gitpush.*
+ssh.key
 #set( $cicd = ${aib.getParam( "application.cicd_platform" )} )							      
 #if ( $cicd.indexOf("codeship") >= 0 )
 codeship.aes
