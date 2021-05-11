@@ -1,0 +1,13 @@
+#-------------------------------------------------------------------------------
+## macro rootLevelMappings - common mappings for each non-base tech stacks
+#-------------------------------------------------------------------------------
+#macro( rootLevelMappings )
+ssh.key=
+gitpush.sh=
+.gitignore=
+settings.xml=
+pom*.xml=
+Dockerfile=
+build.xml=
+jalopy-conventions=
+#end
