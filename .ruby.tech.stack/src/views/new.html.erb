@@ -1,0 +1,7 @@
+#set( $className = ${Utils.capitalizeFirstLetter($classObject.getName())} )
+#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className})} )
+<h1>New ${className}</h1>
+ 
+<%= render 'form' %>
+ 
+<%= link_to 'Back', ${lowercaseClassName}s_path %>
