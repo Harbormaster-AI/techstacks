@@ -1,0 +1,6 @@
+##----------------------------------------------
+## Codeship_From_Image default is a Maven 3 image with Java install
+##----------------------------------------------
+#macro( Codeship_From_Image  ) 
+FROM maven:3
+#end##macro( Codeship_From_Image  )

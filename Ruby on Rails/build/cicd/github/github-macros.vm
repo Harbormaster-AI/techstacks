@@ -1,0 +1,9 @@
+##----------------------------------------------
+## GitHubActions_Steps_Uses
+##----------------------------------------------
+#macro( GitHubActions_Steps_Uses )
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+#end##macro( GitHubActions_Steps_Uses )
+

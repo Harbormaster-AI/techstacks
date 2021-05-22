@@ -1,0 +1,84 @@
+##----------------------------------------------
+## form field declarations for the current classObject
+##----------------------------------------------
+#macro( formFields )
+#set( $className = $classObject.getName() )
+#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter(${className})} )
+#set( $includePrimaryKeys = false )
+##----------------------------------------------
+## loop thru all attributes, excluding pks
+##----------------------------------------------
+#foreach ( $attribute in $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )  
+#set( $name = $attribute.getName() )
+#set( $title = $name )
+#set( $type = $attribute.getType() )
+  <p>
+##----------------------------------------------
+## if not from an association
+##----------------------------------------------				
+#if ( $attribute.isFromAssociation() == false )			
+#set( $bootstrapLabelFmt = "{ class: 'form-label'}" )
+#set( $bootstrapControlFmt = "{ class: 'form-control'}" )
+##----------------------------------------------
+## handle enumerated types as select with options
+##----------------------------------------------				
+#if ( $attribute.isFromEnumerator() == true )
+   <%= form.label :${title}, ${bootstrapLabelFmt} %><br>
+   <%= form.select :${name}, ${classObject.getName()}.${name}s.keys, ${bootstrapControlFmt} %>
+#else##if ( $attribute.isFromEnumerator() == true )
+##----------------------------------------------
+## handle primitive types...not associations yet
+##----------------------------------------------
+##----------------------------------------------
+## handle booleans as a checkbox
+##----------------------------------------------
+#if ( $type.endsWith( "oolean") == true )
+    <%= form.check_box :${name}, {class: "form-check-input"} %>
+    <%= form.label :${title}, ${bootstrapLabelFmt} %><br>	
+##----------------------------------------------
+## handle date using the ngbDatePicker
+##----------------------------------------------				
+#else
+    <%= form.label :${title}, ${bootstrapLabelFmt} %><br>
+#set( $isRequired = $attribute.isRequired() )
+#set( $controlsRequired = false )
+#if ( $type.endsWith( "Date" ) )
+    <%= form.date_field :${name}, ${bootstrapLabelFmt} %>
+##----------------------------------------------
+## handle time using the nbg-timepicker
+##----------------------------------------------
+#elseif ( $type.endsWith( "Time" ) )
+    <%= form.time_field :${name}, ${bootstrapLabelFmt} %>
+##----------------------------------------------
+## handle numerics as an input text
+##----------------------------------------------
+#elseif ( $type.endsWith( "Short" ) || $type.endsWith( "Integer" ) || $type.endsWith( "Long" ) )
+	<%= form.text_field :${name}, ${bootstrapLabelFmt} %>
+##----------------------------------------------
+## handle all by default as input text
+##----------------------------------------------
+#else
+	<%= form.text_field :${name}, ${bootstrapLabelFmt} %>
+#end## of all none-boolean values
+#end##if ( $type.endsWith( "Date" )
+#end##if ( $attribute.isFromEnumerator() == false )
+##----------------------------------------------
+## attribute is from an association
+##----------------------------------------------
+#else
+##outputAssociationRenderings( $attribute.getAssociation() )
+#end##if ( $attribute.isFromAssociation() == false )
+  </p>			
+#end##foreach ( $attribute in $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )      
+#end##macro( formFields )
+
+##----------------------------------------------
+## output the association as a rendering
+##----------------------------------------------
+#macro( outputAssociationRenderings $association )
+#set( $className = $classObject.getName() )
+#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter(${className})} )
+#set( $roleName = ${association.getRoleName()} )
+    <h2>${roleName}</h2>
+    <%= render @${lowercaseClassName}.${roleName} %>
+#end##macro( outputAssociationRenderings $attribute )

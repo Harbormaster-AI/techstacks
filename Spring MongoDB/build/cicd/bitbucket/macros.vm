@@ -1,0 +1,26 @@
+##----------------------------------------------
+## Bitbucket_Pipeline_Image_Declaration
+##----------------------------------------------
+#macro( Bitbucket_Pipeline_Image_Declaration )
+image: maven:3.3.9
+#end##macro( Bitbucket_Pipeline_Image_Declaration )
+
+##----------------------------------------------
+## Bitbucket_Pipeline_Definitions
+##----------------------------------------------
+#macro( Bitbucket_Pipeline_Definitions )          
+definitions:
+  services:
+    mongo: 
+      image: mongo
+#end##macro( Bitbucket_Pipeline_Definitions )
+
+##----------------------------------------------
+
+##----------------------------------------------
+## Bitbucket_Pipeline_Services
+##----------------------------------------------
+#macro( Bitbucket_Pipeline_Services )  
+      services:
+          - mongo
+#end##macro( Bitbucket_Pipeline_Services )

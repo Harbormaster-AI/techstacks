@@ -1,0 +1,40 @@
+##----------------------------------------------
+## Bitbucket_Pipeline_Image_Declaration
+##----------------------------------------------
+#macro( Bitbucket_Pipeline_Image_Declaration )
+image: ruby:#Ruby_Image()
+#end##macro( Bitbucket_Pipeline_Image_Declaration )
+
+##----------------------------------------------
+## Bitbucket_Pipeline_Definitions
+##----------------------------------------------
+#macro( Bitbucket_Pipeline_Definitions )          
+definitions:
+  caches:
+    bundler: vendor/bundle
+  services:
+    postgres:
+      image: postgres
+      environment:
+        POSTGRES_DB: ${appName}DB
+        POSTGRES_USER: root
+        POSTGRES_PASSWORD: letmein2      
+#end##macro( Bitbucket_Pipeline_Definitions )
+
+
+##----------------------------------------------
+## Bitbucket_Pipeline_Caches
+##----------------------------------------------
+#macro( Bitbucket_Pipeline_Caches )  
+      caches:
+          - bundler #cache is defined in the definitions section 
+#end##macro( Bitbucket_Pipeline_Caches )
+
+##----------------------------------------------
+## Bitbucket_Pipeline_Services
+##----------------------------------------------
+#macro( Bitbucket_Pipeline_Services )  
+      services:
+          - postgres
+#end##macro( Bitbucket_Pipeline_Services )
+          

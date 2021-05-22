@@ -1,0 +1,10 @@
+########################################################################
+## AWS Codebuild Artifact Declaration
+########################################################################
+#macro( AWS_CodeBuild_Artifacts )
+  files:
+    - ${appName}/*.egg-info
+  cache:
+    paths:
+      - '/root/.cache/pip'
+#end##macro( AWS_CodeBuild_Artifacts )

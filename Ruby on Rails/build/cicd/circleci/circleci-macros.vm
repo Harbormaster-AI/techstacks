@@ -1,0 +1,21 @@
+##----------------------------------------------
+## CircleCI Docker Image Output - Default is for Java8/MySQL images
+##----------------------------------------------
+#macro( CircleCI_OutputDockerImageDecl )        
+    # CircleCI Ruby
+    # Postgres image
+    docker:
+      - image: cimg/#Ruby_Image()-node
+#end##macro( CircleCI_OutputDockerImageDecl )
+
+##----------------------------------------------
+## CircleCI EnvVarAssignments
+##----------------------------------------------
+#macro( CircleCI_EnvVarAssignments )
+#end##macro( CircleCI_EnvVarAssignments )
+
+##----------------------------------------------
+## output name of the docker file - will be forced to lowercase
+##----------------------------------------------
+#macro( GetDockerfileName )
+dockerfile#end##macro( GetDockerfileName() )

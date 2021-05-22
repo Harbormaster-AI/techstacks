@@ -1,0 +1,25 @@
+##----------------------------------------------
+## Build type
+##----------------------------------------------
+#macro( BuildType )
+Bash#end
+
+
+##----------------------------------------------
+## Build configuration
+##----------------------------------------------
+#macro( BuildConfiguration )
+          deployerReleaseRepo:            ${buildArtifactRepo}    # Snapshot artifacts created by the MvnBuild are uploaded to this Artifactory repository
+          deployerSnapshotRepo:           ${buildArtifactRepo}    # Release artifacts created by the MvnBuild are uploaded to this Artifactory repository.
+          affinityGroup:                  shared_affinity_group # used to bind steps <optional>
+          
+          outputResources:
+            - name:                       build_info  # Uses the defined build info resource               
+          
+          inputResources:
+            - name:                       git_repo         # Use the git_repo resource   
+         
+          integrations:
+            - name:                       ${buildArtifactIntegration}  # Must specify an Artifactory Integration <required>  
+#end
+

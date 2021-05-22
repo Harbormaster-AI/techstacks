@@ -1,0 +1,36 @@
+#set( $className = ${Utils.capitalizeFirstLetter($classObject.getName())} )
+#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className})} )
+<div class="title text-center">
+  List of ${className}s
+</div>
+
+<table class="table table-sm table-hover table-striped"">
+	<thead class="table-dark">
+		<tr>
+#set( $includePrimaryKey = false )
+#set( $includeHierarchy = true )
+#foreach( $attribute in ${classObject.getAttributesOnly( $includeHierarchy, $includePrimaryKey )} )    
+			<th style="text-align:center">${attribute.getDisplayName()}</th>
+#end##foreach ( $attribute = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKey ) )
+			<th style="text-align:center" colspan="2">Actions</th>
+	</thead>
+	<tbody>
+ 
+  <% @${lowercaseClassName}s.each do |${lowercaseClassName}| %>
+		<tr>   
+#foreach( $attribute in ${classObject.getAttributesOnly( $includeHierarchy, $includePrimaryKey )} )
+#set( $attributeName = $attribute.getName() )
+			<td style="text-align:center">
+	  			<%= ${lowercaseClassName}.${attributeName} %>
+			</td>
+#end##foreach ( $attribute = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )  
+			<td style="vertical-align:middle;text-align:center">
+				<%= button_to 'Change', edit_${lowercaseClassName}_path(${lowercaseClassName}), :method => :get, :class => "btn btn-secondary btn-sm"%>
+			</td>
+			<td style="vertical-align:middle;text-align:center">
+				<%= button_to 'Delete', ${lowercaseClassName}_path(${lowercaseClassName}), :method => :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-sm"%>
+			</td>
+    	</tr>
+  <% end %>
+</table>
+<%= button_to 'New ${className}', new_${lowercaseClassName}_path, :method => :get, :class => "btn btn-success btn-sm" %>

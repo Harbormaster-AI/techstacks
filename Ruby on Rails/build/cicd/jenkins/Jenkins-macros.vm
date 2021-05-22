@@ -1,0 +1,7 @@
+##----------------------------------------------
+## Jenkinsfile_Docker_App_Image - default is empty, should be overridden
+##----------------------------------------------
+#macro( Jenkinsfile_Docker_App_Image )
+ruby:2.6#end##macro( Jenkinsfile_Docker_App_Image )
+
+

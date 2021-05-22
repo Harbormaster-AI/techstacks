@@ -1,0 +1,13 @@
+#set( $className = $classObject.getName() )
+#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter(${className})} )
+#set( $appName = $aib.getApplicationNameFormatted() )
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# if you change the one: value, be sure to change its reference in the setup method of ${lowercaseClassName} found in  ${appName}/test/controllers
+
+one:
+#outputFixtureDeclaration(${classObject})
+
+two:
+#outputFixtureDeclaration(${classObject})
+
+

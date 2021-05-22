@@ -1,8 +1,0 @@
-########################################################################
-## Pipenv_Component_Install
-########################################################################
-#macro( Pipenv_Component_Install )
-                sh 'pipenv install'
-                sh 'pipenv install Django'
-                sh 'pipenv install pytest-django'
-#end##macro( Pipenv_Component_Install )
