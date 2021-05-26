@@ -1,0 +1,34 @@
+## ------------------------------------------------
+## Database image - should be overridden
+## ------------------------------------------------
+#macro( DockerComposeDBImage )
+mongo:latest
+#end 
+
+## ------------------------------------------------
+## Env vars for DB service declaration
+## ------------------------------------------------
+#macro( DockerComposeDBEnvironment )
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: letmein2
+#end 
+
+## ------------------------------------------------
+## Ports for DB service declaration - should be overriden
+## ------------------------------------------------
+#macro( DockerComposeDBPorts )
+27017:27017#end
+
+## ------------------------------------------------
+## Env vars for platform service declaration
+## ------------------------------------------------
+#macro( DockerComposePlatformEnvironment )
+      DEFAULT_HOST_ADDRESS: 127.0.0.1
+      DEFAULT_HOST_PORT: 27017
+#end
+
+## ------------------------------------------------
+## Ports for platform service declaration
+## ------------------------------------------------
+#macro( DockerComposePlatformPorts )
+4200:4200#end
