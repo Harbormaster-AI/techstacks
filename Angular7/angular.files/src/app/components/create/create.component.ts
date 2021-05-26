@@ -17,7 +17,9 @@ export class Create${className}Component extends SubBaseComponent implements OnI
 
   title = 'Add ${className}';
   ${lowercaseClassName}Form: FormGroup;
-  
+  ${lowercaseClassName}: any;
+
+    
   constructor(  http: HttpClient,
   				private ${lowercaseClassName}service: ${className}Service, 
   				private fb: FormBuilder, 

@@ -1,21 +1,14 @@
-########################################################################
-## JFrog_Pipelines Macros
-########################################################################
+##----------------------------------------------
+## Build type
+##----------------------------------------------
+#macro( BuildType )
+GoBuild#end
 
-########################################################################
-## JFrog_Pipelines_Build_Step - Overriden from common.stack
-########################################################################
-#macro( JFrog_Pipelines_Build_Step )
-      # ======================================================= 
-      # Bash Build Step
-      # =======================================================    
-      - name:                          build_step    # Unique name <required>
-        type:                          GoBuild        # build type <required>  
-        
-        # ======================================================= 
-        # Step configuration
-        # ======================================================= 
-        configuration:      
+
+##----------------------------------------------
+## Build configuration
+##----------------------------------------------
+#macro( BuildConfiguration )
         
           resolverRepo:                 ${buildArtifactRepo}    # Name of the Artifactory repository to be used to resolve dependencies.
           
@@ -27,17 +20,9 @@
          
           integrations:
             - name:                     ${buildArtifactIntegration}  # Must specify an Artifactory Integration <required>  
-        
-        execution:
-          
-          onStart:
-            - echo "Preparing for work..."
-          onSuccess:
-            - echo "Things went well"
-          onFailure:
-            - echo "uh oh, something went wrong"
-          onComplete:             
-            - echo "Cleaning up..."
+            - name:                       git_repo         # Use the git_repo resource   
+         
+          integrations:
+            - name:                       ${buildArtifactIntegration}  # Must specify an Artifactory Integration <required>  
+#end
             
-#end##macro( JFrog_Pipelines_Build_Step )
-

@@ -6,73 +6,24 @@
     # mongodb image - runs in a common network where ports exposed
     #          on the primary container are available on localhost
     docker:
-      - image: circleci/node:10.9.0-jessie
+      - image: circleci/node:#NODE_JS_Version()
       - image: mongo:4.0.5
         command: [mongod, --smallfiles]
 #end##macro( CircleCI_OutputDockerImageDecl )
 
-########################################################################
-## CircleCI Run Commands
-########################################################################
-#macro( CircleCI_RunCommands )
-# install the Angular CLI
-     # assign vars for Git
-      - run: 'export EMAIL=circleci@circleci.com'
-      - run: 'export GIT_AUTHOR_NAME=CircleCi'
-      - run: 'export GIT_COMMITTER_NAME=CircleCi'
-      
-     # install the Angular CLI, pip to /dev/null to remove analytics invocation
-      - run: 'sudo #NPM_Install_Directive()'
 
-      # create an appRoot directory to install into 
-      - run: mkdir /home/circleci/appRoot
-
-      # create a new Angular project shell
-      - run: cd /home/circleci/appRoot && ng new ${appName} --defaults
-
-      # copy the application files from the working directory
-      - run: cp -r -n /home/circleci/appRoot/${appName}/ /home/circleci/gitRoot/
-
-      # setup the application, copies generated app files to the project directory
-      - run: cd /home/circleci/gitRoot/${appName} && npm install --prod && npm run setup
-
-      # perform the build into a directory called angular under the dist directory
-      - run: cd /home/circleci/gitRoot/${appName} && ng build #--base-href /${appName}/
-      
-#if ( ${aib.getParam('jfrog.inUse')} == "true" || ${aib.getParam('nexus.inUse')} == "true" )
-      # deploy to target repo
-      - run: npm run deploy
-#end      
-
-#end###macro( CircleCI_RunCommands )
-
-########################################################################
-## CircleCI Store Test Results - overridden from common.stack.templates
-########################################################################
-#macro( CircleCI_StoreTestResults )
-#end###macro( CircleCI_StoreTestResults )
-
-########################################################################
-## CircleCI Store Artifact - overridden from common.stack.templates
-########################################################################
-#macro( CircleCI_StoreArtifacts )
-#end###macro( CircleCI_StoreArtifacts )
-
-########################################################################
-## CircleCI EnvVarAssignments - overridden from common.stack.templates
-########################################################################
-#macro( CircleCI_EnvVarAssignments )
-#end##macro( CircleCI_EnvVarAssignments )
-
-########################################################################
-## CircleCI CircleCI_DeclareCommonReferences - overridden from common.stack.templates
-########################################################################
-#macro( CircleCI_DeclareCommonReferences )
-#end##macro( CircleCI_DeclareCommonReferences )
-
-
-########################################################################
-## CircleCI CircleCI_TerraformReferences - overridden from common.stack.templates
-########################################################################
-#macro( CircleCI_TerraformReferences )
-#end##macro( CircleCI_TerraformReferences )
+##----------------------------------------------
+## CircleCI Test Results
+##----------------------------------------------
+#macro( CircleCI_TestResults )
+##      - run: mkdir ~/junit
+##      - run:
+##          name: Test application
+##          command: |
+##              TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
+##              cd appRoot/${appName} && yarn test $TEST
+##      - run:
+##          command: cp junit.xml ~/junit/ > /dev/null
+##          when: always
+                
+#end##macro( CircleCI_TestResults )

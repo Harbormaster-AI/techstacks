@@ -6,4 +6,3 @@
 #Azure_Pipeline_Pool_Declaration()
 #Azure_Pipeline_Var_Declarations()
 #Azure_Pipeline_Steps()
-  displayName: 'build the entire application'

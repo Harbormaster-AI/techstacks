@@ -54,11 +54,17 @@ stages:
 build:
   stage: build
   script: 
-      - export PIP_CACHE_DIR=.cache/pip
-      - pip install pipenv
-#Pipenv_Component_Install()          
-      - pip install pipenv
-      - pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests
+#instantiateCommandArrays()
+#initializeGlobalCICDInitializationCommands()
+#foreach( $command in $globalCICDInitialzationCommands )
+      - $command
+#end##foreach( $command in $globalCICDInitialzationCommands )
+      name: build/test ${appName} 
+      script:
+#initializeGlobalCICDBuildCommands()
+#foreach( $command in $globalCICDBuildCommands )
+      - $command
+#end##foreach( $command in $globalCICDInitialzationCommands )  
 #end##macro( GitLab_Stage_Definitions )
 
 ########################################################################

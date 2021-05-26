@@ -1,10 +1,6 @@
-########################################################################
-## JFrog_Pipelines Macros
-########################################################################
-
-########################################################################
+##----------------------------------------------
 ## JFrog_Pipelines_Resource_Declaration
-########################################################################
+##----------------------------------------------
 #macro( JFrog_Pipelines_Resource_Declaration )
 #set( $buildArtifactRepo = ${aib.getParam('artifact-repo.buildArtifactRepo')} )
 #set( $buildArtifactIntegration = ${aib.getParam('artifact-repo.buildArtifactIntegration')} )
@@ -110,9 +106,9 @@ resources:
       
 #end##macro( JFrog_Pipelines_Resource_Declaration )
 
-########################################################################
+##----------------------------------------------
 ## JFrog_Pipelines_Pipeline_Declaration
-########################################################################
+##----------------------------------------------
 #macro( JFrog_Pipelines_Pipeline_Declaration )
 pipelines:
   - name: ${appName}Pipeline
@@ -122,26 +118,26 @@ pipelines:
 #end##macro( JFrog_Pipelines_Pipeline_Declaration )
 
 
-########################################################################
+##----------------------------------------------
 ## JFrog_Pipelines_Steps_Declaration
-########################################################################
+##----------------------------------------------
 #macro( JFrog_Pipelines_Steps_Declaration )
 
 ##Build the project
-#JFrog_Pipelines_Build_Step
+#JFrog_Pipelines_Build_Step()
 
 ##Build the Docker image
-#JFrog_Pipelines_Docker_Build_Step
+#JFrog_Pipelines_Docker_Build_Step()
 
 ##Push the Docker image
-#JFrog_Pipelines_Docker_Push_Step
+#JFrog_Pipelines_Docker_Push_Step()
 
 #end##macro( JFrog_Pipelines_Steps_Declaration )
 
 
-########################################################################
+##----------------------------------------------
 ## JFrog_Pipelines_Docker_Build__Step 
-########################################################################
+##----------------------------------------------
 #macro( JFrog_Pipelines_Docker_Build_Step )
       # ======================================================= 
       # Docker Build Step
@@ -185,9 +181,9 @@ pipelines:
             - echo "uh oh, something went wrong with the Docker image build"
 #end###macro( JFrog_Pipelines_Docker_Build_Step )
 
-########################################################################
+##----------------------------------------------
 ## JFrog_Pipelines_Docker_Push__Step 
-########################################################################
+##----------------------------------------------
 #macro( JFrog_Pipelines_Docker_Push_Step )
       # ======================================================= 
       # Docker Push Step
@@ -231,4 +227,62 @@ pipelines:
             - echo "uh oh, something went wrong with the Docker image push"
 #end###macro( JFrog_Pipelines_Docker_Push_Step )
 
+##----------------------------------------------
+## JFrog_Pipelines_Build_Step - Implement for the common stack
+##----------------------------------------------
+#macro( JFrog_Pipelines_Build_Step )
+
+      # ======================================================= 
+      # Build Step
+      # =======================================================    
+      - name:                             build_step    # Unique name <required>
+        type:                             #BuildType()  # build type <required>  
+        
+        # ======================================================= 
+        # Step configuration
+        # =======================================================
+         
+        configuration:      
+
+#BuildConfiguration()
+                
+        execution:
+          
+          onStart:
+            - echo "Install dependencies..."
+            - bundle install --path vendor/bundle
+#instantiateCommandArrays()            
+#initializeGlobalCICDInitializationCommands()
+#foreach( $command  in $globalCICDInitialzationCommands )
+            - $command
+#end##foreach( $key in $globalCICDInitialzationMaps.keySet() )
+
+          onExecute:
+#initializeGlobalCICDBuildCommands()
+#foreach( $command in $globalCICDBuildCommands )
+            - $command
+#end##foreach( $key in $globalCICDInitialzationMaps.keySet() )
+
+          onSuccess:                       
+            - echo "Successfully installed, built, and tested
+            
+          onFailure:
+            - echo "Failture..."
+            
+
+#end
+
+
+##----------------------------------------------
+## Build type
+##----------------------------------------------
+#macro( BuildType )
+#end
+
+
+##----------------------------------------------
+## Build configuration
+##----------------------------------------------
+#macro( BuildConfiguration )
+#end
  

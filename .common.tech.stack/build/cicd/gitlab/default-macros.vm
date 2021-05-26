@@ -10,17 +10,50 @@
 #macro( GitLab_Cache_Declaration )
 #end
 
+##----------------------------------------------
+## GitLab_StageDeclarations
+##----------------------------------------------
 #macro( GitLab_Stage_Declarations )
-#end
+stages:
+  - build-and-test
+#end##macro( GitLab_Stage_Declarations )
 
+##----------------------------------------------
+## GitLab_Before_Script 
+##----------------------------------------------
 #macro( GitLab_Before_Script )
+before_script:
+#instantiateCommandArrays()
+#initializeGlobalCICDInitializationCommands()
+#foreach( $command in $globalCICDInitialzationCommands )
+    - $command
+#end
 #end
 
+##----------------------------------------------
+## GitLab_Stage_Definitions 
+##----------------------------------------------
 #macro( GitLab_Stage_Definitions )
+build:
+  stage: build-and-test
+  script:
+#initializeGlobalCICDBuildCommands()
+#foreach( $command in $globalCICDBuildCommands )
+    - $command   
+#end
 #end
 
+##----------------------------------------------
+## GitLab_After_Script
+##----------------------------------------------
 #macro( GitLab_After_Script )
 #end
 
+##----------------------------------------------
+## GitLab_Artifacts 
+##----------------------------------------------
 #macro( GitLab_Artifacts )
-#end
+  artifacts:
+    paths:
+      - ${appName}binary
+#end##macro( GitLab_Artifacts )

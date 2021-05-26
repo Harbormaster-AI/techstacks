@@ -1,18 +1,27 @@
+##----------------------------------------------
+## Directive to install NPM
+##----------------------------------------------
 #macro( NPM_Install_Directive )
 npm install -g @angular/cli@8.3.24> /dev/null
 #end
 
+##----------------------------------------------
+# Supported Node JS version
+##----------------------------------------------
 #macro( NODE_JS_Version )
-12#end
+8#end
 
+##----------------------------------------------
+## Directives to install NPM within Docker container
+##----------------------------------------------
 #macro( Docker_NPM_Install_Directives )
 RUN npm install @angular-devkit/build-angular@0.803.19
-RUN npm install -g @angular/cli@8.3.21 > /dev/null
+RUN #NPM_Install_Directive()
 #end
 
-########################################################################
+##----------------------------------------------
 ## GitHubActions_Strategy 
-########################################################################
+##----------------------------------------------
 #macro( GitHubActions_Strategy )
     strategy:
       matrix:

@@ -10,21 +10,31 @@
 #macro( Jenkinsfile_Install_Agent )
 #end##macro( Jenkinsfile_Install_Agent )
 
-#######################################################################
-## Jenkinsfile_Install_Steps - default is empty, should be overridden
-########################################################################
-#macro( Jenkinsfile_Install_Steps )
-#end##macro( Jenkinsfile_Install_Steps )
 
 #######################################################################
 ## Jenkinsfile_Build_Agent - default is empty, optional overridden
 ########################################################################
 #macro( Jenkinsfile_Build_Agent )
 #end##macro( Jenkinsfile_Build_Agent )
+
+#######################################################################
+## Jenkinsfile_Install_Steps -
+########################################################################
+#macro( Jenkinsfile_Install_Steps )
+#instantiateCommandArrays()
+#initializeGlobalCICDInitializationCommands()
+#foreach( $command  in $globalCICDInitialzationCommands )
+                sh $command
+#end##foreach( $key in $globalCICDInitialzationMaps.keySet() )
+#end##macro( Jenkinsfile_Install_Steps )
                                               
 #######################################################################
 ## Jenkinsfile_Build_Steps - default is empty, should be overridden
 ########################################################################
 #macro( Jenkinsfile_Build_Steps )
+#initializeGlobalCICDBuildCommands()
+#foreach( $command in $globalCICDBuildCommands )
+                sh $command
+#end##foreach( $key in $globalCICDInitialzationMaps.keySet() )
 #end##macro( Jenkinsfile_Build_Steps )
                                               

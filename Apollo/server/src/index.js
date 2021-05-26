@@ -34,7 +34,7 @@ const server = new ApolloServer({
   resolvers,
   playground: { version: '1.7.25' },
   engine: {
-    apiKey: process.env.ENGINE_API_KEY,
+    apiKey: process.env.APOLLO_KEY,
 	...internalEngineConfig,
   },
   dataSources

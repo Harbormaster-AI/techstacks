@@ -1,4 +1,4 @@
 #macro ( getServletClassDecl )
 public class BaseServlet
-extends com.cloudmigrate.framework.presentation.servlet.FrameworkStartupServlet
+extends com.Harbormaster.framework.presentation.servlet.FrameworkStartupServlet
 #end

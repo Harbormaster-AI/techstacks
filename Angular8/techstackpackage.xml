@@ -6,7 +6,7 @@
 	info-page-url="http://www.harbormaster.ai/Angular8.tech.stack"
     version="1.0"
     app-type="mobile"
-    release-status="alpha"
+    release-status="production"
 	derivedFrom="Angular7"
 	supportsDocker="true"
 	supportsKubernetes="true">

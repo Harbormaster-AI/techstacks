@@ -13,7 +13,7 @@
 
 <!-- aws-lambda options -->
 <options name="aws-lambda">
-	<option name="s3Bucket" value="cloudmigratedemobucket" required="true" description="S3 Bucket Name" type="input"/>
+	<option name="s3Bucket" value="Harbormasterdemobucket" required="true" description="S3 Bucket Name" type="input"/>
 	<option name="runtime" value="java8" required="true" description="runtime lang" type="select"
 		selections="java8,nodejs6.10,nodejs8.10"/>
 	<option name="lambdaRoleArn"  value="arn:aws:iam::xxxxxxxx:role/service-role/myRoleName" required="true" description="AWS Lambda Role ARN" type="input"/> 

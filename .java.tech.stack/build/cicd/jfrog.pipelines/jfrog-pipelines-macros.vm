@@ -1,22 +1,29 @@
-########################################################################
-## JFrog_Pipelines Macros
-########################################################################
+##----------------------------------------------
+## JFrog_Pipelines_Build_Archive_FileSpec_Configuration
+##----------------------------------------------
 
-########################################################################
-## JFrog_Pipelines_Build_Step - Implement for the common stack
-########################################################################
-#macro( JFrog_Pipelines_Build_Step )
-      # ======================================================= 
-      # Maven Build Step
-      # =======================================================    
-      - name:                             build_step    # Unique name <required>
-        type:                             MvnBuild            # build type <required>  
-        
-        # ======================================================= 
-        # Step configuration
-        # ======================================================= 
-        configuration:      
-        
+#macro( JFrog_Pipelines_Build_Archive_FileSpec_Configuration )
+    # ==========================================================
+    # File spec configuration
+    # ========================================================== 
+    configuration:
+      
+      sourceArtifactory:   ${buildArtifactIntegration}           # The name of the Artifactory Integration <required>
+      pattern:             ${buildArtifactRepo}/**/**/${appName}*.jar    # Fhe application archive file to download <required>
+      target:              target/                             # Where to download the file to <optional for download>
+#end##macro( JFrog_Pipelines_Build_Archive_FileSpec_Configuration )
+
+##----------------------------------------------
+## Build type
+##----------------------------------------------
+#macro( BuildType )
+MvnBuild#end
+
+
+##----------------------------------------------
+## Build configuration
+##----------------------------------------------
+#macro( BuildConfiguration )
           autoPublishBuildInfo:           true                # Publishes build info to Artifactory. Requires a BuildInfo resources in the outputResources list. Default is false.
           sourceLocation:                 .                   # The source code starts at the root directory
           mvnCommand:                     clean package       # Tells Maven to perform a clean then package the app
@@ -38,29 +45,5 @@
               
           integrations:
             - name:                       ${buildArtifactIntegration}  # Must specify an Artifactory Integration <required>  
-        
-        execution:
-          
-          onStart:
-            - echo "Preparing for build using Maven..."
-
-          onSuccess:                       # preserve test results
-            - mkdir -p jfrog_pipelines/testresults
-            - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} jfrog_pipelines/testresults/ \;
+#end
             
-#end##macro( JFrog_Pipelines_Build_Step )
-
-########################################################################
-## JFrog_Pipelines_Build_Archive_FileSpec_Configuration
-########################################################################
-
-#macro( JFrog_Pipelines_Build_Archive_FileSpec_Configuration )
-    # ==========================================================
-    # File spec configuration
-    # ========================================================== 
-    configuration:
-      
-      sourceArtifactory:   ${buildArtifactIntegration}           # The name of the Artifactory Integration <required>
-      pattern:             ${buildArtifactRepo}/**/**/${appName}*.jar    # Fhe application archive file to download <required>
-      target:              target/                             # Where to download the file to <optional for download>
-#end##macro( JFrog_Pipelines_Build_Archive_FileSpec_Configuration )

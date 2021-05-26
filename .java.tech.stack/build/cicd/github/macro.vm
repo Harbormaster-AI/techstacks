@@ -9,19 +9,3 @@
           java-version: '11'
           distribution: 'adopt'
 #end##macro( GitHubActions_Steps_Uses )
-
-########################################################################
-## GitHubActions_Steps
-########################################################################
-#macro( GitHubActions_Steps )
-#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
-#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
-#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
-#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
-      - name: Running test using Junit and deploy to Nexus Repo
-        run: mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
-#else        
-      - name: compiling, running test using Junit, the create a deployable war file
-        run: mvn package
-#end##if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
-#end##macro( GitHubActions_Steps )

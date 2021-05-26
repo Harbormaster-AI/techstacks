@@ -1,55 +1,22 @@
-########################################################################
-## Jenkins Macros
-########################################################################
-
-########################################################################
+##----------------------------------------------
 ## Jenkinsfile_Docker_App_Image - overridden from commmon.templates
-########################################################################
+##----------------------------------------------
 #macro( Jenkinsfile_Docker_App_Image )
 mysql:8#end##macro( Jenkinsfile_Docker_App_Image )
 
 
-#######################################################################
+##----------------------------------------------
 ## Jenkinsfile_Install_Agent - overridden from commmon.templates
-########################################################################
+##----------------------------------------------
 #macro( Jenkinsfile_Install_Agent )
         agent {
             docker { image 'openjdk8' }
         }
 #end##macro( Jenkinsfile_Install_Agent )
 
-#######################################################################
-## Jenkinsfile_Install_Steps - overridden from commmon.templates
-########################################################################
-#macro( Jenkinsfile_Install_Steps )
-               sh 'echo Installing Maven'
-               sh 'apt-get update -y;
-               sh 'apt-get install -y maven'
-               sh 'echo assigning MySQL env vars
-               sh 'export MYSQL_USER=root'
-               sh 'export MYSQL_ROOT_PASSWORD=letmein2'
-#end##macro( Jenkinsfile_Install_Steps )
-
-
-#######################################################################
+##----------------------------------------------
 ## Jenkinsfile_Build_Agent - overridden from commmon.templates
-########################################################################
+##----------------------------------------------
 #macro( Jenkinsfile_Build_Agent )
 #end##macro( Jenkinsfile_Build_Agent )
                                               
-#######################################################################
-## Jenkinsfile_Build_Steps - overridden from commmon.templates
-########################################################################
-#macro( Jenkinsfile_Build_Steps )
-#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
-#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
-#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
-#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
-                sh 'mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}'
-#else        
-                sh 'mvn package'
-#end    
-                junit 'target/surefire-reports/TEST-*.xml'                
-
-#end##macro( Jenkinsfile_Build_Steps )
-

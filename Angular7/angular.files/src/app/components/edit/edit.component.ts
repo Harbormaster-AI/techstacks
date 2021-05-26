@@ -14,9 +14,11 @@ import { SubBaseComponent } from '../../${className}/sub.base.component';
 })
 export class Edit${className}Component extends SubBaseComponent implements OnInit {
 
-  ${lowercaseClassName}: any;
+  title = 'Add ${className}';
   ${lowercaseClassName}Form: FormGroup;
-  title = 'Edit ${className}';
+ 
+  ${lowercaseClassName}: any;
+
   
   constructor( http: HttpClient, 
   				private route: ActivatedRoute, 

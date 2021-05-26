@@ -1,10 +1,6 @@
-########################################################################
-## JFrog_Pipelines Macros
-########################################################################
-
-########################################################################
+##----------------------------------------------
 ## JFrog_Pipelines_Build_Step - Implement for the common stack
-########################################################################
+##----------------------------------------------
 #macro( JFrog_Pipelines_Build_Step )
       # ======================================================= 
       # Bash Build Step
@@ -33,15 +29,19 @@
         execution:
                       
           onStart:
-            - echo Entered the install phase...
-            - apt update
-            - pip install --upgrade pip
-            - pip install pipenv
-#Pipenv_Component_Install()          
+            - echo "Initializing..."
+#instantiateCommandArrays()
+#initializeGlobalCICDInitializationCommands()
+#foreach( $command in $globalCICDInitialzationCommands )
+            - $command
+#end##foreach( $command in $globalCICDInitialzationCommands )
             
           onExecute:
-            - echo "Build/Test"
-            - pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests
+           - echo "Executing build/test"
+#initializeGlobalCICDBuildCommands()
+#foreach( $command in $globalCICDBuildCommands )
+            - $command
+#end##foreach( $command in $globalCICDInitialzationCommands )
 
           onSuccess:                       # preserve test results
             - echo "Successfully installed, built, and tested
@@ -51,3 +51,27 @@
             
 #end##macro( JFrog_Pipelines_Build_Step )
 
+##----------------------------------------------
+## Build type
+##----------------------------------------------
+#macro( BuildType )
+Bash#end
+
+
+##----------------------------------------------
+## Build configuration
+##----------------------------------------------
+#macro( BuildConfiguration )
+          deployerReleaseRepo:            ${buildArtifactRepo}    # Snapshot artifacts created by the MvnBuild are uploaded to this Artifactory repository
+          deployerSnapshotRepo:           ${buildArtifactRepo}    # Release artifacts created by the MvnBuild are uploaded to this Artifactory repository.
+          affinityGroup:                  shared_affinity_group # used to bind steps <optional>
+          
+          outputResources:
+            - name:                       build_info  # Uses the defined build info resource               
+          
+          inputResources:
+            - name:                       git_repo         # Use the git_repo resource   
+         
+          integrations:
+            - name:                       ${buildArtifactIntegration}  # Must specify an Artifactory Integration <required>  
+#end

@@ -6,8 +6,11 @@ ssh.key=
 gitpush.sh=
 .gitignore=
 settings.xml=
+pom.xml=
 pom*.xml=
 Dockerfile=
+docker-compose.yml
+entrypoint.sh
 build.xml=
 jalopy-conventions=
 #end

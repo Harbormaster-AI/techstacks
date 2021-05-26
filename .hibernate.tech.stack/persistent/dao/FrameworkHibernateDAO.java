@@ -12,7 +12,7 @@ import ${aib.getRootPackageName()}.persistent.FrameworkPersistenceHelper;
  * Base class for all Hibernate DAO classes generated and supported
  * by the framework.
  * 
- * @author	cloudMigrate, Inc.
+ * @author	Harbormaster, Inc.
  */
 public class FrameworkHibernateDAO 
 {

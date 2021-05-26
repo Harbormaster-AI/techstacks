@@ -7,7 +7,7 @@
     version="1.4"
     app-type="webapp"
     release-status="production"
-    derivedFrom=".java.tech.stack,.hibernate.tech.stack"
+    derivedFrom=".hibernate.tech.stack,.java.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true">
 	<target-languages>

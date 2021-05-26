@@ -2,13 +2,13 @@
     name="Base Go Tech Stack"
     shortName=".go.tech.stack"
     description="The base for all Go related tech stacks" 
-    icon-url=""
+    icon-url="img/go.lang.svg"
  	info-page-url="http://www.harbormaster.ai/.go.tech.stack"
     version="1.0"
     app-type="webapp"
-    release-status="production"
+    release-status="beta"
     derivedFrom=".common.tech.stack"
-    visible="false">
+    visible="true">
 	<target-languages>
 		<target-language name="go"/>
 		<target-language name="javascript"/>

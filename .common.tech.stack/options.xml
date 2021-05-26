@@ -13,22 +13,15 @@
 
 <!-- application options -->
 <options name="application">
-	<option name="name" value="demo" required="true" 
-		description="app display name" type="input"/>
-	<option name="description" value="" required="false"
-		description="app description" type="input"/>
-	<option name="author" value="" required="false"
-		description="app's author" type="input"/>
-	<option value="logoUrl" required="" name="corporate logo URL"
-		description="link to company logo" type="input"/>
-	<option value="./img/turnstone.biologics.png" required="false" name="application logo URL"
-		description="link to app logo" type="input"/>
-	<option value="Turnstone Biologics" required="true" modifiable="false" name="company name"
-		description="your company name" type="input"/>
-	<option value="1.0.0" required="true" name="version"
-		description="app version" type="input"/>		
-	<option name="package name" value="com.occulue" modifiable="false" required="true"
-		description="package prefix to apply(com.xyz format)" type="input"/>
+	<option name="name" value="demo" required="true" description="app display name" type="input"/>
+	<option name="description" value="a demonstration app" required="false" description="app description" type="input"/>
+	<option name="author" value="your_name_here" required="false" description="app's author" type="input"/>
+	<option name="homePageUrl" value="http://wwww.homeage.com" required="false" description="homepage URL" type="input"/>
+	<option name="corporate logo URL" value="logoUrl" required="" description="link to company logo" type="input"/>
+	<option name="application logo URL" value="./img/turnstone.biologics.png" required="false" description="link to app logo" type="input"/>
+	<option name="company name"  value="Turnstone Biologics" required="true" modifiable="false" description="your company name" type="input"/>
+	<option name="version" value="1.0.0" required="true" description="app version" type="input"/>		
+	<option name="package name" value="com.occulue" modifiable="false" required="true" description="package prefix to apply(com.xyz format)" type="input"/>
 </options>
 
 <!-- CI/CD Platform options -->

@@ -142,7 +142,7 @@ public class ${className}RestController extends $parentController
      * Handles loading all ${className} business objects
      * @return		List<${className}>
      */
-    @RequestMapping("/loadAll")
+    @RequestMapping("/")
     public List<${className}> loadAll()
     {                
         List<$className> ${lowercaseClassName}List = null;
@@ -153,7 +153,7 @@ public class ${className}RestController extends $parentController
             ${lowercaseClassName}List = ${className}BusinessDelegate.get${className}Instance().getAll${className}();
             
             if ( ${lowercaseClassName}List != null )
-                LOGGER.info(  "${className}Controller:loadAll${className}() - successfully loaded all ${className}s" );
+                LOGGER.info(  "${className}Controller:lodAll${className}() - successfully loaded all ${className}s" );
         }
         catch( Throwable exc )
         {

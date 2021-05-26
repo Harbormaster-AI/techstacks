@@ -1,42 +1,23 @@
-########################################################################
+##----------------------------------------------
 ## AWS Codebuild Env Var Declaration
-########################################################################
+##----------------------------------------------
 #macro( AWS_CodeBuild_EnvVarsDeclaration )        
     PIPENV_VENV_IN_PROJECT: "true"
 #end##macro( AWS_CodeBuild_EnvVars() )
 
-########################################################################
-## AWS Codebuild Install Phase Commands
-########################################################################
-#macro( AWS_CodeBuild_Install_Phase_Commands )  
+##----------------------------------------------
+## AWS Codebuild Runtime Versions
+##----------------------------------------------
+#macro( AWS_CodeBuild_Runtime_Versions )
     runtime-versions:
         python: 3.7
         docker: 18
-    commands:
-      - echo Entered the install phase...
-      - apt update
-      - pip install --upgrade pip
-      - pip install pipenv
-#Pipenv_Component_Install()
-    finally:
-      - echo Install phase complete...
-#end##macro( AWS_CodeBuild_Install_Phase_Commands )
+#end
 
-########################################################################
-## AWS Codebuild Build Phase Commands
-########################################################################
-#macro( AWS_CodeBuild_Build_Phase_Commands )
-    commands:
-      - echo Entered the build phase...
-      - pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests
-      - python ${appName}/setup.py sdist
-    finally:
-      - echo Build phase complete
-#end##macro( AWS_CodeBuild_Build_Phase_Commands )
 
-########################################################################
+##----------------------------------------------
 ## AWS Codebuild Artifact Declaration
-########################################################################
+##----------------------------------------------
 #macro( AWS_CodeBuild_Artifacts )
   files:
     - ${appName}/*.egg-info
@@ -45,8 +26,3 @@
       - '/root/.cache/pip'
 #end##macro( AWS_CodeBuild_Artifacts )
 
-########################################################################
-## Pipenv_Component_Install
-########################################################################
-#macro( Pipenv_Component_Install )
-#end##macro( Pipenv_Component_Install )

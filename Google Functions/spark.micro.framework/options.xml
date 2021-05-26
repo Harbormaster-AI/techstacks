@@ -14,7 +14,7 @@
 	<option name="buildRESTfulLayer"  value="true" required="true" description="build DAO layer as an executable jar file" type="boolean"/>
 	<option name="copyRESTfulLayer"  value="false" required="true" description="copy DAO layer executable jar file" type="boolean"/>
 	<option name="securityRemoteUrl"  value="" required="true" description="security account with URL to copy DAO restful API" type="input"/>
-	<option name="fileLocation"  value="/usr/share/cloudmigrate" required="true" description="security account with URL to copy DAO restful API" type="input"/>	
-	<option name="privateKeyFileLocation"  value="C:\Users\srand\Downloads\business\technical\pem.files\cloudmigrate-default-key-pair.pem" required="true" description="private key file location" type="input"/>
+	<option name="fileLocation"  value="/usr/share/Harbormaster" required="true" description="security account with URL to copy DAO restful API" type="input"/>	
+	<option name="privateKeyFileLocation"  value="C:\Users\srand\Downloads\business\technical\pem.files\Harbormaster-default-key-pair.pem" required="true" description="private key file location" type="input"/>
 	<option name="passphrase"  value="" required="true" description="passphrase for key file, leave empty if none" type="input"/>	
 </options>

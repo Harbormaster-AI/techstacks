@@ -2,7 +2,7 @@
 #set( $lowercaseClassName = "${Utils.lowercaseFirstLetter(${className})}" )
 const { DataSource } = require('apollo-datasource');
 #foreach( $type in $classObject.getAssociationTypes( $className ) )
-const ${type}API = require('./${Utils.lowercaseFirstLetter(${type})}DS');
+const ${type}API = require('./${type}DS');
 #end
 
 class ${className}API extends DataSource {

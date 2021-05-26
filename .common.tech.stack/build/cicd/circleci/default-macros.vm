@@ -1,9 +1,6 @@
-########################################################################
-## CircleCI Macros
-########################################################################
-########################################################################
+##----------------------------------------------
 ## CircleCI common references
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_DeclareCommonReferences )
 
 working_directory: &working_directory
@@ -24,9 +21,9 @@ save_repo: &save_repo
         - *working_directory
 #end##macro( CircleCI_DeclareCommonReferences )
 
-########################################################################
+##----------------------------------------------
 ## CircleCI Docker image
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_DockerImageDeclaration )
 #set( $dockerUserName = ${aib.getParam("docker.username")} ) 
 #set( $dockerPassword = ${aib.getParam("docker.password")} )
@@ -46,18 +43,24 @@ save_repo: &save_repo
       - *restore_repo
       - setup_remote_docker
       - run:
-          name: creating docker image requiring project env vars DOCKER_USER and DOCKER_PASS
+          name: creating docker image..considering using env vars DOCKER_USER and DOCKER_PASS
           command: |
             docker login --username ${dockerUserName} --password ${dockerPassword} ${dockerHost}
-            docker build -t ${dockerOrgName}/${dockerRepo}:${dockerTag} .
+            docker build -t ${dockerOrgName}/${dockerRepo}:${dockerTag} -f #GetDockerfileName() .
             docker push ${dockerOrgName}/${dockerRepo}:${dockerTag}
 
 #end##macro( CircleCI_DockerImageDeclaration )
 
+##----------------------------------------------
+## output name of the docker file
+##----------------------------------------------
+#macro( GetDockerfileName )
+Dockerfile#end##macro( GetDockerfileName() )
 
-########################################################################
+
+##----------------------------------------------
 ## CircleCI build_test_project Declaration
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_BuiltTestProjectDeclaration )
   # core job
   build_test_project:
@@ -75,17 +78,18 @@ save_repo: &save_repo
     steps:
 
 #CircleCI_Checkout()
-#CircleCI_RestoreRepo()
+##CircleCI_RestoreRepo()  - remove if build to build preservations is required.  strategically, prefer to start from scatch
 #CircleCI_RunCommands()
+#CircleCI_TestResults()
 #CircleCI_SaveRepo()
 #CircleCI_StoreTestResults()
 #CircleCI_StoreArtifacts()
 
 #end##macro( CircleCI_BuiltTestProjectDeclaration )
 
-########################################################################
+##----------------------------------------------
 ## dockerjob declaration macro
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_DockerJobDeclaration )
 #if( ${aib.getParam("docker.inUse")} == "true" )
       - docker_build:
@@ -94,9 +98,9 @@ save_repo: &save_repo
 #end
 #end##macro( terraformJobDeclaration )
 
-########################################################################
+##----------------------------------------------
 ## terraform job declaration macro
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_TerraformJobDeclaration )
 #if( ${aib.getParam("terraform.inUse")} == "true" )
       - terraform:
@@ -105,9 +109,9 @@ save_repo: &save_repo
 #end
 #end##macro( terraformJobDeclaration )
 
-########################################################################
+##----------------------------------------------
 ## terraform references macro
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_TerraformReferences )
 #if( ${aib.getParam("terraform.inUse")} == "true" )      
   
@@ -132,9 +136,9 @@ terraform_init: &terraform_init
 #end
 #end##macro( terraformReferenceDeclaration )
 
-########################################################################
+##----------------------------------------------
 ## Terraform job definition
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_TerraformJobDefinition )
 #if( ${aib.getParam("terraform.inUse")} == "true" )
 #set( $fingerprint = ${aib.getParam("cicd.ssh-fingerprint")} )
@@ -155,56 +159,63 @@ terraform_init: &terraform_init
 #end##if( ${aib.getParam("terraform.inUse")} == "true" )            
 #end##macro( CircleCI_TerraformJobDefinition )
 
-########################################################################
+##----------------------------------------------
 ## CircleCI Workflow definition
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_WorkflowsDeclaration )
-# simple workflow to build out the environment
+# a workflow to build out the environment
 workflows:
-  version: 2
   build_test_deploy_workflow:
     jobs:
+#set( $gitTag = ${aib.getParam("git.tag")} )
+#if ( $gitTag == $null || $gitTab == "" ) 
       - build_test_project
+#else      
+      - build_test_project:
+          filters:
+            tags:
+              only: $gitTag
+#end##if ( $gitTag == $null || $gitTab == "" )       
 #CircleCI_DockerJobDeclaration()
 #CircleCI_TerraformJobDeclaration()
 #end##macro( CircleCI_WorkflowsDeclaration )
 
-########################################################################
+##----------------------------------------------
 ## CircleCI Checkout definition
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_Checkout )
       # check out source code to working directory
       - checkout
 #end##macro( CircleCI_CheckoutDecl )
 
-########################################################################
+##----------------------------------------------
 ## CircleCI Assign Working Directory
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_AssignWorkingDirectory )
     # assign the working directory
     working_directory: *working_directory
 #end##macro( CircleCI_AssignWorkingDirectory()
 
-########################################################################
+##----------------------------------------------
 ## CircleCI Restore Repo Declaration
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_RestoreRepo )
       # restore the saved cache after the first run or if `pom.xml` has changed
       # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
       - *restore_repo
 #end##macro( CircleCI_RestoreRepoDecl )
 
-########################################################################
+##----------------------------------------------
 ## CircleCI Restore Repo Declaration
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_SaveRepo )
       # cache the entire project 
       - *save_repo
 #end##macro( CircleCI_SaveRepoDecl )
 
-########################################################################
+##----------------------------------------------
 ## CircleCI Store Test Results
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_StoreTestResults )
       # Upload test results for display in Test Summary:
       # https://circleci.com/docs/2.0/collect-test-data/
@@ -212,9 +223,9 @@ workflows:
           path: ~/test-results
 #end###macro( CircleCI_StoreTestResults )
 
-########################################################################
+##----------------------------------------------
 ## CircleCI Store Artifact
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_StoreArtifacts )
       # Upload test summary for display in Artifacts:
       # https://circleci.com/docs/2.0/artifacts/
@@ -222,12 +233,43 @@ workflows:
           path: ~/test-results/junit
 #end###macro( CircleCI_StoreArtifacts )
 
-########################################################################
+##----------------------------------------------
 ## CircleCI_Orb_Declarations
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_Orb_Declarations )
 #end###macro( CircleCI_Orb_Declarations )
 
 
+##----------------------------------------------
+## CircleCI Run Commands
+##----------------------------------------------
+#macro( CircleCI_RunCommands )
+      # changing ownership
+      - run:
+          name: Assigning vars for Git
+          command: export EMAIL=circleci@circleci.com && export GIT_AUTHOR_NAME=CircleCi && export GIT_COMMITTER_NAME=CircleCi
 
+      - run:
+          name: Initializing
+          command: echo initializaing...
+                   
+#instantiateCommandArrays()
+#initializeGlobalCICDInitializationCommands()          
+#foreach( $command in $globalCICDInitialzationCommands )
+      - run: $command 
+#end
+#initializeGlobalCICDBuildCommands()
+      - run:
+          name: Building with testing
+          command: echo building with testing...
 
+#foreach( $command in $globalCICDBuildCommands )
+      - run: $command 
+#end
+#end###macro( CircleCI_RunCommands )
+
+##----------------------------------------------
+## CircleCI_TestResults
+##----------------------------------------------
+#macro( CircleCI_TestResults )
+#end

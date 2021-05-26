@@ -62,7 +62,7 @@
 #elseif( $type.equalsIgnoreCase("char") )
 #set( $type = "String" )
 #elseif( $type.equalsIgnoreCase("java.sql.Date") || $type.equalsIgnoreCase("Date") )
-#set( $type = "GraphQLDate" )
+#set( $type = "String" )
 #elseif( $type.equalsIgnoreCase("int") || $type.equalsIgnoreCase("integer") )
 #set( $type = "Int" )
 #elseif( $type.equalsIgnoreCase("double") )

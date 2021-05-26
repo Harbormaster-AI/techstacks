@@ -25,18 +25,6 @@ definitions:
         POSTGRES_PASSWORD: letmein2      
 #end##macro( Bitbucket_Pipeline_Definitions )
 
-
-########################################################################
-## Bitbucket_Pipeline_Step
-########################################################################
-#macro( Bitbucket_Pipeline_Step )  
-  - step: 
-      script:
-          - golint -set_exit_status
-          - go build -o app
-          - go test
-#end##macro( Bitbucket_Pipeline_Step )  
-
 ########################################################################
 ## Bitbucket_Pipeline_Caches
 ########################################################################

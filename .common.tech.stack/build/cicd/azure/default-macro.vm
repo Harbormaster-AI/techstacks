@@ -1,20 +1,20 @@
-########################################################################
+##----------------------------------------------
 ## Azure_Pipeline_Pool_Declaration
-########################################################################
+##----------------------------------------------
 #macro( Azure_Pipeline_Pool_Declaration )
 pool:
   vmImage: 'ubuntu-16.04'
 #end##macro( Azure_Pipeline_Pool_Declaration )
 
-########################################################################
+##----------------------------------------------
 ## Azure_Pipeline_Var_Declarations
-########################################################################
+##----------------------------------------------
 #macro( Azure_Pipeline_Var_Declarations )
 #end##macro( Azure_Pipeline_Var_Declarations )
 
-########################################################################
+##----------------------------------------------
 ## Azure_Pipeline_Var_Declarations
-########################################################################
+##----------------------------------------------
 #macro( Azure_Pipeline_Docker_Steps )
 #set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
 #set( $dockerRepo = ${aib.getParam("docker.repo")} )
@@ -37,3 +37,25 @@ pool:
     tags: |
       $dockerTag    
 #end##macro( Azure_Pipeline_Var_Declarations )
+
+##----------------------------------------------
+## Azure_Pipeline_Steps
+##----------------------------------------------
+#macro( Azure_Pipeline_Steps )
+#instantiateCommandArrays()
+#initializeGlobalCICDInitializationCommands()
+steps:
+- script: echo initializing...
+  displayName: 'Initializing...'
+#foreach( $command in $globalCICDInitialzationCommands )
+- script: $command
+#end##foreach( $command in $globalCICDInitialzationMaps.keySet() )
+#initializeGlobalCICDBuildCommands()
+- script: echo building...
+#foreach( $command in $globalCICDBuildCommands )
+- script: $command
+#end##foreach( $key in $globalCICDInitialzationMaps.keySet() )
+
+#end##macro( AWS_CodeBuild_Install_Phase_Commands )
+
+

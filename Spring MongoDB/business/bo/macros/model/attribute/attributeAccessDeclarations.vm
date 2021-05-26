@@ -46,7 +46,7 @@
 ## need to determine the default value to output.  Treat different if it's a primarykey, attribute, or from an association 
 #if ( $attribute.isPrimaryKey() )
 	#if( $autoGenPKs == true || $attribute.isDateRelated() )
-		#set( $defaultPhrase = "new ${type}( com.cloudmigrate.framework.common.misc.Utility.generateUID() )" )
+		#set( $defaultPhrase = "new ${type}( com.Harbormaster.framework.common.misc.Utility.generateUID() )" )
 	#else
 		#set( $defaultPhrase = "null" )
 	#end##if( $autoGenPKs == true || attribute.isDateRelated() )

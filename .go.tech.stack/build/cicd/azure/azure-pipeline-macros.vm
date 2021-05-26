@@ -10,36 +10,3 @@ pool:
   vmImage: 'ubuntu-latest'
 #end##macro( Azure_Pipeline_Pool_Declaration )
 
-########################################################################
-## Azure_Pipeline_Steps
-########################################################################
-#macro( Azure_Pipeline_Steps )
-steps:
-- script: docker run -d --name=harbormaster-test-postgres -e POSTGRES_DB=${appName}DB -e POSTGRES_USER=root -e POSTGRES_PASSWORD=letmein2 postgres
-  displayName: 'installing latest postgres docker image'
-- task: GoTool@0
-  inputs:
-    version: '1.13.5'
-- task: Go@0
-  inputs:
-    command: 'get'
-    arguments: '-d'
-    workingDirectory: '$(System.DefaultWorkingDirectory)'
-- task: Go@0
-  inputs:
-    command: 'build'
-    workingDirectory: '$(System.DefaultWorkingDirectory)'
-- task: Go@0
-  inputs:
-    command: 'test'
-    arguments: '-v'
-    workingDirectory: '$(modulePath)'    
-- task: CopyFiles@2
-  inputs:
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-- task: PublishBuildArtifacts@1
-  inputs:
-     artifactName: drop
- #Azure_Pipeline_Docker_Steps()
-
-#end##macro( Azure_Pipeline_Steps )

@@ -1,29 +1,32 @@
-########################################################################
-## NPM_Install_Directive - overridden from common.templates tech stack
-########################################################################
+##----------------------------------------------
+## Directive to install NPM
+##----------------------------------------------
 #macro( NPM_Install_Directive )
 npm install -g @angular/cli@7.2.3 > /dev/null
 #end
 
-########################################################################
-## NODE_JS_Version - overridden from common.templates tech stack
-########################################################################
+##----------------------------------------------
+## Minimum NODE_JS_Version
+##----------------------------------------------
 #macro( NODE_JS_Version )
-8#end
-
-########################################################################
-## Docker_NPM_Install_Directives - overridden from common.templates tech stack
-########################################################################
-#macro( Docker_NPM_Install_Directives )
-RUN npm install @angular-devkit/build-angular@0.803.19
-RUN npm install -g @angular/cli@8.3.21 > /dev/null
+7
 #end
 
-########################################################################
+##----------------------------------------------
+## Directives to install NPM within Docker container
+##----------------------------------------------
+#macro( Docker_NPM_Install_Directives )
+RUN npm install @angular-devkit/build-angular@0.7.5
+RUN #NPM_Install_Directive()
+#end
+
+##----------------------------------------------
 ## GitHubActions_Strategy - overridden from common.templates tech stack
-########################################################################
+##----------------------------------------------
 #macro( GitHubActions_Strategy )
     strategy:
       matrix:
         node-version: [7.x]
 #end##macro( GitHubActions_Strategy )
+
+

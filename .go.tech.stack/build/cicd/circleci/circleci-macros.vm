@@ -2,68 +2,41 @@
 #set( $dbName = ${aib.getParam( "go.dbName" )} )
 #set( $dbUserName = ${aib.getParam( "go.dbUserName" )} )
 #set( $dbPassword = ${aib.getParam( "go.dbPassword" )} )
-########################################################################
-## CircleCI Macros
-########################################################################
 
-########################################################################
+##----------------------------------------------
 ## CircleCI Docker Image Output
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_OutputDockerImageDecl )        
     # CircleCI Golang
-    # Postgres image
+    # db image
     docker:
-      - image: circleci/#Go_Lang_Image()      
+      - image: circleci/#Go_Lang_Image()    
 #if ( $dbType == "mysql" )
       - image: mysql:8.0
-#else ( $dbType == "postgres" )                  
+#else## assume postgres...but there are other options                  
       - image: postgres
 #end##if ( $dbType == mysql )
+ 
+
+
 #end##macro( CircleCI_OutputDockerImageDecl )
 
-########################################################################
-## CircleCI Run Commands
-########################################################################
-#macro( CircleCI_RunCommands )
-      - run:        
-          name: Install Gorilla Mux for as Router
-          command: go get github.com/gorilla/mux 
-      - run:                  
-          name: Install Go ORM...
-          command: go get -u gorm.io/gorm
-      - run:          
-          name: Install Go ORM database type...
-          command: go get -u gorm.io/driver/$dbType
-      - run:          
-          name: Install .env reader
-          command: go get github.com/joho/godotenv
-      - run:          
-          name: Change to the app directory
-          command: cd src/${appName} 
-      - run:          
-          name: Initalize, build, and test
-          command: |
-            cd src/${appName} 
-            go mod init ${appName}
-            go mod tidy
-            go build
-            go test ${appName}/api/test
-#end###macro( CircleCI_RunCommands )
-
-########################################################################
+##----------------------------------------------
 ## CircleCI EnvVarAssignments
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_EnvVarAssignments )
         environment:
 #if ( $dbType == "mysql" )
-            MYSQL_DATABASE: ${appName}DB
-            MYSQL_ALLOW_EMPTY_PASSWORD: yes
-            MYSQL_ROOT_PASSWORD: ${dbPassword}
-#else ( $dbType == "postgres" )                  
+          MYSQL_ROOT_PASSWORD: $dbPassword
+          MYSQL_DATABASE: $dbName
+          MYSQL_USER: $dbUserName
+          MYSQL_PASSWORD: $dbPassword
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+#elseif ( $dbType == "postgres" )                  
         # required env vars
-            POSTGRES_DB: ${appName}DB
-            POSTGRES_USER: root
-            POSTGRES_PASSWORD: ${dbPassword} 
+          POSTGRES_DB: $dbName
+          POSTGRES_USER: $dbUserName
+          POSTGRES_PASSWORD: $dbPassword 
 #end##if ( $dbType == mysql )
             TEST_RESULTS: /tmp/test-results # path to where test results will be saved    
 #end##macro( CircleCI_EnvVarAssignments )

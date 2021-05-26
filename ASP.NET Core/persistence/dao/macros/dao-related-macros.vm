@@ -163,7 +163,7 @@ v.addAll( new ${attribute.getFirstForeignKey().getClassObject().getName()}Primar
 #elseif( $types.contains( $type ) )                              
 			${businessObjectSetPrefix}( assignSafe${type}( rs.getString( "${asArg}" ) ) );                             
 #elseif( $type.endsWith( ".imestamp" ) )                        
-			${businessObjectSetPrefix}( new com.cloudmigrate.framework.misc.FrameworkTimestamp( rs.getString( "${asArg} ) ) );                    
+			${businessObjectSetPrefix}( new com.Harbormaster.framework.misc.FrameworkTimestamp( rs.getString( "${asArg} ) ) );                    
 #else    ## treat it as a String                    
 			${businessObjectSetPrefix}( rs.getString( "${asArg}" ) );                    	
 #end                    
@@ -291,7 +291,7 @@ v.addAll( new ${attribute.getFirstForeignKey().getClassObject().getName()}Primar
 #set( $suffix = ")" )
 #end## $velocityCount < $numAttributes
 ##output
-						new $attribute.getType()( com.cloudmigrate.framework.common.misc.Utility.generateUID() $suffix
+						new $attribute.getType()( com.Harbormaster.framework.common.misc.Utility.generateUID() $suffix
 #end## foreach $attribute in $attributes
 					);
 #end##if ( $aib.autoGeneratePKs() == true )    

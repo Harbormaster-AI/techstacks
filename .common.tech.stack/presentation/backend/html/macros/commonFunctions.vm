@@ -12,7 +12,7 @@
 #macro( jspImports )
 #*<%@
     page import="
-    com.cloudmigrate.framework.common.namespace.*"
+    com.Harbormaster.framework.common.namespace.*"
 %>*#
 #end
 

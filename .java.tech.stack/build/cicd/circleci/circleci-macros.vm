@@ -1,10 +1,6 @@
-########################################################################
-## CircleCI Macros
-########################################################################
-
-########################################################################
+##----------------------------------------------
 ## CircleCI Docker Image Output - overridden from common.stack.templates
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_OutputDockerImageDecl )        
     # CircleCI Java8 image, installs Apache Maven
     # MySQL 8 image
@@ -13,48 +9,35 @@
       - image: mysql:8.0
         # required env vars
         environment:
+            MYSQL_USER: user
+            MYSQL_PASSWORD: letmein2
             MYSQL_ALLOW_EMPTY_PASSWORD: yes
-            MYSQL_ROOT_PASSWORD: ''
-            MYSQL_DATABASE: circleci
+            MYSQL_ROOT_PASSWORD: letmein2
+            MYSQL_DATABASE: ${appName}
 #end##macro( CircleCI_OutputDockerImageDecl )
 
-########################################################################
-## CircleCI Run Commands - - overridden from common.stack.templates
-########################################################################
-#macro( CircleCI_RunCommands )
-      - run: 
-#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
-#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
-#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
-#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
-          name: Running test using Junit and deploy to Nexus Repo
-          command: mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
-#else        
-          name: compiling, running test using Junit, the create a deployable war file
-          command: mvn package
-#end    
-
-      # save the results from the testing that occurred during
-      # the maven packaging in the prior step
+##----------------------------------------------
+## CircleCI Test Results
+##----------------------------------------------
+#macro( CircleCI_TestResults )
       - run:
           name: Save test results
           command: |
             mkdir -p ~/test-results/junit/
             find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
           when: always
-
 #end###macro( CircleCI_RunCommands )
 
 
-########################################################################
+##----------------------------------------------
 ## CircleCI EnvVarAssignments - overridden from common.stack.templates
-########################################################################
+##----------------------------------------------
 #macro( CircleCI_EnvVarAssignments )
     environment:
-        DATABASE_USERNAME: root
-        DATABASE_PASSWORD:
+        DATABASE_USERNAME: user
+        DATABASE_PASSWORD: letmein2
         DATABASE_DIALECT: org.hibernate.dialect.MySQL8Dialect
         DATABASE_DRIVER: com.mysql.jdbc.Driver
-        DATABASE_URL: jdbc:mysql://localhost:3306/circleci?createDatabaseIfNotExist=true
+        DATABASE_URL: jdbc:mysql://localhost:3306/${appName}?createDatabaseIfNotExist=true
         
 #end##macro( CircleCI_EnvVarAssignments )

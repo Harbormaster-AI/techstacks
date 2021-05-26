@@ -23,12 +23,13 @@
 ## GitHubActions_Steps
 ########################################################################
 #macro( GitHubActions_Steps )
-      - name: Export PIP Cache Dir
-        run: export PIP_CACHE_DIR=.cache/pip
-      - name: install dependencies
-        run: pip install pipenv
-#Pipenv_Component_Install()        
-        run: pip install pipenv
-      - name: test ${appName} using pytest outputting results to ${appName}/tests
-        run: pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests
+#instantiateCommandArrays()
+#initializeGlobalCICDInitializationCommands()
+#foreach( $command in $globalCICDInitialzationCommands )
+-script: $command
+#end##foreach( $command in $globalCICDInitialzationCommands )
+#initializeGlobalCICDBuildCommands()
+#foreach( $command in $globalCICDBuildCommands )
+-script: $command
+#end##foreach( $command in $globalCICDInitialzationCommands )
 #end##macro( GitHubActions_Steps )

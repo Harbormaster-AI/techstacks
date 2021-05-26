@@ -7,9 +7,10 @@
     version="1.0"
     app-type="mobile"
     release-status="production"
-    derivedFrom=".nodejs.tech.stack,.mongodb.tech.stack"
+    derivedFrom=".mongodb.tech.stack,.nodejs.tech.stack"
 	supportsDocker="true"
-	supportsKubernetes="true">
+	supportsKubernetes="true"
+	visible="true">
 	<target-languages>
 		<target-language name="typescript"/>
 		<target-language name="javascript"/>

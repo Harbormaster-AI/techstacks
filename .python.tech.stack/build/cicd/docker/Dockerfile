@@ -21,9 +21,6 @@ RUN mkdir -p $PROJECT_DIR
 COPY . /var/www/
 WORKDIR $PROJECT_DIR
 
-RUN pip install --upgrade pip
-RUN pip install django=='2.2.*'
-
 #############################################################################
 # install upgrade pip and Django 2.2
 #############################################################################

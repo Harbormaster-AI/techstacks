@@ -1,9 +1,9 @@
 <tech-stack-package 
-    name="aws tech stack"
-    shortName=".aws.tech.stack"
-    description="Common files to be used for tech stacks leveraging the AWS cloud" 
+    name="Base MongoDB Tech Stack"
+    shortName=".mongodb.tech.stack"
+    description="Common files to be used for tech stacks leveraging MongoDB" 
     icon-url=""
- 	info-page-url="http://www.harbormaster.ai/aws.tech.stack"
+ 	info-page-url="http://www.harbormaster.ai/mongodb.tech.stack"
     version="1.0"
     app-type="webapp"
     release-status="production"
@@ -12,6 +12,6 @@
 		<target-language name="N/A"/>
 	</target-languages><!-- target language(s) supported by the template structure -->
 	<tech-stack>
-	    <tech-stack-component name="build" description="options related" app-layer="build"/>
+	    <tech-stack-component name="nosql database" description="options related" app-layer="data"/>
 	</tech-stack>
 </tech-stack-package>

@@ -9,3 +9,17 @@ ubuntu-latest #end##macro( CircleCI_OutputDockerImageDecl )
 ########################################################################
 #macro( GitHubActions_Strategy )
 #end##macro( GitHubActions_Strategy )
+
+########################################################################
+## GitHubActions_Steps
+########################################################################
+#macro( GitHubActions_Steps )
+#initializeGlobalCICDInitializationCommands
+#foreach( $command in $globalCICDInitialzationCommands )
+      run: '$command'
+#end
+#initializeGlobalCICDBuildCommands
+#foreach( $command in $globalCICDBuildCommands )
+      run: '$command'
+#end
+#end##macro( GitHubActions_Steps )

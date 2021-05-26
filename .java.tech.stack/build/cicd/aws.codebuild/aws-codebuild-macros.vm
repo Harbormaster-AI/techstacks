@@ -21,42 +21,6 @@
 #end##macro( AWS_CodeBuild_Install_Phase_Commands ) 
 
 ########################################################################
-## AWS Codebuild Install Phase Commands
-########################################################################
-#macro( AWS_CodeBuild_Install_Phase_Commands )
-    commands:
-      - echo Entered the install phase...
-      - apt-get update -y
-      - echo Installing Apache Maven...      
-      - apt-get install -y maven
-      - echo Installing MySQL...      
-      - apt-get install -y mysql-server
-      - su mysql -s /bin/bash -c "/usr/sbin/mysqld" &
-      - su mysql "CREATE USER root@localhost IDENTIFIED BY ''; GRANT ALL ON *.* TO root@localhost; FLUSH PRIVILEGES;" &
-    finally:
-      - echo Install phase complete...
-#end##macro( AWS_CodeBuild_Install_Phase_Commands )
-
-#######################################################################
-## AWS Codebuild Build Phase Commands
-########################################################################
-#macro( AWS_CodeBuild_Build_Phase_Commands )
-    commands:
-#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
-#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
-#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
-#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
-      - echo Entered the build/test/package/deploy phase...
-      - mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}
-#else        
-      - echo Entered the build/test/package phase...
-      - mvn package
-#end    
-    finally:
-      - echo Build phase complete  
-#end##macro( AWS_CodeBuild_Build_Phase_Commands )
-
-########################################################################
 ## AWS Codebuild Artifact Declaration
 ########################################################################
 #macro( AWS_CodeBuild_Artifacts )

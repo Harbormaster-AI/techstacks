@@ -5,7 +5,7 @@
     * without expecting a return
     */
     public void dispatch( String methodName, java.util.Collection args, String serviceName, java.util.Properties props )
-    throws com.cloudmigrate.framework.common.exception.ProcessingException
+    throws com.Harbormaster.framework.common.exception.ProcessingException
     {
         try
         {
@@ -19,7 +19,7 @@
         }
         catch( org.mule.umo.UMOException exc )
         {
-            throw new com.cloudmigrate.framework.common.exception.ProcessingException( "BaseBusinessDelegate:dispatch(...) - Failed to invoke web-service:method-name " + serviceName + ":" + methodName + " - " + exc );
+            throw new com.Harbormaster.framework.common.exception.ProcessingException( "BaseBusinessDelegate:dispatch(...) - Failed to invoke web-service:method-name " + serviceName + ":" + methodName + " - " + exc );
         }
     }
 
@@ -28,7 +28,7 @@
     * for a return
     */
     public Object send( String methodName, java.util.Collection args, String serviceName )
-    throws com.cloudmigrate.framework.common.exception.ProcessingException
+    throws com.Harbormaster.framework.common.exception.ProcessingException
     {
     	return( send( methodName, args, serviceName, null ) );
 	}    
@@ -37,7 +37,7 @@
     * for a return
     */
     public Object send( String methodName, java.util.Collection args, String serviceName, java.util.Properties props )
-    throws com.cloudmigrate.framework.common.exception.ProcessingException
+    throws com.Harbormaster.framework.common.exception.ProcessingException
     {
         Object returnValue = null;
         
@@ -54,7 +54,7 @@
         }
         catch( org.mule.umo.UMOException exc )
         {
-            throw new com.cloudmigrate.framework.common.exception.ProcessingException( "BaseBusinessDelegate:dispatch(...) - Failed to invoke web-service:method-name " + serviceName + ":" + methodName + " - " + exc );        
+            throw new com.Harbormaster.framework.common.exception.ProcessingException( "BaseBusinessDelegate:dispatch(...) - Failed to invoke web-service:method-name " + serviceName + ":" + methodName + " - " + exc );        
         }
                      
     	return( returnValue );   

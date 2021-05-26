@@ -59,9 +59,9 @@
 		</global-results>
         
         <global-exception-mappings>
-            <exception-mapping exception="com.cloudmigrate.framework.common.exception.AuthenticationException" result="authentication_error"/>
-            <exception-mapping exception="com.cloudmigrate.framework.common.exception.AuthorizationException" result="authorization_error"/>
-            <exception-mapping exception="com.cloudmigrate.framework.common.exception.DuplicateNameException" result="duplicate_name_error"/>
+            <exception-mapping exception="com.Harbormaster.framework.common.exception.AuthenticationException" result="authentication_error"/>
+            <exception-mapping exception="com.Harbormaster.framework.common.exception.AuthorizationException" result="authorization_error"/>
+            <exception-mapping exception="com.Harbormaster.framework.common.exception.DuplicateNameException" result="duplicate_name_error"/>
         </global-exception-mappings>
 
         <action name="">

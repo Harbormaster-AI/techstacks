@@ -19,19 +19,16 @@ steps:
   inputs:
     versionSpec: '3.6'
     architecture: 'x64'
-    
-- script: pip install --upgrade pip
-  displayName: 'installing pip upgrade'
-  
-- script: pip install pipenv
-  displayName: 'installing pipenv'
-  
- #Pipenv_Component_Install()
-   
-- script: pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests
-  displayName: 'running pytest over test cases, storing test results'
-  
-- script: python ${appName}/setup.py sdist
-  displayName: 'packaging distribution'
- 
+  - step:
+      name: install dependencies and building ${appName} 
+      script:
+#instantiateCommandArrays()
+#initializeGlobalCICDInitializationCommands()
+#foreach( $command in $globalCICDInitialzationCommands )
+        - $command
+#end##foreach( $command in $globalCICDInitialzationCommands )
+#initializeGlobalCICDBuildCommands()
+#foreach( $command in $globalCICDBuildCommands )
+        - $command
+#end##foreach( $command in $globalCICDInitialzationCommands )
 #end##macro( Azure_Pipeline_Steps )

@@ -117,14 +117,12 @@ module.exports.createStore = () => {
 #if ( $singleAssociation.hasNavigableSiblingAssociationEndObject() == true )
 #if( $singleAssociation.getSiblingAssociationEndObject().isFromSingleValueAssociation() == true )															
   ${lowercaseChildName}.belongsTo(${lowercaseClassName}, { 
-    as: '${singleAssociation.getSiblingAssociationEndObject().getRoleName()}' 
+    as: 'as_${lowercaseClassName}_${singleAssociation.getSiblingAssociationEndObject().getRoleName()}' 
   }) 
 #else
   ${lowercaseChildName}.belongsToMany(${lowercaseClassName}, {
-	as: { 
-	  singular: 'To${singleAssociation.getRoleName()}', 
-	  plural: '${singleAssociation.getRoleName()}' 
-	}
+	as: 'as_${lowercaseClassName}_${singleAssociation.getRoleName()}',
+	through: 'through_${lowercaseClassName}_${singleAssociation.getRoleName()}'
   })
 #end##if( ${singleAssociation.getSiblingAssociationEndObject().isFromSingleValueAssociation() == true )
 #end##if ( $singleAssociation.hasNavigableSiblingAssociationEndObject() == true )
@@ -136,24 +134,21 @@ module.exports.createStore = () => {
 #if ( $multiAssociation.hasNavigableSiblingAssociationEndObject() == true )
 #if( $multiAssociation.getSiblingAssociationEndObject().isFromSingleValueAssociation() == true )															
   ${lowercaseChildName}.belongsTo(${lowercaseClassName}, { 
-    as: '${multiAssociation.getSiblingAssociationEndObject().getRoleName()}' 
+	    as: 'as_${lowercaseClassName}_${roleName}',
+	    through: 'through_${lowercaseClassName}_${roleName}'
   }) 
 #else
   ${lowercaseChildName}.belongsToMany(${lowercaseClassName}, {
-	as: { 
-	  singular: 'To${roleName}', 
-	  plural: '${roleName}' 
-	}
+	    as: 'as_${lowercaseClassName}_${roleName}',
+	    through: 'through_${lowercaseClassName}_${roleName}'
   })
 #end##if( ${multiAssociation.getSiblingAssociationEndObject().isFromSingleValueAssociation() == true )
 #end##if ( $multiAssociation.hasNavigableSiblingAssociationEndObject() == true )
 #set( $lowercaseChildName = ${Utils.lowercaseFirstLetter(${childName})} )
 #if ( $multiAssociation.hasNavigableSiblingAssociationEndObject() == true )
   ${lowercaseChildName}.belongsToMany(${lowercaseClassName},  { 
-    as: { 
-	  singular: 'To${multiAssociation.getSiblingAssociationEndObject().getRoleName()}', 
-	  plural: '${multiAssociation.getSiblingAssociationEndObject().getRoleName()}' 
-	}
+    as: 'as_${lowercaseClassName}_${multiAssociation.getSiblingAssociationEndObject().getRoleName()}',
+    through: 'through_${lowercaseClassName}_${multiAssociation.getSiblingAssociationEndObject().getRoleName()}'
   })
 #else
   ${lowercaseClassName}.hasMany(${lowercaseChildName}, {
