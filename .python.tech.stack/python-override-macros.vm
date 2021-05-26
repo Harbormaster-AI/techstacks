@@ -1,0 +1,23 @@
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variable:
+## 
+## globalCICDInitializationCommandsMap
+##----------------------------------------------
+#macro( initializeGlobalCICDInitializationCommands )
+#set( $dummy = $globalCICDInitialzationCommands.add("export PIP_CACHE_DIR=.cache/pip" ) )    
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo pip install pipenv" ) )    
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo pipenv install" ) )
+#end##macro( initateGlobalCICDInitializationCommands )
+
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variables:
+## 
+## globalCICDBuildCommandsMap 
+##----------------------------------------------
+#macro( initializeGlobalCICDBuildCommands )
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#end
+#end##macro( AWS_TerraformJobDefinition )
+
