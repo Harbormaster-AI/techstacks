@@ -1,0 +1,79 @@
+## ------------------------------------------------
+## DB Service section in Docker compose file
+## ------------------------------------------------
+#macro( DockerComposeDBService )
+  db:
+    image:#DockerComposeDBImage()
+#set( $composeDbEnvs = "#DockerComposeDBEnvironment()" )
+#if( $composeDbEnvs == $null || $composeDbEnvs == "" )
+#else
+    environment:
+#DockerComposeDBEnvironment()
+#end##if( $composeEnvs == $null || $composeEnvs == "" )
+#set( $composeDbPorts = "#DockerComposeDBPorts()" )
+#if( $composeDbPorts == $null || $composeDbPorts == "" )
+#else
+    ports:
+      - "#DockerComposeDBPorts()"
+#end##if( $composeDbPorts == $null || $composeDbPorts == "" )
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+#end
+
+## ------------------------------------------------
+## Database image - must be overridden
+## ------------------------------------------------
+#macro( DockerComposeDBImage )#end 
+
+## ------------------------------------------------
+## Env vars for DB service declaration - should be overridden
+## ------------------------------------------------
+#macro( DockerComposeDBEnvironment )#end 
+
+## ------------------------------------------------
+## Ports for DB service declaration - should be overriden
+## ------------------------------------------------
+#macro( DockerComposeDBPorts )#end
+
+## ------------------------------------------------
+## Platform service section
+## ------------------------------------------------
+#macro( DockerComposePlatformService )
+    image: #DockerComposePlatformImage()
+    ports:
+      - "#DockerComposePlatformPorts()"
+#set( $platformEnv = "#DockerComposePlatformEnvironment()" )
+#if ( $platformEnv == $null || $platformEnv == "" )
+#else      
+    environment:
+#DockerComposePlatformEnvironment()
+#end##if ( $platformEnv == $null || $platformEnv == "" )
+#set( $dbServiceInUse = "#DockerComposeDBService()" )
+#if ( $dbServiceInUse == $null || $dbServiceInUse == "" )
+#else
+    depends_on:
+      - db
+    links:
+      - db
+#end##if ( $dbServiceInUse == $null || $dbServiceInUse == "" )
+#end
+
+## ------------------------------------------------
+## Platform image...normally the generated apps image
+## ------------------------------------------------
+#macro( DockerComposePlatformImage )
+#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
+#set( $dockerRepo = ${aib.getParam("docker.repo")} )
+#set( $dockerTag = ${aib.getParam("docker.tag")} )
+${dockerOrgName}/${dockerRepo}:${dockerTag}
+#end
+
+## ------------------------------------------------
+## Ports for platform service declaration - should be overriden
+## ------------------------------------------------
+#macro( DockerComposePlatformPorts )#end
+
+## ------------------------------------------------
+## Env vars for platform service declaration - should be overriden
+## ------------------------------------------------
+#macro( DockerComposePlatformEnvironment )#end

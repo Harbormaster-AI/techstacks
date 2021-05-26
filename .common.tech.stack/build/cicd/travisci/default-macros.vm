@@ -1,0 +1,24 @@
+########################################################################
+## Travis_Install 
+########################################################################
+#macro( Travis_Install )
+install: 
+  - "echo -e \"machine github.com\\n  login $GITHUB_TOKEN\" > ~/.netrc"
+  - "git lfs pull"
+#instantiateCommandArrays()  
+#initializeGlobalCICDInitializationCommands()          
+#foreach( $command in $globalCICDInitialzationCommands )
+    - $command 
+#end  
+#end##macro( Travis_Install )
+
+########################################################################
+## Travis_Script 
+########################################################################
+#macro( Travis_Script )
+script: 
+#initializeGlobalCICDBuildCommands()          
+#foreach( $command in $globalCICDBuildCommands )
+    - $command 
+#end  
+#end##macro( Travis_Script )
