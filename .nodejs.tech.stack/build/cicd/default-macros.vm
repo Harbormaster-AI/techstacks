@@ -1,0 +1,34 @@
+##----------------------------------------------
+## CAN BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variable:
+## 
+## globalCICDInitializationCommandsMap
+##----------------------------------------------
+#macro( initializeGlobalCICDInitializationCommands )
+#set( $cicd = ${aib.getParam( "cicd.platform" )} )
+#if ( $cicd.indexOf("aws") >= 0 ||  $cicd.indexOf("github") >= 0 )
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo apt-get update -y" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo apt-get -y install mongodb-server" )  )    
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo service mongodb start" )  )
+#end##if ( $cicd.indexOf("aws") >= 0 )  
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo #NPM_Install_Directive()" ) )      
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo mkdir -p appRoot" ) )      
+#set( $dummy = $globalCICDInitialzationCommands.add("cd appRoot && sudo ng new angular-demo --defaults" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo cp -r ${appName}/. appRoot/${appName}" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("cd appRoot/angular-demo && sudo npm install --${BUILD_ENV} > /dev/null" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("cd appRoot/angular-demo && sudo npm run setup" ) )
+#end##macro( initateGlobalCICDInitializationCommands )
+
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variables:
+## 
+## globalCICDBuildCommandsMap 
+##----------------------------------------------
+#macro( initializeGlobalCICDBuildCommands )
+#set( $dummy = $globalCICDBuildCommands.add("cd appRoot/angular-demo && sudo ng build #--base-href /angular-demo/" ) )
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $dummy = $globalCICDBuildCommands.add("sudo npm run deploy" ) )
+#end
+#end##macro( initializeGlobalCICDBuildCommands )
+
