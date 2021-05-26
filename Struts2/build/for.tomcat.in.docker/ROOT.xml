@@ -1,0 +1,6 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+<Context docBase="../deploy/${appName}-${aib.getVersion()}.war"/>
