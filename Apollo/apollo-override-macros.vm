@@ -1,0 +1,54 @@
+##----------------------------------------------
+=
+## TO INITIALIZE the following variable:
+## 
+## globalCICDInitializationCommandsMap
+##----------------------------------------------
+#macro( initializeGlobalCICDInitializationCommands )
+#set( $dummy = $globalCICDInitialzationCommands.add("cd server/${appName} && sudo #NPM_Install_Directive()" ) )
+#end##macro( initateGlobalCICDInitializationCommands )
+
+## ------------------------------------------------
+## DB Service section in Docker compose file
+##
+## By default, Apollo uses Sequelize which is 
+## installed by the application docker image
+## ------------------------------------------------
+#macro( DockerComposeDBService )#end
+
+## ------------------------------------------------
+## Ports for platform service declaration
+## ------------------------------------------------
+#macro( DockerComposePlatformPorts )
+4000:4000#end
+
+##----------------------------------------------
+## Directive to install NPM
+##----------------------------------------------
+#macro( NPM_Install_Directive )
+npm install --${BUILD_ENV} > /dev/null
+#end
+
+##----------------------------------------------
+## Minimum NODE_JS_Version
+##----------------------------------------------
+#macro( NODE_JS_Version )
+12
+#end
+
+##----------------------------------------------
+## Directives to install NPM within Docker container
+##----------------------------------------------
+#macro( Docker_NPM_Install_Directives )
+RUN #NPM_Install_Directive()
+#end
+
+##----------------------------------------------
+## GitHubActions_Strategy - overridden from common.templates tech stack
+##----------------------------------------------
+#macro( GitHubActions_Strategy )
+    strategy:
+      matrix:
+        node-version: [12.x]
+#end##macro( GitHubActions_Strategy )
+
