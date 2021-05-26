@@ -1,0 +1,51 @@
+#set( $appName = $aib.getApplicationNameFormatted() )
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+    	<title>${appName}</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+	    <%= csrf_meta_tags %>
+    	<%= csp_meta_tag %>
+	
+	    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+
+  	</head>
+
+	<body>
+	
+	  	<div class="jumbotron text-center">
+			<h1>${appName}</h1>
+  		</div>
+ 
+    	<div class="container">
+	   	
+	   		<div class="row">
+	    
+	     		<div class="col-lg-2">
+#foreach( $class in $aib.getClassesToGenerate() )
+#if( $class.isNotEmpty() == true )
+#set( $className = $class.getName() )   
+#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter(${className})} ) 		
+		   			<%= button_to '${className}s', ${lowercaseClassName}s_path, :method => :get,  :class => "btn btn-primary btn-lg"%>
+#end##if( $class.isNotEmpty() == true )
+#end##if( $class.isNotEmpty() == true )
+	     		</div>
+
+        		<!-- Page Content -->
+        		<div class="col-lg-10">
+					<%= yield %>
+        		</div>
+
+      		</div>   
+		
+		</div>
+		
+  </body>
+
+</html>

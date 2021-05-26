@@ -1,0 +1,57 @@
+##----------------------------------------------
+## Ruby_Image - can be overriden
+##----------------------------------------------
+#macro( Ruby_Image )
+ruby:2.7.1#end
+
+## ------------------------------------------------
+## DB Service section in Docker compose file
+## Empty since Rails defaults to using SQLite
+##
+## Add this section if using another DB
+## ------------------------------------------------
+#macro( DockerComposeDBService )#end
+
+## ------------------------------------------------
+## Ports for platform service declaration
+## ------------------------------------------------
+#macro( DockerComposePlatformPorts )
+3000:3000#end
+
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variable:
+## 
+## globalCICDInitializationCommandsMap
+##----------------------------------------------
+#macro( initializeGlobalCICDInitializationCommands )
+#set( $dummy = $globalCICDInitialzationCommands.add("gem install rails" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("yarn --version" ) ) 
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo apt-get update && sudo apt-get install sqlite3 libsqlite3-dev" ) )      
+#set( $dummy = $globalCICDInitialzationCommands.add("mkdir /home/circleci/appRoot" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("cd /home/circleci/appRoot && bundle gem $appName --no-coc --no-mit -t" ) )      
+#set( $dummy = $globalCICDInitialzationCommands.add("cd /home/circleci/appRoot && rails new $appName --force" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("cd /home/circleci/appRoot/$appName && yarn add bootstrap jquery popper.js @popperjs/core @fortawesome/fontawesome-free" ) )      
+#set( $dummy = $globalCICDInitialzationCommands.add("cd /home/circleci/appRoot/$appName && rails webpacker:install" ) )
+#end##macro( initateGlobalCICDInitializationCommands )
+
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variables:
+## 
+## globalCICDBuildCommandsMap 
+##----------------------------------------------
+#macro( initializeGlobalCICDBuildCommands )
+#set( $dummy = $globalCICDBuildCommands.add("cp -r -n /home/circleci/appRoot/$appName/ /home/circleci/gitRoot/" ))
+#set( $dummy = $globalCICDBuildCommands.add("cd /home/circleci/gitRoot/$appName && export RAILS_ENV=test && rails webpacker:compile" ))
+#set( $dummy = $globalCICDBuildCommands.add("cd /home/circleci/gitRoot/$appName && export RAILS_ENV=test && rails db:migrate" ))
+#set( $dummy = $globalCICDBuildCommands.add("cd /home/circleci/gitRoot/$appName && export RAILS_ENV=test && rails db:seed" ))
+#set( $dummy = $globalCICDBuildCommands.add("cd /home/circleci/gitRoot/$appName && export RAILS_ENV=test && rails test test/controllers" ))
+#set( $buildGem = $aib.getParam( "ruby.buildGemFile" ) )
+#if ( $buildGem != $null && $buildGem != "" )           
+#set( $dummy = $globalCICDBuildCommands.add("cd /home/circleci/appRoot && gem build  ${appName.toLowerCase()}" ))
+#end##if ( $buildGem != $null && $buildGem != "" )
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#end
+#end##macro( AWS_TerraformJobDefinition )
+

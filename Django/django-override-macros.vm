@@ -1,0 +1,55 @@
+## ------------------------------------------------
+## DB Service section in Docker compose file
+## Defaults to using internal dev database
+##
+## Add values here if otherwise
+## ------------------------------------------------
+#macro( DockerComposeDBService )#end
+
+
+## ------------------------------------------------
+## Ports for platform service declaration
+## ------------------------------------------------
+#macro( DockerComposePlatformPorts )
+8000:8000#end
+
+
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variable:
+## 
+## globalCICDInitializationCommandsMap
+##----------------------------------------------
+#macro( initializeGlobalCICDInitializationCommands )
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo python -m pip install --upgrade pip " )  )
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo pip install --upgrade pip" ) )      
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo pip install pipenv" )  )
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo pipenv install" )  )
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo pipenv install Django==2.2" )  )     
+#set( $dummy = $globalCICDInitialzationCommands.add("sudo pipenv install pytest-django" )  )     
+#end##macro( initateGlobalCICDInitializationCommands )
+
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variables:
+## 
+## globalCICDBuildCommandsMap 
+##----------------------------------------------
+#macro( initializeGlobalCICDBuildCommands )
+      
+#set( $dummy = $globalCICDBuildCommands.add("[ $EUID == 0 ] && SUDO="" || SUDO=sudo && $SUDO chown -R circleci:circleci /usr/local/bin" ) )
+#set( $dummy = $globalCICDBuildCommands.add("[ $EUID == 0 ] && SUDO="" || SUDO=sudo && $SUDO chown -R circleci:circleci /usr/local/lib/python3.7/site-packages" ) )
+
+#set( $dummy = $globalCICDBuildCommands.add("sudo pipenv run pytest --junitxml=test-results/junit.xml ${appName}/tests" ) )
+#set( $dummy = $globalCICDBuildCommands.add("sudo python ${appName}/setup.py sdist" ) )
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#end
+#end##macro( AWS_TerraformJobDefinition )
+
+
+
+## ------------------------------------------------
+## Ports for platform service declaration
+## ------------------------------------------------
+#macro( DockerComposePlatformPorts )
+8080:8080#end

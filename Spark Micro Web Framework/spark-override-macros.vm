@@ -1,0 +1,5 @@
+## ------------------------------------------------
+## Ports for platform service declaration
+## ------------------------------------------------
+#macro( DockerComposePlatformPorts )
+4567:4567#end

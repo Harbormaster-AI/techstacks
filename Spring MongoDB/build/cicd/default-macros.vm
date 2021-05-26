@@ -1,0 +1,9 @@
+#macro( instantiateCommandArrays )
+
+#set( $globalCICDInitialzationCommands = [] )
+#set( $globalCICDBuildCommands = [] )
+#set( $dummy = $globalCICDInitialzationCommands.add("apt-get update -y") )
+#set( $dummy = $globalCICDInitialzationCommands.add("apt-get install -y maven") )
+#set( $dummy = $globalCICDInitialzationCommands.add("apt-get -y install mongodb-server") )
+#set( $dummy = $globalCICDInitialzationCommands.add("service mongodb start") )
+#end

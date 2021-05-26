@@ -1,0 +1,56 @@
+##----------------------------------------------
+## outputs fields with a default value
+##----------------------------------------------
+#macro ( outputSeedDeclaration $class $forSeedingDB )
+#set( $attributes = $class.getAttributesOnly(false, false) )
+#set( $attributesSize = $attributes.size() )
+#set( $createDecl = "" )
+#foreach( $attribute in $attributes )
+#if ( $attribute.isFromEnumerator() == true )
+#set( $attributeName = ${attribute.getName()} )
+#if( $forSeedingDB == true )
+#set( $defaultValue = "0" )
+#else## like for controller testing
+#set( $defaultValue = "${class.getName()}.${attributeName}s[0]" )
+#end##if( $forSeedingDB == true )
+#else##if ( $attribute.isFromEnumerator() == true )
+#set( $type = $attribute.getType() )
+#set( $attributeName = "${Utils.lowercaseFirstLetter( $attribute.getAsArgument() )}" )
+#set( $isTypeTime = "#isTypeTime( $type )" )
+#if( $isTypeTime.length() > 0 )
+#set( $defaultValue = "1.week.ago" )
+#else##if( $isTypeTime.length() > 0 )
+#if( $type.contains("tring") )
+#set( $defaultValue = "${esc.quote}test string for ${attributeName}${esc.quote}" )
+#elseif( $type.contains("loat") )
+#set( $defaultValue = "1000" )
+#elseif( $type.contains("oolean") )
+#set( $defaultValue = "true" )
+#elseif( $type.equalsIgnoreCase("char") )
+#set( $defaultValue = "A" )
+#elseif( $type.equalsIgnoreCase("int") || $type.contains( "nteger") )
+#set( $defaultValue = "100" )
+#elseif( $type.contains("ouble") )
+#set( $defaultValue = "10" )
+#elseif( $type.contains("hort") )
+#set( $defaultValue = "1" )
+#else## assume it is a string
+#set( $defaultValue = "${esc.quote}test value${esc.quote}" )
+#end##if( $type.contains("tring") )
+#end##if( $isTypeTime.length() > 0 )
+#end##if ( $attribute.isFromEnumerator() == false )## ignore enums
+#set( $createDecl = "${createDecl}${attributeName}:${defaultValue}" )
+#if ($velocityCount < $attributesSize )
+#set( $createDecl = "${createDecl}, " )
+#end##if ($velocityCount < $attributesSize )
+#end##foreach( $attribute in $attributes )
+${createDecl}#end##macro ( outputSeedDeclaration $class )
+
+##----------------------------------------------
+## determine if a type is related to time
+##----------------------------------------------
+#macro ( isTypeTime $type )
+#if ( $type.contains("time") || $type.contains("Time") || $type.contains("Date")  )
+    "true"
+#end##if ( $types.contains("time") || $types.contains("Time") || $types.contains("Date") )
+#end##macro( isTimeType )
