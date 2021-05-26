@@ -1,0 +1,52 @@
+##----------------------------------------------
+## NPM_Install_Directive - should be overridden
+##----------------------------------------------
+#macro( NPM_Install_Directive )
+#end
+
+##----------------------------------------------
+## NODE_JS_Version - should be overridden
+##----------------------------------------------
+#macro( NODE_JS_Version )
+#end
+
+##----------------------------------------------
+## Docker_NPM_Install_Directives - should be overridden
+##----------------------------------------------
+#macro( Docker_NPM_Install_Directives )
+#end
+
+##----------------------------------------------
+## GitHubActions_Strategy - should be overridden
+##----------------------------------------------
+#macro( GitHubActions_Strategy )
+#end##macro( GitHubActions_Strategy )
+
+##----------------------------------------------
+## instantiates the global arrays to hold the 
+## tech specific commands for initialization
+## and build
+##----------------------------------------------
+#macro( instantiateCommandArrays )
+#set( $globalCICDInitialzationCommands = [] )
+#set( $globalCICDBuildCommands = [] )
+
+#end
+
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variable:
+## 
+## globalCICDInitializationCommands
+##----------------------------------------------
+#macro( initializeGlobalCICDInitializationCommands )
+#end
+
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variables:
+## 
+## globalCICDBuildCommands
+##----------------------------------------------
+#macro( initializeGlobalCICDBuildCommands )
+#end

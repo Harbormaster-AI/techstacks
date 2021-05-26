@@ -1,0 +1,18 @@
+##----------------------------------------------
+## Bitbucket_Pipeline_Step
+##----------------------------------------------
+#macro( Bitbucket_Pipeline_Step )  
+  - step:
+      name: install dependencies and building ${appName} 
+      script:
+#instantiateCommandArrays()
+#initializeGlobalCICDInitializationCommands()
+#foreach( $command in $globalCICDInitialzationCommands )
+        - $command
+#end##foreach( $command in $globalCICDInitialzationCommands )
+#initializeGlobalCICDBuildCommands()
+#foreach( $command in $globalCICDBuildCommands )
+        - $command
+#end##foreach( $command in $globalCICDInitialzationCommands )
+
+#end##macro( Bitbucket_Pipeline_Step )  

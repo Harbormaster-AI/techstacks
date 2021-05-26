@@ -1,0 +1,21 @@
+##----------------------------------------------
+## Codeship_Install
+##----------------------------------------------
+#macro( Codeship_Install  ) 
+#instantiateCommandArrays()
+#initializeGlobalCICDInitializationCommands()          
+#foreach( $command in $globalCICDInitialzationCommands )
+RUN $command 
+#end
+#end##macro( Codeship_Install  )
+
+##----------------------------------------------
+## Codeship_Build
+##----------------------------------------------
+#macro( Codeship_Build )
+#initializeGlobalCICDBuildCommands()          
+#foreach( $command in $globalCICDBuildCommands )
+$command 
+#end
+#end##macro( Codeship_Build )
+
