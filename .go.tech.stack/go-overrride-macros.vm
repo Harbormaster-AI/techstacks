@@ -1,0 +1,67 @@
+##----------------------------------------------
+## Go_Lang_Image - can be overriden
+##----------------------------------------------
+#macro( Go_Lang_Image )
+golang:1.16
+#end
+
+## ------------------------------------------------
+## Database image - should be overridden
+## ------------------------------------------------
+#macro( DockerComposeDBImage )
+mysql:latest
+#end 
+
+## ------------------------------------------------
+## Ports for DB service declaration - should be overriden
+## ------------------------------------------------
+#macro( DockerComposeDBPorts )
+3306:3306#end
+
+## ------------------------------------------------
+## Env vars for DB service declaration
+## ------------------------------------------------
+#macro( DockerComposeDBEnvironment )
+      MYSQL_USER: $aib.getParam("go.dbUserName")
+      MYSQL_PASSWORD: $aib.getParam("go.dbPassword")
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_ROOT_PASSWORD:  $aib.getParam("go.dbPassword")
+      MYSQL_DATABASE: $aib.getParam("go.dbName")
+#end 
+
+## ------------------------------------------------
+## Ports for platform service declaration
+## ------------------------------------------------
+#macro( DockerComposePlatformPorts )
+4000:4000#end
+
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variable:
+## 
+## globalCICDInitializationCommandsMap
+##----------------------------------------------
+#macro( initializeGlobalCICDInitializationCommands )
+#set( $dbType = $aib.getParam( "go.dbType" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("go get github.com/gorilla/mux " ) )    
+#set( $dummy = $globalCICDInitialzationCommands.add("go get -u gorm.io/gorm" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("go get -u gorm.io/driver/$dbType" ) ) 
+#set( $dummy = $globalCICDInitialzationCommands.add("go get github.com/joho/godotenv" )  )        
+#end##macro( initateGlobalCICDInitializationCommands )
+
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variables:
+## 
+## globalCICDBuildCommandsMap 
+##----------------------------------------------
+#macro( initializeGlobalCICDBuildCommands )
+#set( $dummy = $globalCICDBuildCommands.add("cd src/${appName}" ) )
+#set( $dummy = $globalCICDBuildCommands.add("go mod init ${appName}" ) )
+#set( $dummy = $globalCICDBuildCommands.add("go mod tidy") )
+#set( $dummy = $globalCICDBuildCommands.add("go build" ) )
+#set( $dummy = $globalCICDBuildCommands.add("go test ${appName}/api/test") )
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" ) )
+#end
+#end##macro( AWS_TerraformJobDefinition )
+

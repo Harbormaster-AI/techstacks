@@ -1,0 +1,50 @@
+#if( ${containerObject} )
+#set( $appName = "Container-${containerObject.getName()}" )
+#else
+#set( $appName = $aib.getApplicationNameFormatted() )
+#end
+
+########################################################################
+## Travis_Language_Declaration
+########################################################################
+#macro( Travis_Language_Declaration )
+language: node_js
+node_js:
+  - "#NODE_JS_Version()"
+#end##macro( Travis_Language_Declaration )
+
+########################################################################
+## Travis_Cache_Declaration
+########################################################################
+#macro( Travis_Cache_Declaration )
+cache: npm
+#end##macro( Travis_Cache_Declaration )
+
+
+########################################################################
+## Travis_Git_Declaration
+########################################################################
+#macro( Travis_Git_Declaration )
+git:
+  depth: false
+  quiet: true
+#end##macro( Travis_Git_Declaration )
+
+
+########################################################################
+## Travis_EnvVar_Declarations
+########################################################################
+#macro( Travis_EnvVar_Declarations )
+env:
+  - APP_NAME=${appName} APP_ROOT_DIR=appRoot FULL_APP_DIR=$TRAVIS_BUILD_DIR/appRoot/${appName}
+#end##macro( Travis_EnvVar_Declarations )
+
+########################################################################
+## Travis_Script 
+########################################################################
+#macro( Travis_Services )
+services:
+  - mongodb
+#end##macro( Travis_Services )
+  
+

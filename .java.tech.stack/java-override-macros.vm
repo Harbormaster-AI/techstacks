@@ -1,0 +1,70 @@
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variable:
+## 
+## globalCICDInitializationCommandsMap
+##----------------------------------------------
+#macro( initializeGlobalCICDInitializationCommands )
+#set( $dummy = $globalCICDInitialzationCommands.add("export DEFAULT_HOST_ADDRESS=127.0.0.1" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("export DEFAULT_HOST_PORT=27017" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("export DATABASE_USERNAME=root" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("export DATABASE_PASSWORD=letmein2" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("export DATABASE_DIALECT=org.hibernate.dialect.MySQL8Dialect" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("export DATABASE_DRIVER=com.mysql.cj.jdbc.Driver" ) )
+#set( $dummy = $globalCICDInitialzationCommands.add("export DATABASE_URL=jdbc:mysql://localhost:3306/${appName}?createDatabaseIfNotExist=true" ) )   
+#end##macro( initateGlobalCICDInitializationCommands )
+
+##----------------------------------------------
+## MUST BE OVERLOADED BY THE DERIVING TECH STACK
+## TO INITIALIZE the following variables:
+## 
+## globalCICDBuildCommandsMap 
+##----------------------------------------------
+#macro( initializeGlobalCICDBuildCommands )
+#if ( ${aib.getParam('artifact-repo.inUse')} == "true" )
+#set( $repoUserName = ${aib.getParam('artifact-repo.userName')} )
+#set( $repoPassword = ${aib.getParam('artifact-repo.password')} )
+#set( $repoRepoUrl = ${aib.getParam('artifact-repo.repoUrl')} )
+#set( $dummy = $globalCICDBuildCommands.add( "mvn deploy --settings settings.xml -Dinternal.repo.username=${repoUserName} -Dinternal.repo.password=${repoPassword} -Dinternal.repo.url=${repoRepoUrl}" ) )
+#else        
+#set( $dummy = $globalCICDBuildCommands.add( "mvn package" ) )
+#end    
+#end##macro( initializeGlobalCICDBuildCommands )
+
+
+## ------------------------------------------------
+## Database image - should be overridden
+## ------------------------------------------------
+#macro( DockerComposeDBImage )
+mysql:latest
+#end 
+
+## ------------------------------------------------
+## Ports for DB service declaration - should be overriden
+## ------------------------------------------------
+#macro( DockerComposeDBPorts )
+3306:3306#end
+
+## ------------------------------------------------
+## Env vars for DB service declaration
+## ------------------------------------------------
+#macro( DockerComposeDBEnvironment )
+      MYSQL_ROOT_PASSWORD: letmein2
+      MYSQL_DATABASE: developmentdb
+#end 
+
+
+## ------------------------------------------------
+## Env vars for platform service declaration
+## ------------------------------------------------
+#macro( DockerComposePlatformEnvironment )
+        DATABASE_URL: jdbc:mysql://db:3306/developmentdb?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+        DATABASE_PASSWORD: letmein2
+#end
+
+
+## ------------------------------------------------
+## Ports for platform service declaration
+## ------------------------------------------------
+#macro( DockerComposePlatformPorts )
+8080:8080#end
