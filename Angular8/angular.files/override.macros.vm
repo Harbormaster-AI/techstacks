@@ -46,3 +46,13 @@
     "typescript": "~3.5.3"
   }
   #end##macro( angularDependencies ) 
+  
+
+########################################################################
+## GitHubActions_Strategy - overridden from common.templates tech stack
+########################################################################
+#macro( GitHubActions_Strategy )
+    strategy:
+      matrix:
+        node-version: [8.x]
+#end##macro( GitHubActions_Strategy )
