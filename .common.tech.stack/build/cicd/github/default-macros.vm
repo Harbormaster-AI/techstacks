@@ -22,4 +22,7 @@ ubuntu-latest #end##macro( CircleCI_OutputDockerImageDecl )
 #foreach( $command in $globalCICDBuildCommands )
       run: '$command'
 #end
+#if ( $aib.getParam( "kubernetes.inUse" ) == "true" )
+      run: cd terraform && chmod 777 terraform.sh && ./terraform.sh install
+#end##if ( $aib.getParam( "kubernetes.inUse" ) == "true" )  
 #end##macro( GitHubActions_Steps )

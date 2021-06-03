@@ -262,7 +262,9 @@ pipelines:
 #foreach( $command in $globalCICDBuildCommands )
             - $command
 #end##foreach( $key in $globalCICDInitialzationMaps.keySet() )
-
+#if ( $aib.getParam( "kubernetes.inUse" ) == "true" )
+            - cd terraform && chmod 777 terraform.sh && ./terraform.sh install
+#end##if ( $aib.getParam( "kubernetes.inUse" ) == "true" )  
           onSuccess:                       
             - echo "Successfully installed, built, and tested
             

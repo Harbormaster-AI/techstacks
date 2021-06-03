@@ -49,8 +49,7 @@ mysql:latest
 ## Env vars for DB service declaration
 ## ------------------------------------------------
 #macro( DockerComposeDBEnvironment )
-      MYSQL_ROOT_PASSWORD: letmein2
-      MYSQL_DATABASE: developmentdb
+#set( $dockerComposeDBEnvVarMap = {"MYSQL_DATABASE" : "developmentdb", "MYSQL_ROOT_PASSWORD" : "letmein2" } )
 #end 
 
 
@@ -58,8 +57,7 @@ mysql:latest
 ## Env vars for platform service declaration
 ## ------------------------------------------------
 #macro( DockerComposePlatformEnvironment )
-        DATABASE_URL: jdbc:mysql://db:3306/developmentdb?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
-        DATABASE_PASSWORD: letmein2
+#set( $dockerComposePlatformEnvVarMap = {"DATABASE_DIALECT": "com.mysql.cj.jdbc.Driver", "DATABASE_URL" : "jdbc:mysql://db:3306/developmentdb?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true", "DATABASE_PASSWORD" : "letmein2" } )
 #end
 
 

@@ -1,0 +1,84 @@
+##----------------------------------------------
+## Expose_K8_Ports 
+##----------------------------------------------
+#macro( Expose_K8_Ports )
+##----------------------------------------------
+##----------------------------------------------    
+## expose the db port for better remote client communication
+##----------------------------------------------
+    port {
+      name        = "db-port"
+      port        = #DockerComposeDBPorts()
+      target_port = #DockerComposeDBPorts()
+    }
+
+##----------------------------------------------    
+## expose the app port for better remote client communication 
+##----------------------------------------------
+    port {
+      name        = "app-port"
+      port        = #DockerComposePlatformPorts()
+      target_port = #DockerComposePlatformPorts()
+    }
+
+#end##macro( Expose_K8_Ports )
+
+##----------------------------------------------
+## Declare_K8_Containers - 
+##----------------------------------------------
+#macro( Declare_K8_Containers )
+##----------------------------------------------
+## db container
+##----------------------------------------------
+    template {
+      container {
+        image = "DockerComposeDBImage"
+        name  = "db-container"
+
+        port {
+          container_port = #DockerComposeDBPorts()
+        }
+
+        resources {
+          requests {
+            cpu    = "100m"
+            memory = "100Mi"
+          }
+        }
+
+##----------------------------------------------
+## ${appName} container
+##----------------------------------------------
+        
+      container {
+        image = "#DockerComposePlatformImage()"
+        name  = "app-container"
+
+        port {
+          container_port = #DockerComposePlatformPorts()
+        }
+#DockerComposeDBEnvironment()
+#foreach( $key in $dockerComposeDBEnvVarMap.keySet() )
+        env {
+          name  = "${key}"
+          value = "$dockerComposeDBEnvVarMap.get($key)"
+        }
+#end
+#DockerComposeDBEnvironment()
+#foreach( $key in $dockerComposeDBEnvVarMap.keySet() )
+        env {
+          name  = "${key}"
+          value = "$dockerComposeDBEnvVarMap.get($key)"
+        }
+#end
+        resources {
+          requests {
+            cpu    = "100m"
+            memory = "100Mi"
+          }
+        }
+
+      }
+
+    }
+#end##macro( Declare_K8_Containers )

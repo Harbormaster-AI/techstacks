@@ -13,12 +13,12 @@ resource "kubernetes_service" "app-master" {
       app  = "${appName}"
     }
 ################################################################
-## expose the application port on 8080 by default
+## expose the application port 
 ################################################################
     port {
       name        = "app-port"
-      port        = 8080
-      target_port = 8080
+      port        = #DockerComposePlatformPorts()
+      target_port = #DockerComposePlatformPorts()
     }
 
 #Expose_K8_Ports()
@@ -26,7 +26,8 @@ resource "kubernetes_service" "app-master" {
 ################################################################
 ## Load balancing will automatically expose the ports publicly
 ################################################################
-    type = "LoadBalancer"
+#set( $serviceType = ${aib.getParam("kubernetes.serviceType"} )
+    type = "${serviceType}"
   }
   
 }

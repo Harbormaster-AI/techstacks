@@ -1,6 +1,6 @@
-########################################################################
+##----------------------------------------------
 ## AWS Provider Terraform expressions
-########################################################################
+##----------------------------------------------
 #macro( outputAsAWSProvider )
 #if( ${containerObject} )
 #set( $appName = "Container-${containerObject.getName()}" )
@@ -150,9 +150,9 @@ resource "aws_instance" "web" {
 
 #end
 
-########################################################################
+##----------------------------------------------
 ## aws key pair declaration components to dynamically create SSH access
-########################################################################
+##----------------------------------------------
 #macro ( outputAWSKeyPairDecl )
 locals {
   public_key_filename  = "${path.root}/keys/id_rsa.pub"
@@ -184,9 +184,9 @@ resource "aws_key_pair" "generated" {
 }
 #end ##macro ( outputAWSKeyPairDecl )
 
-########################################################################
+##----------------------------------------------
 ## expression to use to ssh into the created AWS EC2 instance
-########################################################################
+##----------------------------------------------
 #macro ( outputSSHCommandDecl )
 output "ssh_command" {
   description = "Command to use to SSH into the instance."
@@ -194,10 +194,17 @@ output "ssh_command" {
 }
 #end ##macro ( outputSSHCommandDecl )
 
-########################################################################
-## declare default harbormaster community MongoDB AMI
-########################################################################
+##----------------------------------------------
+## declare harbormaster community MongoDB AMI
+##----------------------------------------------
 #macro ( outputMongoDBCommunityAMIDecl )
   # standard harbormaster community Amazon Machine Image using MongoDB started on the default port 
   ami = "ami-05df3d475fe54e496"
 #end ##macro ( outputMongoDBCommunityAMIDecl )
+
+##----------------------------------------------
+## env vars for Terraform using AWS
+##----------------------------------------------
+#macro ( providerEnvVarsForTerraform )
+-var aws-access-key=${aib.getParam("terraform.aws-access-key")} -var aws-secret-key=${aib.getParam("terraform.aws-secret-key")}
+#end

@@ -3,9 +3,6 @@
 #else
 #set( $appName = $aib.getApplicationNameFormatted() )
 #end
-#set( $dockerOrgName = ${aib.getParam("docker.orgName")} )
-#set( $dockerRepo = ${aib.getParam("docker.repo")} )
-#set( $dockerTag = ${aib.getParam("docker.tag")} )
 
 provider "kubernetes" {
   host = "$aib.getParam( "kubernetes.host" )"

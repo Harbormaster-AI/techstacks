@@ -9,6 +9,9 @@
 #else
     environment:
 #DockerComposeDBEnvironment()
+#foreach( $key in $dockerComposeDBEnvVarMap.keySet() )
+        $key : $dockerComposeDBEnvVarMap.get($key)
+#end
 #end##if( $composeEnvs == $null || $composeEnvs == "" )
 #set( $composeDbPorts = "#DockerComposeDBPorts()" )
 #if( $composeDbPorts == $null || $composeDbPorts == "" )
@@ -47,6 +50,9 @@
 #else      
     environment:
 #DockerComposePlatformEnvironment()
+#foreach( $key in $dockerComposePlatformEnvVarMap.keySet() )
+        $key : $dockerComposePlatformEnvVarMap.get($key)
+#end
 #end##if ( $platformEnv == $null || $platformEnv == "" )
 #set( $dbServiceInUse = "#DockerComposeDBService()" )
 #if ( $dbServiceInUse == $null || $dbServiceInUse == "" )

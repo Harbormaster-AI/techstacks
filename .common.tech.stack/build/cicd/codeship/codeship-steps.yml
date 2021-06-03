@@ -15,7 +15,7 @@
   encrypted_dockercfg_path: .dockercfg
 #if( ${aib.getParam("terraform.inUse")} == "true" )  
 - service: terraform
-  name: Terrform Execution
+  name: Terrform Execution 
   command: /code/gitRoot/terraform.sh
   encrypted_env_file:
     - aws.env.encrypted

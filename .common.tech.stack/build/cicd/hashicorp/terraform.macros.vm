@@ -7,6 +7,7 @@ k8s.variables.tf=terraform.k8s
 k8s.tf=terraform.k8s
 pods.tf=terraform.k8s
 services.tf=terraform.k8s
+terraform.sh=terraform
 #if ( $aib.getParam( "kubernetes.hostTarget" ) == "google" )
 account.json=terraform
 k8.google.main.tf=terraform

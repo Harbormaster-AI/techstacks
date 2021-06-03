@@ -9,8 +9,7 @@ mongo:latest
 ## Env vars for DB service declaration
 ## ------------------------------------------------
 #macro( DockerComposeDBEnvironment )
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: letmein2
+#set( $dockerComposeDBEnvVarMap = {"MONGO_INITDB_ROOT_USERNAME" : "root", "MONGO_INITDB_ROOT_PASSWORD" : "letmein2", "MONGOOSE_HOST_NAME" : "kubernetes_service.app-master.load_balancer_ingress.0.ip"  } )
 #end 
 
 ## ------------------------------------------------
@@ -23,8 +22,7 @@ mongo:latest
 ## Env vars for platform service declaration
 ## ------------------------------------------------
 #macro( DockerComposePlatformEnvironment )
-      DEFAULT_HOST_ADDRESS: 127.0.0.1
-      DEFAULT_HOST_PORT: 27017
+#set( $dockerComposePlatformEnvVarMap = {"DEFAULT_HOST_ADDRESS" : "127.0.0.1", "DEFAULT_HOST_PORT" : "27017" } )
 #end
 
 ## ------------------------------------------------

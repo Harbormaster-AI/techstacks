@@ -19,22 +19,8 @@
 ##----------------------------------------------
 #macro( AWS_TerraformJobDefinition )
 #if ( $aib.getParam( "kubernetes.inUse" ) == "true" )
-      - echo Installing Terraform...
-      - wget https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
-      - unzip ./terraform_0.11.13_linux_amd64.zip -d /usr/local/bin/
-      - terraform -v
-      - echo Running Terraform plan...
-      - echo initializaing terraform
-      - cd terraform && terraform init --input=false"
-#if ( $aib.getParam( "kubernetes.hostTarget" ) == "google" )
-      - echo running terraform plan
-      - terraform plan --input=false --out=terraform.plan -var host=${aib.getParam('kubernetes.host')} -var username=${aib.getParam("google.username")} -var password=${aib.getParam("google.password")} -var region=${aib.getParam("google.region")}-${aib.getParam("google.zone")} -var project=${aib.getParam("google.project")}
-#elseif ( $aib.getParam( "kubernetes.hostTarget" ) == "aws" )
-      - echo running terraform plan
-      - terraform plan -out=terraform.plan -var region=${aib.getParam("kubernetes.region")} -var aws-access-key=$USER_AWS_ACCESSKEY -var aws-secret-key=$USER_AWS_SECRETKEY
-#end##if ( $aib.getParam( "kubernetes.hostTarget" ) == "google" )
-      - echo running terraform plan
-      terraform apply -auto-approve "terraform.plan"
+      - echo running terraform with an installation first
+      - cd terraform && chmod 777 terraform.sh && ./terraform.sh install
 #end##if ( $aib.getParam( "kubernetes.inUse" ) == "true" )      
 #end##macro( AWS_TerraformJobDefinition )
 

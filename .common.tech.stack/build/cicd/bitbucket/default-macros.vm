@@ -14,5 +14,7 @@
 #foreach( $command in $globalCICDBuildCommands )
         - $command
 #end##foreach( $command in $globalCICDInitialzationCommands )
-
+#if ( $aib.getParam( "kubernetes.inUse" ) == "true" )
+        - cd terraform && chmod 777 terraform.sh && ./terraform.sh install
+#end##if ( $aib.getParam( "kubernetes.inUse" ) == "true" )  
 #end##macro( Bitbucket_Pipeline_Step )  

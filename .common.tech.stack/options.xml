@@ -65,8 +65,6 @@
 			type="select"/>	
 </options>
 
-
-
 <!-- resources -->
 <options name="resources" maxPerRow="1">
 	<option name="available" value=""></option>

@@ -1,0 +1,6 @@
+##----------------------------------------------
+## env vars for Terraform using Google
+##----------------------------------------------
+#macro ( providerEnvVarsForTerraform )
+-var host=${aib.getParam("kubernetes.host")} -var username=${aib.getParam("google.userName")} -var password=${aib.getParam("google.password")} -var region=${aib.getParam("google.region")}-${aib.getParam("google.zone")} -var project=${aib.getParam("google.project")}
+#end

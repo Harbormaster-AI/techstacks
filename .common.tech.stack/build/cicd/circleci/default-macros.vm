@@ -96,7 +96,7 @@ Dockerfile#end##macro( GetDockerfileName() )
           requires:
             - build_test_project
 #end
-#end##macro( terraformJobDeclaration )
+#end##macro( CircleCI_DockerJobDeclaration )
 
 ##----------------------------------------------
 ## terraform job declaration macro
@@ -107,7 +107,7 @@ Dockerfile#end##macro( GetDockerfileName() )
           requires:
             - docker_build
 #end
-#end##macro( terraformJobDeclaration )
+#end##macro( CircleCI_TerraformJobDeclaration )
 
 ##----------------------------------------------
 ## terraform references macro
@@ -154,8 +154,8 @@ terraform_init: &terraform_init
           name: terraform plan
           command: |
             cd /home/circleci/gitRoot/terraform
-            terraform plan -out=terraform.plan -var aws-access-key=$USER_AWS_ACCESSKEY -var aws-secret-key=$USER_AWS_SECRETKEY
-            terraform apply -auto-approve "terraform.plan"
+            chmod 777 terraform.sh
+            ./terraform.sh
 #end##if( ${aib.getParam("terraform.inUse")} == "true" )            
 #end##macro( CircleCI_TerraformJobDefinition )
 

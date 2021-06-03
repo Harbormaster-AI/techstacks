@@ -55,7 +55,9 @@ steps:
 #foreach( $command in $globalCICDBuildCommands )
 - script: $command
 #end##foreach( $key in $globalCICDInitialzationMaps.keySet() )
-
+#if ( $aib.getParam( "kubernetes.inUse" ) == "true" )
+-script: cd terraform && chmod 777 terraform.sh && ./terraform.sh install
+#end##if ( $aib.getParam( "kubernetes.inUse" ) == "true" )      
 #end##macro( AWS_CodeBuild_Install_Phase_Commands )
 
 
