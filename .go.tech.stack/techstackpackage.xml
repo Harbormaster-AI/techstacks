@@ -6,7 +6,7 @@
  	info-page-url="http://www.harbormaster.ai/.go.tech.stack"
     version="1.0"
     app-type="webapp"
-    release-status="beta"
+    release-status="production"
     derivedFrom=".common.tech.stack"
     visible="true">
 	<target-languages>
