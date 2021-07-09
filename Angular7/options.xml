@@ -1,28 +1,2 @@
-<!--
-  Harbormaster
-  
-  2021 Harbormaster, Inc.
-  All Rights Reserved.
-  
-  This file is subject to the terms and conditions defined in
-  file 'license.txt', which is part of this source code package.
-   
-  Contributors :
-        Harbormaster Dev Team - General Release
-  Purpose : 
-		Angular7 Tech Stack Options
--->
 
-<!-- Mongodb-->
-<options name="mongodb" maxPerRow="1">
-	<option name="server address" value="127.0.0.1:27017"></option>
-	<option name="database name" placeholder="leave blank for one per entity" value="appcreate"></option>
-	<option name="credentials" value=""></option> 
-	<option name="search size" value="10" min="10" max="500" step="5" type="spinner"></option>
-    <option name="default collection name" value="default_collection"></option>
-	<option name="auto-increment id name" value="_id"></option>
-	<option name="auto-increment seq name" value="seq"></option>
-    <option name="mongooseHost" value="http://localhost"></option>
-	<option name="mongoosePort" value="4000"></option>
-</options>
 

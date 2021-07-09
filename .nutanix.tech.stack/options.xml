@@ -1,16 +1,3 @@
-<!--
-  Harbormaster
-  
-  2021 Harbormaster, Inc.
-  All Rights Reserved.
-  
-  This file is subject to the terms and conditions defined in
-  file 'license.txt', which is part of this source code package.
-   
-  Contributors :
-        Harbormaster Dev Team - General Release
--->
-
 <options name="aws" maxPerRow="1">
 	<option name="inUse"  value="false" required="true" description="using AWS" type="boolean"/>
 	<option name="access-key"  value="ASSIGN_AS_ENV_VAR_WITH_CI_PROVIDER" required="true" description="aws access key" type="input"/>

@@ -1,16 +1,3 @@
-<!--
-  Harbormaster
-  
-  2021 Harbormaster, Inc.
-  All Rights Reserved.
-  
-  This file is subject to the terms and conditions defined in
-  file 'license.txt', which is part of this source code package.
-   
-  Contributors :
-        Harbormaster Dev Team - General Release
--->
-
 <!-- Google options -->
 <options name="google" maxPerRow="1">
 	<option name="inUse"  value="false" required="true" description="using AWS" type="boolean"/>

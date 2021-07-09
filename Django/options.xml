@@ -1,88 +1,14 @@
-<!--
-  Harbormaster
-  
-  2021 Harbormaster, Inc.
-  All Rights Reserved.
-  
-  This file is subject to the terms and conditions defined in
-  file 'license.txt', which is part of this source code package.
-   
-  Contributors :
-        Harbormaster Dev Team - General Release
--->
-
-<!-- application options -->
-<options name="application">
-	<option name="name" value="demo" required="true" description="app display name" type="input"/>
-	<option name="description" value="a demonstration app" required="false" description="app description" type="input"/>
-	<option name="author" value="your_name_here" required="false" description="app's author" type="input"/>
-	<option name="homePageUrl" value="http://wwww.homeage.com" required="false" description="homepage URL" type="input"/>
-	<option name="corporate logo URL" value="logoUrl" required="" description="link to company logo" type="input"/>
-	<option name="application logo URL" value="./img/turnstone.biologics.png" required="false" description="link to app logo" type="input"/>
-	<option name="company name"  value="Turnstone Biologics" required="true" modifiable="false" description="your company name" type="input"/>
-	<option name="version" value="1.0.0" required="true" description="app version" type="input"/>		
-	<option name="package name" value="com.occulue" modifiable="false" required="true" description="package prefix to apply(com.xyz format)" type="input"/>
-</options>
-
 <options name="django" maxPerRow="1">
 	<option name="superUserId" value="admin" required="true"
 		description="super user id" type="input"/>
 	<option name="superUserPassword" value="letmein2" required="true"
 		description="super user password" type="input"/>
-	<option name="superUserEmail" value="xxx&xxx.com" required="true"
+	<option name="superUserEmail" value="xxx@xxx.com" required="true"
 		description="super user email" type="input"/>
 	<option name="port" value="8080" required="true"
 		description="super user email" type="input"/>
 </options>
            
-<!-- CI/CD Platform options -->
-<options name="cicd" maxPerRow="1">
-	<option name="platform" value="codeship" 
-		selections="jenkins,codeship,circleci,jfrog.pipelines,travis,aws,azure,bitbucket,gitlab,semaphore,shippable,buddy"
-		required="true"
-		description="CI/CD Platform" 
-		type="select"/>	
-	<option name="AES key" value="" required="true"
-		description="CodeShip AES key value" type="input"/>
-	<option name="ssh-fingerprint" value="" required="true"
-		description="SSH Fingerprint for CircleCI" type="input"/>
-</options>
-
-<!-- Artifact repository options -->
-<options name="artifact-repo" maxPerRow="1">
-	<option name="inUse"  value="false" required="true" description="using sonatype nexus" type="boolean"/>
-	<option name="type" value="jfrog" 
-		selections="jfrog,nexus"
-		required="true"
-		description="CI/CD Platform" 
-		type="select"/>	
-	<option name="userName"  value="" required="true" description="repo user name" type="input"/>
-	<option name="password"  value="" required="true" description="repo password" type="input"/>
-	<option name="email"  value="" required="true" description="email address assigned with nexus"
-		placeHolder="email address asigned to nexus account" type="input"/>
-	<option name="publishRepoKey"  value="" required="true" description="key in repository to reference"
-		placeHolder="key in repository to reference" type="input"/>
-	<option name="serverUrl" value="http://127.0.0.1/repository/npm-repo" 
-		required="true" description="nexus server url" type="input"/>
-</options>
-
-<!-- Terraform options -->
-<options name="terraform" maxPerRow="1">
-	<option name="inUse"  value="true" required="true" description="using hashicorp terraform" type="boolean"/>
-	<option name="provider" value="google" 
-			selections="aws,azure,google,nutanix,local"
-			required="true"
-			description="Available Terraform providers" 
-			type="select"/>	
-</options>
-
-
-
-<!-- resources -->
-<options name="resources" maxPerRow="1">
-	<option name="available" value=""></option>
-</options>
-
 
 
 

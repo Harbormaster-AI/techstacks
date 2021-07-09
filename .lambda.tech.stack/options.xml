@@ -1,16 +1,3 @@
-<!--
-  Harbormaster
-  
-  2021 Harbormaster, Inc.
-  All Rights Reserved.
-  
-  This file is subject to the terms and conditions defined in
-  file 'license.txt', which is part of this source code package.
-   
-  Contributors :
-        Harbormaster Dev Team - General Release
--->
-
 <!-- aws-lambda options -->
 <options name="aws-lambda">
 	<option name="s3Bucket" value="Harbormasterdemobucket" required="true" description="S3 Bucket Name" type="input"/>
