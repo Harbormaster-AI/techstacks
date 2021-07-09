@@ -7,7 +7,7 @@
     version="1.1"
     app-type="webapp"
     release-status="production"
-    derivedFrom=".hibernate.tech.stack, .java.tech.stack"
+    derivedFrom=".hibernate.tech.stack,.java.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true">
 	<target-languages>
@@ -16,7 +16,7 @@
 	<tech-stack>
 		<tech-stack-component name="spring boot" description="RESTful API web services backend" app-layer="presentation"></tech-stack-component>
 		<tech-stack-component name="hibernate" description="Hibernate ORM" app-layer="data"></tech-stack-component>
-		<tech-stack-component name="junit" description="Junit to test core functionality" app-layer="test"/>	
+		<tech-stack-component name="junit" description="JUnit to test core functionality" app-layer="test"/>	
 		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
 	</tech-stack>
 </tech-stack-package>
