@@ -16,7 +16,7 @@
 #if ( $cicd.indexOf("jenkins") >= 0  || $cicd == "all" )
 Jenkinsfile=
 #end##if ( $cicd.indexOf("jenkins") >= 0 )
-#if ( $cicd.indexOf("codeship") >= 0 || $cicd == "all"  )
+#if ( $cicd.indexOf("codeship") >= 0 || $cicd.indexOf("cloudbees") >= 0 || $cicd == "all"  )
 codeship-services.yml
 codeship-steps.yml=
 Dockerfile_For_Setup=
