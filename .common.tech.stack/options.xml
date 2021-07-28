@@ -13,7 +13,7 @@
 
 <!-- CI/CD Platform options -->
 <options name="cicd" maxPerRow="1">
-	<option name="platform" value="codeship" 
+	<option name="platform" value="circleci" 
 		selections="jenkins,codeship,circleci,jfrog.pipelines,travis,aws,azure,bitbucket,gitlab,semaphore,shippable,buddy"
 		required="true"
 		description="CI/CD Platform" 
@@ -44,7 +44,7 @@
 
 <!-- Terraform options -->
 <options name="terraform" maxPerRow="1">
-	<option name="inUse"  value="true" required="true" description="using hashicorp terraform" type="boolean"/>
+	<option name="inUse"  value="false" required="true" description="using hashicorp terraform" type="boolean"/>
 	<option name="provider" value="google" 
 			selections="aws,azure,google,nutanix,local"
 			required="true"
