@@ -1,5 +1,6 @@
 #header()
 #set( $className = $classObject.getName() )
+#set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
 package ${aib.getRootPackageName(true)}.#getDelegatePackageName();
 
 import java.util.*;
