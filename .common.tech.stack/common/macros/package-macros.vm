@@ -26,20 +26,9 @@ import ${aib.getRootPackageName()}.#getTOPackageName().*;
 #end
 
 #macro( importStatements $imports )
-    #foreach( $im in $imports )
-##    	#if ( $packages.size() > 0 )
-##    		#foreach( $pkg in $packages )
-##    			#if ( $pkg.length() > 0 )
-##xrimport ${aib.getRootPackageName()}.${pkg}.${im}.*;
-##import ${aib.getRootPackageName()}.${im}.*;
-##    			#else
-##import ${aib.getRootPackageName()}.${im}.*;
-##    			#end
-##    		#end
-##    	#else
+#foreach( $im in $imports )
 import ${aib.getRootPackageName()}.${im}.*;
-##    	#end
-    #end
+#end
 #end
 
 #macro( getServicePackageName )
