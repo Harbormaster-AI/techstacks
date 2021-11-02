@@ -24,11 +24,11 @@
 #set( $includeRequiredAttribute = true )
 #set( $throwRemoteException = false )
 #foreach( $attribute in $classObject.getAttributes() )
-  ## only provide accessors for non-primary-key fields
-  #if( $attribute.isFromAssociation() == false || $includeAssociations == true )
-  ## delegate to the macro that outputs the accessor method for the provided attribute
-    #getAttributeAccessorMethods( $attribute true $throwRemoteException $attribute.getAsArgument() )
-  #end##if( $attribute.isFromAssociation() == $includeAssociations )
+## only provide accessors for non-primary-key fields
+#if( $attribute.isFromAssociation() == false || $includeAssociations == true )
+## delegate to the macro that outputs the accessor method for the provided attribute
+#getAttributeAccessorMethods( $attribute true $throwRemoteException $attribute.getAsArgument() )
+#end##if( $attribute.isFromAssociation() == $includeAssociations )
 #end##foreach( $attributes in $classObject.getAttributes() )
 
 #end
