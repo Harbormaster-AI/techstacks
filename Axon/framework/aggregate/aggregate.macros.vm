@@ -1,0 +1,30 @@
+#macro( declareAggregateAttributes $class )
+#set( $includePKs = false )
+#foreach( $attribute in $class.getDirectAttributes( $includePKs ) )
+#set( $attributeName = $attribute.getName() )
+#set( $attributeType = $attribute.getType() )
+    private ${attributeType} ${attributeName};
+#end###foreach( $attribute in $class.getDirectAttributes( $includePKs ) )
+#end##macro( declareAggregateAttributes )
+
+#macro( declareAggregateAssociations $class )
+#foreach( $association in $class.getAssociations() )
+#set( $associationName = $association.getRoleName() )
+#set( $associationType = $association.getType() )
+#set( $defaultValue = "null" )
+#set( $qualifier = "private ")
+#if( $attribute.isMultivalued() == true )
+#set( $associationType = $association.getType() )
+#set( $defaultValue = "new ArrayList<>()" )
+#end##if( $attribute.isMultivalued() == true )
+    ${qualifier}${attributeType} ${associationName} = $defaultValue;
+#end###foreach( $attribute in $class.getDirectAttributes( $includePKs ) )
+#end##macro( applyAggregateAttributes )
+
+#macro( applyAggregateAttributes $class $var )
+#set( $includePKs = false )
+#foreach( $attribute in $class.getDirectAttributes( $includePKs ) )
+#set( $name = $attribute.getName() )
+        this.${name} = ${var}.get${Utils.capitalizeFirstLetter( $name )}();
+#end###foreach( $attribute in $class.getDirectAttributes( $includePKs ) )
+#end##macro( applyAggregateAttributes )

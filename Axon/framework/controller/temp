@@ -1,0 +1,500 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< org.springframework.boot:axon-demo >-----------------
+[INFO] Building axon-demo 2.5.1
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from sonatype: https://oss.sonatype.org/content/repositories/snapshots/io/grpc/grpc-core/maven-metadata.xml
+Progress (1): 598 B
+                   
+Downloaded from sonatype: https://oss.sonatype.org/content/repositories/snapshots/io/grpc/grpc-core/maven-metadata.xml (598 B at 1.0 kB/s)
+Downloading from sonatype: https://oss.sonatype.org/content/repositories/snapshots/io/grpc/grpc-api/maven-metadata.xml
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:resources (default-resources) @ axon-demo ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- kotlin-maven-plugin:1.5.10:compile (compile) @ axon-demo ---
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (java-compile) @ axon-demo ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 37 source files to C:\Users\srand\realmethods\tools\apache\apache-tomcat-9.0.14\webapps\harbormaster\.project.creation.output\project_gen_Axon_ns2ff37b\target\classes
+[INFO] Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[18,8] class SnapshotApplicationConfiguration is public, should be declared in a file named SnapshotApplicationConfiguration.java
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[212,17] cannot find symbol
+  symbol:   class Company
+  location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[460,13] cannot find symbol
+  symbol:   class ApplicationContext
+  location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[212,17] cannot find symbol
+  symbol:   class Department
+  location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[439,13] cannot find symbol
+  symbol:   class ApplicationContext
+  location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[212,17] cannot find symbol
+  symbol:   class Division
+  location: class com.harbormaster.delegate.DivisionBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[439,13] cannot find symbol
+  symbol:   class ApplicationContext
+  location: class com.harbormaster.delegate.DivisionBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/EmployeeAggregate.java:[53,13] cannot find symbol
+  symbol:   class EmployeeCreateEvent
+  location: class com.harbormaster.aggregate.EmployeeAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/EmployeeAggregate.java:[60,13] cannot find symbol
+  symbol:   class EmployeeUpdateEvent
+  location: class com.harbormaster.aggregate.EmployeeAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/CompanyAggregate.java:[59,13] cannot find symbol
+  symbol:   class CompanyCreateEvent
+  location: class com.harbormaster.aggregate.CompanyAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/CompanyAggregate.java:[68,13] cannot find symbol
+  symbol:   class CompanyUpdateEvent
+  location: class com.harbormaster.aggregate.CompanyAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/EmployeeBusinessDelegate.java:[212,17] cannot find symbol
+  symbol:   class Employee
+  location: class com.harbormaster.delegate.EmployeeBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/EmployeeBusinessDelegate.java:[248,13] cannot find symbol
+  symbol:   class ApplicationContext
+  location: class com.harbormaster.delegate.EmployeeBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/DivisionAggregate.java:[53,13] cannot find symbol
+  symbol:   class DivisionCreateEvent
+  location: class com.harbormaster.aggregate.DivisionAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/DivisionAggregate.java:[58,13] cannot find symbol
+  symbol:   class DivisionUpdateEvent
+  location: class com.harbormaster.aggregate.DivisionAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/DepartmentAggregate.java:[53,13] cannot find symbol
+  symbol:   class DepartmentCreateEvent
+  location: class com.harbormaster.aggregate.DepartmentAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/DepartmentAggregate.java:[58,13] cannot find symbol
+  symbol:   class DepartmentUpdateEvent
+  location: class com.harbormaster.aggregate.DepartmentAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[17,2] cannot find symbol
+  symbol: class Configuration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[26,9] cannot find symbol
+  symbol:   class Snapshotter
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[25,12] cannot find symbol
+  symbol:   class SnapshotTriggerDefinition
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[33,9] cannot find symbol
+  symbol:   class Snapshotter
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[32,12] cannot find symbol
+  symbol:   class SnapshotTriggerDefinition
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[40,9] cannot find symbol
+  symbol:   class Snapshotter
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[39,12] cannot find symbol
+  symbol:   class SnapshotTriggerDefinition
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[47,9] cannot find symbol
+  symbol:   class Snapshotter
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[46,12] cannot find symbol
+  symbol:   class SnapshotTriggerDefinition
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/controller/DivisionRestController.java:[198,110] cannot find symbol
+  symbol:   class Department
+  location: class com.harbormaster.controller.DivisionRestController
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/controller/CompanyRestController.java:[166,110] cannot find symbol
+  symbol:   class Division
+  location: class com.harbormaster.controller.CompanyRestController
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/controller/CompanyRestController.java:[200,110] cannot find symbol
+  symbol:   class Employee
+  location: class com.harbormaster.controller.CompanyRestController
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/controller/DepartmentRestController.java:[198,110] cannot find symbol
+  symbol:   class Employee
+  location: class com.harbormaster.controller.DepartmentRestController
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[27,10] cannot find symbol
+  symbol:   class Value
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[24,10] cannot find symbol
+  symbol:   class Bean
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[34,10] cannot find symbol
+  symbol:   class Value
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[31,10] cannot find symbol
+  symbol:   class Bean
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[41,10] cannot find symbol
+  symbol:   class Value
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[38,10] cannot find symbol
+  symbol:   class Bean
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[48,10] cannot find symbol
+  symbol:   class Value
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[45,10] cannot find symbol
+  symbol:   class Bean
+  location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/event/DivisionEventHandler.java:[70,33] constructor DivisionEntity in class com.harbormaster.entity.DivisionEntity cannot be applied to given types;
+  required: java.util.UUID,java.lang.String,com.harbormaster.entity.EmployeeEntity,java.util.List<com.harbormaster.entity.DepartmentEntity>
+  found: no arguments
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/event/DivisionEventHandler.java:[75,15] cannot find symbol
+  symbol:   method setDivisionId(java.util.UUID)
+  location: variable entity of type com.harbormaster.entity.DivisionEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/event/DivisionEventHandler.java:[80,64] incompatible types: boolean cannot be converted to java.util.List<com.harbormaster.entity.DivisionEntity>
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[53,9] cannot assign a value to final variable queryGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[54,9] cannot assign a value to final variable commandGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[82,24] cannot find symbol
+  symbol:   method setCompanyId(java.util.UUID)
+  location: variable command of type com.harbormaster.api.CreateCompanyCommand
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[87,33] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[119,33] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[148,48] constructor DeleteCompanyCommand in class com.harbormaster.api.DeleteCompanyCommand cannot be applied to given types;
+  required: java.lang.String
+  found: java.util.UUID,java.lang.String,java.util.Date,double,java.util.List<com.harbormaster.entity.DivisionEntity>,java.util.List<com.harbormaster.entity.EmployeeEntity>,com.harbormaster.valueobject.Address,com.harbormaster.valueobject.Address,com.harbormaster.enumerator.CompanyType,com.harbormaster.enumerator.Industry
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[150,33] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[159,90] cannot find symbol
+  symbol:   variable key
+  location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[187,33] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[192,101] cannot find symbol
+  symbol:   method getImputId()
+  location: variable summary of type com.harbormaster.api.CompanyFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[192,68] incompatible types: com.harbormaster.api.LoadDepartmentFilter cannot be converted to com.harbormaster.api.LoadCompanyFilter
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[195,80] cannot find symbol
+  symbol:   method getInputId()
+  location: variable summary of type com.harbormaster.api.CompanyFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[217,42] incompatible types: no instance(s) of type variable(s) R,Q,R exist so that java.util.concurrent.CompletableFuture<R> conforms to java.util.List<com.harbormaster.entity.CompanyEntity>
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[254,69] incompatible types: void cannot be converted to com.harbormaster.entity.DivisionEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[268,72] cannot find symbol
+  symbol:   class DivisionFetchSummary
+  location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[307,21] cannot find symbol
+  symbol:   class Employee
+  location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[315,47] incompatible types: java.util.UUID cannot be converted to com.harbormaster.entity.DivisionEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[328,63] incompatible types: void cannot be converted to com.harbormaster.entity.CompanyEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[360,69] incompatible types: void cannot be converted to com.harbormaster.entity.EmployeeEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[374,72] cannot find symbol
+  symbol:   class EmployeeFetchSummary
+  location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[413,21] cannot find symbol
+  symbol:   class Employee
+  location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[421,47] incompatible types: java.util.UUID cannot be converted to com.harbormaster.entity.EmployeeEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[434,63] incompatible types: void cannot be converted to com.harbormaster.entity.CompanyEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[451,84] incompatible types: java.util.UUID cannot be converted to com.harbormaster.api.CompanyFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[53,9] cannot assign a value to final variable queryGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[54,9] cannot assign a value to final variable commandGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[82,24] cannot find symbol
+  symbol:   method setDepartmentId(java.util.UUID)
+  location: variable command of type com.harbormaster.api.CreateDepartmentCommand
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[87,36] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[119,36] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[148,51] constructor DeleteDepartmentCommand in class com.harbormaster.api.DeleteDepartmentCommand cannot be applied to given types;
+  required: java.lang.String
+  found: java.util.UUID,java.lang.String,com.harbormaster.entity.EmployeeEntity,java.util.List<com.harbormaster.entity.EmployeeEntity>
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[150,36] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[159,93] cannot find symbol
+  symbol:   variable key
+  location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[187,36] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[192,107] cannot find symbol
+  symbol:   method getImputId()
+  location: variable summary of type com.harbormaster.api.DepartmentFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[192,48] incompatible types: no instance(s) of type variable(s) R,Q,R exist so that java.util.concurrent.CompletableFuture<R> conforms to com.harbormaster.entity.DepartmentEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[195,83] cannot find symbol
+  symbol:   method getInputId()
+  location: variable summary of type com.harbormaster.api.DepartmentFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[217,42] incompatible types: no instance(s) of type variable(s) R,Q,R exist so that java.util.concurrent.CompletableFuture<R> conforms to java.util.List<com.harbormaster.entity.DepartmentEntity>
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[238,89] cannot find symbol
+  symbol:   variable Department
+  location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[254,64] cannot find symbol
+  symbol:   class EmployeeFetchSummary
+  location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[262,27] cannot find symbol
+  symbol:   method setHead(com.harbormaster.entity.EmployeeEntity)
+  location: variable department of type com.harbormaster.entity.DepartmentEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[288,35] cannot find symbol
+  symbol:   method setHead(<nulltype>)
+  location: variable department of type com.harbormaster.entity.DepartmentEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[305,55] incompatible types: java.util.UUID cannot be converted to com.harbormaster.entity.EmployeeEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[339,69] incompatible types: void cannot be converted to com.harbormaster.entity.EmployeeEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[353,72] cannot find symbol
+  symbol:   class EmployeeFetchSummary
+  location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[392,21] cannot find symbol
+  symbol:   class Employee
+  location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[400,47] incompatible types: java.util.UUID cannot be converted to com.harbormaster.entity.EmployeeEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[413,69] incompatible types: void cannot be converted to com.harbormaster.entity.DepartmentEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[430,96] incompatible types: java.util.UUID cannot be converted to com.harbormaster.api.DepartmentFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[53,9] cannot assign a value to final variable queryGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[54,9] cannot assign a value to final variable commandGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[82,24] cannot find symbol
+  symbol:   method setDivisionId(java.util.UUID)
+  location: variable command of type com.harbormaster.api.CreateDivisionCommand
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[87,34] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[119,34] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[148,49] constructor DeleteDivisionCommand in class com.harbormaster.api.DeleteDivisionCommand cannot be applied to given types;
+  required: java.lang.String
+  found: java.util.UUID,java.lang.String,com.harbormaster.entity.EmployeeEntity,java.util.List<com.harbormaster.entity.DepartmentEntity>
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[150,34] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[159,91] cannot find symbol
+  symbol:   variable key
+  location: class com.harbormaster.delegate.DivisionBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[187,34] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[192,103] cannot find symbol
+  symbol:   method getImputId()
+  location: variable summary of type com.harbormaster.api.DivisionFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[192,70] incompatible types: com.harbormaster.api.LoadDepartmentFilter cannot be converted to com.harbormaster.api.LoadDivisionFilter
+[INFO] 100 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  22.368 s
+[INFO] Finished at: 2021-10-28T14:16:52-05:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile (java-compile) on project axon-demo: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[18,8] class SnapshotApplicationConfiguration is public, should be declared in a file named SnapshotApplicationConfiguration.java
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[212,17] cannot find symbol
+[ERROR]   symbol:   class Company
+[ERROR]   location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[460,13] cannot find symbol
+[ERROR]   symbol:   class ApplicationContext
+[ERROR]   location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[212,17] cannot find symbol
+[ERROR]   symbol:   class Department
+[ERROR]   location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[439,13] cannot find symbol
+[ERROR]   symbol:   class ApplicationContext
+[ERROR]   location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[212,17] cannot find symbol
+[ERROR]   symbol:   class Division
+[ERROR]   location: class com.harbormaster.delegate.DivisionBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[439,13] cannot find symbol
+[ERROR]   symbol:   class ApplicationContext
+[ERROR]   location: class com.harbormaster.delegate.DivisionBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/EmployeeAggregate.java:[53,13] cannot find symbol
+[ERROR]   symbol:   class EmployeeCreateEvent
+[ERROR]   location: class com.harbormaster.aggregate.EmployeeAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/EmployeeAggregate.java:[60,13] cannot find symbol
+[ERROR]   symbol:   class EmployeeUpdateEvent
+[ERROR]   location: class com.harbormaster.aggregate.EmployeeAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/CompanyAggregate.java:[59,13] cannot find symbol
+[ERROR]   symbol:   class CompanyCreateEvent
+[ERROR]   location: class com.harbormaster.aggregate.CompanyAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/CompanyAggregate.java:[68,13] cannot find symbol
+[ERROR]   symbol:   class CompanyUpdateEvent
+[ERROR]   location: class com.harbormaster.aggregate.CompanyAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/EmployeeBusinessDelegate.java:[212,17] cannot find symbol
+[ERROR]   symbol:   class Employee
+[ERROR]   location: class com.harbormaster.delegate.EmployeeBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/EmployeeBusinessDelegate.java:[248,13] cannot find symbol
+[ERROR]   symbol:   class ApplicationContext
+[ERROR]   location: class com.harbormaster.delegate.EmployeeBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/DivisionAggregate.java:[53,13] cannot find symbol
+[ERROR]   symbol:   class DivisionCreateEvent
+[ERROR]   location: class com.harbormaster.aggregate.DivisionAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/DivisionAggregate.java:[58,13] cannot find symbol
+[ERROR]   symbol:   class DivisionUpdateEvent
+[ERROR]   location: class com.harbormaster.aggregate.DivisionAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/DepartmentAggregate.java:[53,13] cannot find symbol
+[ERROR]   symbol:   class DepartmentCreateEvent
+[ERROR]   location: class com.harbormaster.aggregate.DepartmentAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/aggregate/DepartmentAggregate.java:[58,13] cannot find symbol
+[ERROR]   symbol:   class DepartmentUpdateEvent
+[ERROR]   location: class com.harbormaster.aggregate.DepartmentAggregate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[17,2] cannot find symbol
+[ERROR]   symbol: class Configuration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[26,9] cannot find symbol
+[ERROR]   symbol:   class Snapshotter
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[25,12] cannot find symbol
+[ERROR]   symbol:   class SnapshotTriggerDefinition
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[33,9] cannot find symbol
+[ERROR]   symbol:   class Snapshotter
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[32,12] cannot find symbol
+[ERROR]   symbol:   class SnapshotTriggerDefinition
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[40,9] cannot find symbol
+[ERROR]   symbol:   class Snapshotter
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[39,12] cannot find symbol
+[ERROR]   symbol:   class SnapshotTriggerDefinition
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[47,9] cannot find symbol
+[ERROR]   symbol:   class Snapshotter
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[46,12] cannot find symbol
+[ERROR]   symbol:   class SnapshotTriggerDefinition
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/controller/DivisionRestController.java:[198,110] cannot find symbol
+[ERROR]   symbol:   class Department
+[ERROR]   location: class com.harbormaster.controller.DivisionRestController
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/controller/CompanyRestController.java:[166,110] cannot find symbol
+[ERROR]   symbol:   class Division
+[ERROR]   location: class com.harbormaster.controller.CompanyRestController
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/controller/CompanyRestController.java:[200,110] cannot find symbol
+[ERROR]   symbol:   class Employee
+[ERROR]   location: class com.harbormaster.controller.CompanyRestController
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/controller/DepartmentRestController.java:[198,110] cannot find symbol
+[ERROR]   symbol:   class Employee
+[ERROR]   location: class com.harbormaster.controller.DepartmentRestController
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[27,10] cannot find symbol
+[ERROR]   symbol:   class Value
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[24,10] cannot find symbol
+[ERROR]   symbol:   class Bean
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[34,10] cannot find symbol
+[ERROR]   symbol:   class Value
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[31,10] cannot find symbol
+[ERROR]   symbol:   class Bean
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[41,10] cannot find symbol
+[ERROR]   symbol:   class Value
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[38,10] cannot find symbol
+[ERROR]   symbol:   class Bean
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[48,10] cannot find symbol
+[ERROR]   symbol:   class Value
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/config/SnapshotConfig.java:[45,10] cannot find symbol
+[ERROR]   symbol:   class Bean
+[ERROR]   location: class com.harbormaster.config.SnapshotApplicationConfiguration
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/event/DivisionEventHandler.java:[70,33] constructor DivisionEntity in class com.harbormaster.entity.DivisionEntity cannot be applied to given types;
+[ERROR]   required: java.util.UUID,java.lang.String,com.harbormaster.entity.EmployeeEntity,java.util.List<com.harbormaster.entity.DepartmentEntity>
+[ERROR]   found: no arguments
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/event/DivisionEventHandler.java:[75,15] cannot find symbol
+[ERROR]   symbol:   method setDivisionId(java.util.UUID)
+[ERROR]   location: variable entity of type com.harbormaster.entity.DivisionEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/event/DivisionEventHandler.java:[80,64] incompatible types: boolean cannot be converted to java.util.List<com.harbormaster.entity.DivisionEntity>
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[53,9] cannot assign a value to final variable queryGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[54,9] cannot assign a value to final variable commandGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[82,24] cannot find symbol
+[ERROR]   symbol:   method setCompanyId(java.util.UUID)
+[ERROR]   location: variable command of type com.harbormaster.api.CreateCompanyCommand
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[87,33] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[119,33] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[148,48] constructor DeleteCompanyCommand in class com.harbormaster.api.DeleteCompanyCommand cannot be applied to given types;
+[ERROR]   required: java.lang.String
+[ERROR]   found: java.util.UUID,java.lang.String,java.util.Date,double,java.util.List<com.harbormaster.entity.DivisionEntity>,java.util.List<com.harbormaster.entity.EmployeeEntity>,com.harbormaster.valueobject.Address,com.harbormaster.valueobject.Address,com.harbormaster.enumerator.CompanyType,com.harbormaster.enumerator.Industry
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[150,33] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[159,90] cannot find symbol
+[ERROR]   symbol:   variable key
+[ERROR]   location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[187,33] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[192,101] cannot find symbol
+[ERROR]   symbol:   method getImputId()
+[ERROR]   location: variable summary of type com.harbormaster.api.CompanyFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[192,68] incompatible types: com.harbormaster.api.LoadDepartmentFilter cannot be converted to com.harbormaster.api.LoadCompanyFilter
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[195,80] cannot find symbol
+[ERROR]   symbol:   method getInputId()
+[ERROR]   location: variable summary of type com.harbormaster.api.CompanyFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[217,42] incompatible types: no instance(s) of type variable(s) R,Q,R exist so that java.util.concurrent.CompletableFuture<R> conforms to java.util.List<com.harbormaster.entity.CompanyEntity>
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[254,69] incompatible types: void cannot be converted to com.harbormaster.entity.DivisionEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[268,72] cannot find symbol
+[ERROR]   symbol:   class DivisionFetchSummary
+[ERROR]   location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[307,21] cannot find symbol
+[ERROR]   symbol:   class Employee
+[ERROR]   location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[315,47] incompatible types: java.util.UUID cannot be converted to com.harbormaster.entity.DivisionEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[328,63] incompatible types: void cannot be converted to com.harbormaster.entity.CompanyEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[360,69] incompatible types: void cannot be converted to com.harbormaster.entity.EmployeeEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[374,72] cannot find symbol
+[ERROR]   symbol:   class EmployeeFetchSummary
+[ERROR]   location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[413,21] cannot find symbol
+[ERROR]   symbol:   class Employee
+[ERROR]   location: class com.harbormaster.delegate.CompanyBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[421,47] incompatible types: java.util.UUID cannot be converted to com.harbormaster.entity.EmployeeEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[434,63] incompatible types: void cannot be converted to com.harbormaster.entity.CompanyEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/CompanyBusinessDelegate.java:[451,84] incompatible types: java.util.UUID cannot be converted to com.harbormaster.api.CompanyFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[53,9] cannot assign a value to final variable queryGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[54,9] cannot assign a value to final variable commandGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[82,24] cannot find symbol
+[ERROR]   symbol:   method setDepartmentId(java.util.UUID)
+[ERROR]   location: variable command of type com.harbormaster.api.CreateDepartmentCommand
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[87,36] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[119,36] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[148,51] constructor DeleteDepartmentCommand in class com.harbormaster.api.DeleteDepartmentCommand cannot be applied to given types;
+[ERROR]   required: java.lang.String
+[ERROR]   found: java.util.UUID,java.lang.String,com.harbormaster.entity.EmployeeEntity,java.util.List<com.harbormaster.entity.EmployeeEntity>
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[150,36] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[159,93] cannot find symbol
+[ERROR]   symbol:   variable key
+[ERROR]   location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[187,36] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[192,107] cannot find symbol
+[ERROR]   symbol:   method getImputId()
+[ERROR]   location: variable summary of type com.harbormaster.api.DepartmentFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[192,48] incompatible types: no instance(s) of type variable(s) R,Q,R exist so that java.util.concurrent.CompletableFuture<R> conforms to com.harbormaster.entity.DepartmentEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[195,83] cannot find symbol
+[ERROR]   symbol:   method getInputId()
+[ERROR]   location: variable summary of type com.harbormaster.api.DepartmentFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[217,42] incompatible types: no instance(s) of type variable(s) R,Q,R exist so that java.util.concurrent.CompletableFuture<R> conforms to java.util.List<com.harbormaster.entity.DepartmentEntity>
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[238,89] cannot find symbol
+[ERROR]   symbol:   variable Department
+[ERROR]   location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[254,64] cannot find symbol
+[ERROR]   symbol:   class EmployeeFetchSummary
+[ERROR]   location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[262,27] cannot find symbol
+[ERROR]   symbol:   method setHead(com.harbormaster.entity.EmployeeEntity)
+[ERROR]   location: variable department of type com.harbormaster.entity.DepartmentEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[288,35] cannot find symbol
+[ERROR]   symbol:   method setHead(<nulltype>)
+[ERROR]   location: variable department of type com.harbormaster.entity.DepartmentEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[305,55] incompatible types: java.util.UUID cannot be converted to com.harbormaster.entity.EmployeeEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[339,69] incompatible types: void cannot be converted to com.harbormaster.entity.EmployeeEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[353,72] cannot find symbol
+[ERROR]   symbol:   class EmployeeFetchSummary
+[ERROR]   location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[392,21] cannot find symbol
+[ERROR]   symbol:   class Employee
+[ERROR]   location: class com.harbormaster.delegate.DepartmentBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[400,47] incompatible types: java.util.UUID cannot be converted to com.harbormaster.entity.EmployeeEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[413,69] incompatible types: void cannot be converted to com.harbormaster.entity.DepartmentEntity
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DepartmentBusinessDelegate.java:[430,96] incompatible types: java.util.UUID cannot be converted to com.harbormaster.api.DepartmentFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[53,9] cannot assign a value to final variable queryGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[54,9] cannot assign a value to final variable commandGateway
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[82,24] cannot find symbol
+[ERROR]   symbol:   method setDivisionId(java.util.UUID)
+[ERROR]   location: variable command of type com.harbormaster.api.CreateDivisionCommand
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[87,34] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[119,34] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[148,49] constructor DeleteDivisionCommand in class com.harbormaster.api.DeleteDivisionCommand cannot be applied to given types;
+[ERROR]   required: java.lang.String
+[ERROR]   found: java.util.UUID,java.lang.String,com.harbormaster.entity.EmployeeEntity,java.util.List<com.harbormaster.entity.DepartmentEntity>
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[150,34] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[159,91] cannot find symbol
+[ERROR]   symbol:   variable key
+[ERROR]   location: class com.harbormaster.delegate.DivisionBusinessDelegate
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[187,34] non-static method getInstance() cannot be referenced from a static context
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[192,103] cannot find symbol
+[ERROR]   symbol:   method getImputId()
+[ERROR]   location: variable summary of type com.harbormaster.api.DivisionFetchOneSummary
+[ERROR] /C:/Users/srand/realmethods/tools/apache/apache-tomcat-9.0.14/webapps/harbormaster/.project.creation.output/project_gen_Axon_ns2ff37b/src/main/java/com/harbormaster/delegate/DivisionBusinessDelegate.java:[192,70] incompatible types: com.harbormaster.api.LoadDepartmentFilter cannot be converted to com.harbormaster.api.LoadDivisionFilter
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
