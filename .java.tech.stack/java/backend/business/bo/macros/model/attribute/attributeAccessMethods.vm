@@ -13,9 +13,9 @@ $name					String
 ## first, create the get method        
    /**
 #if( $forVO == true )
-	#set( $type = $attribute.getType() )
+#set( $type = $attribute.getType() )
 #else
-	#set( $type = "String" )
+#set( $type = "String" )
 #end## forVO == true
 #if( $forVO == true )
     * Returns the $attribute.getName()
@@ -24,7 +24,7 @@ $name					String
 #end  ## forVO == true        
 #set( $return = "* @return " )
 #if( $forVO == true )
-	#set( $return = "${return}${type}" )
+#set( $return = "${return}${type}" )
 #else
 	#set( $return = "${return}String" )
 #end## forVO == true
@@ -32,15 +32,15 @@ $name					String
 	*/                    		    	    	    
 #set( $exception = "" )			    
 #if( $throwRemoteException == true )
-	#set( $exception = " throws java.rmi.RemoteException" )
+#set( $exception = " throws java.rmi.RemoteException" )
 #end	    
 	public $type get${asArgCaps}() $exception	    	   
 	{
 #set( $return = "return this." )
 #if( $forVO == true )
-	#set( $return = "${return}${asArgument}" )
+#set( $return = "${return}${asArgument}" )
 #else
-	#set( $return = "${return}${asArgCaps}" )
+#set( $return = "${return}${asArgCaps}" )
 #end## forVO == true
 		$return;		
 	}
@@ -48,11 +48,11 @@ $name					String
 ## lastly, create the set method for a non-final attribute
 #if( $attribute.isFinal() == false )        
 	/**
-    #if( $forVO == true )
-		#set( $var = $asArgument )
-    #else
-		#set( $var = $asArgCaps )
-	#end## $forVO == true
+#if( $forVO == true )
+#set( $var = $asArgument )
+#else
+#set( $var = $asArgCaps )
+#end## $forVO == true
       	* Assigns the $var
     	* @param $asArgument	$type
     	*/
@@ -79,16 +79,16 @@ $name					String
 #set( $throwsDecl = "throws java.rmi.RemoteException" )
 #set( $formattedArg = $attribute.getArgument() )        
 #if( $forVO == true )
-	#set( $type = $attribute.getType() )
+#set( $type = $attribute.getType() )
 #else
-	#set( $type = "String" )
+#set( $type = "String" )
 #end## forVO == true
 #if( $forVO == false )        
-	#set( $name = $Utils.capitalizeFirstLetter( $arg ) )
-	#set( $formattedArg = $Utils.capitalizeFirstLetter( $arg ) )
+#set( $name = $Utils.capitalizeFirstLetter( $arg ) )
+#set( $formattedArg = $Utils.capitalizeFirstLetter( $arg ) )
 #end## forVO == false
 #if( $throwRemoteException == false )
-	#set( $throwsDecl = "" )
+#set( $throwsDecl = "" )
 #end## $throwRemoteException == false
    /**
     * Returns the $name
