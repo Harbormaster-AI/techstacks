@@ -114,11 +114,12 @@ project:
 # Axon Framework properties
 #
         axon-framework:
-           server-port:              8085
+           server-port:              8011
            version:                  4.5.4
            axonserver-token:         
            axonserver-context:       context1
-           spring-datasource-url:    jdbc:h2:~axondemo;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
+           jpa-hibernate-dialect:    org.hibernate.dialect.H2Dialect
+           datasource-url:           jdbc:h2:~/axondemo;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
            use-axon-server:          true
            axonserver-servers:       localhost
            enable-monitoring:        true
