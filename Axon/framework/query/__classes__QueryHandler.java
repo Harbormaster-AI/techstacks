@@ -29,12 +29,7 @@ import java.util.stream.Collectors;
 @Component
 @ProcessingGroup("${lowercaseClassName}")
 public class ${className}QueryHandler {
-	
-	// default constructor
-	protected ${className}QueryHandler() {
-	}
-	
-	
+		
 	public ${className}QueryHandler(${className}EntityRepository ${lowercaseClassName}EntityRepository) {
         this.${lowercaseClassName}EntityRepository = ${lowercaseClassName}EntityRepository;
     }	
