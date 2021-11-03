@@ -10,6 +10,7 @@ import javax.persistence.*
 #set( $includeAssociations = true )
 #set( $includeId = true )
 #set( $forAggregate = true )
+#set( $forEntity = false )
 //-----------------------------------------------------------
 // Command definitions
 //-----------------------------------------------------------
@@ -21,7 +22,7 @@ import javax.persistence.*
 // $className Commands
 
 data class Create${className}Command(
-#outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate )
+#outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
 data class Update${className}Command(
