@@ -3,12 +3,14 @@
 #set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
 package ${aib.getRootPackageName(true)}.repository;
 
-import ${aib.getRootPackageName(true)}.entity.*;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import ${aib.getRootPackageName(true)}.entity.*;
+
 @Repository
-public interface ${className}EntityRepository extends JpaRepository<${className}Entity, String> {
+public interface ${className}Repository extends JpaRepository<${className}, UUID> {
 
 }
