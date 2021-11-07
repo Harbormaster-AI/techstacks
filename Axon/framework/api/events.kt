@@ -7,7 +7,7 @@ import java.time.Instant
 import java.util.*
 import javax.persistence.*
 
-#set( $imports = [ "enumerator", "entity", "valueobject" ] )
+#set( $imports = [ "entity" ] )
 #importStatements( $imports )
 
 #set( $includeAssociations = true )

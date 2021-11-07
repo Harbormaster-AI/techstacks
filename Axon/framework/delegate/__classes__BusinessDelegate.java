@@ -71,54 +71,52 @@ extends BaseBusinessDelegate {
  
    /**
     * Creates the provided BO.
-    * @param		${className}Entity entity
+    * @param		${className} entity
     * @exception    ProcessingException
     * @exception	IllegalArgumentException
+    * @return		${className}
     */
-	public void create${className}( ${className}Entity entity )
+	public ${className} create${className}( ${className} entity )
     throws ProcessingException, IllegalArgumentException {
-		final String msgPrefix = "${className}BusinessDelegate:create${className} - ";
-        
-        try {
-        	Create${className}Command command = new Create${className}Command(${argsAsInput});
-        	command.set${className}Id( UUID.randomUUID() );
-        	
-        	// --------------------------------------
-        	// validate the create command
-        	// --------------------------------------    	
-    		${className}Validator.getInstance().validateCreation( command );
-    		
+
+		try {
+
+			// --------------------------------------
+        	// assign identity now
+        	// -------------------------------------- 
+			entity.set${className}Id( UUID.randomUUID() );
+
+			Create${className}Command command = new Create${className}Command(${argsAsInput});
+        	        	
     		// ---------------------------------------
     		// issue the create command
     		// ---------------------------------------
-    		commandGateway.sendAndWait( command );
+        	commandGateway.sendAndWait( command );
+        	
         }
         catch (Exception exc) {
-            final String errMsg = "${className}BusinessDelegate:create${className}() - Unable to create ${className}" + exc;
+            final String errMsg = "Unable to create ${className} - " + exc;
             LOGGER.warning( errMsg );
             throw new ProcessingException( errMsg, exc );
         }
         finally {
         }        
+        
+        return entity;
     }
 
    /**
     * Saves the underlying BO.
-    * @param		entity 	${className}Entity
+    * @param		entity 	${className}
     * @exception    ProcessingException
     * @exception  	IllegalArgumentException
+    * @return		${className}
     */
-    public void update${className}( ${className}Entity entity ) 
+    public void update${className}( ${className} entity ) 
     throws ProcessingException, IllegalArgumentException {
-    	final String msgPrefix = "${className}BusinessDelegate:save${className} - ";
-
+    	
     	try {       
     		Update${className}Command command = new Update${className}Command(${argsAsInput});
-    		
-        	// --------------------------------------
-        	// validate the update command
-        	// --------------------------------------    	
-        	${className}Validator.getInstance().validateUpdate( command );                
 
         	// --------------------------------------
         	// issue the update command
@@ -127,7 +125,7 @@ extends BaseBusinessDelegate {
 
     	}
         catch (Exception exc) {
-            final String errMsg = "${className}BusinessDelegate:save${className}() - Unable to save ${className}" + exc;
+            final String errMsg = "Unable to save ${className} - " + exc;
             LOGGER.warning( errMsg );
             throw new ProcessingException( errMsg, exc );
         }
@@ -136,20 +134,14 @@ extends BaseBusinessDelegate {
    
    /**
     * Deletes the associatied value object
-    * @param		${className}Entity	entity 
+    * @param		${className}	entity 
     * @exception 	ProcessingException
     */
-    public void delete( ${className}Entity entity ) 
+    public void delete( ${className} entity ) 
     throws ProcessingException, IllegalArgumentException {	
-    	final String msgPrefix = "${className}BusinessDelegate:save${className} - ";
     	
         try {  
-        	// --------------------------------------
-        	// validate the deletion command
-        	// --------------------------------------    	
         	Delete${className}Command command = new Delete${className}Command( entity.get${className}Id() );
-
-        	${className}Validator.getInstance().validateDelete( command ); 
 
         	// --------------------------------------
         	// issue the update command
@@ -158,7 +150,7 @@ extends BaseBusinessDelegate {
 
         }
         catch (Exception exc) {
-            final String errMsg = msgPrefix + "Unable to delete ${className} using Id = "  + entity.get${className}Id();
+            final String errMsg = "Unable to delete ${className} using Id = "  + entity.get${className}Id();
             LOGGER.warning( errMsg );
             throw new ProcessingException( errMsg, exc );
         }
@@ -173,14 +165,13 @@ extends BaseBusinessDelegate {
      * @exception ProcessingException - Thrown if processing any related problems
      * @exception IllegalArgumentException 
      */
-    public ${className}Entity get${className}( ${className}FetchOneSummary summary ) 
+    public ${className} get${className}( ${className}FetchOneSummary summary ) 
     throws ProcessingException, IllegalArgumentException {
-    	final String msgPrefix = "${className}BusinessDelegate:get${className} - ";
     	
     	if( summary == null )
     		throw new IllegalArgumentException( "${className}FetchOneSummary arg cannot be null" );
     	
-    	${className}Entity $lowercaseClassName = null;
+    	${className} entity = null;
     	
         try {
         	// --------------------------------------
@@ -191,9 +182,9 @@ extends BaseBusinessDelegate {
         	// --------------------------------------
         	// use queryGateway to send request to Find a $className
         	// --------------------------------------
-        	CompletableFuture<${className}Entity> futureEntity = queryGateway.query(new Find${className}Query( new Load${className}Filter( summary.get${className}Id() ) ), ResponseTypes.instanceOf(${className}Entity.class));
+        	CompletableFuture<${className}> futureEntity = queryGateway.query(new Find${className}Query( new Load${className}Filter( summary.get${className}Id() ) ), ResponseTypes.instanceOf(${className}.class));
         	
-        	$lowercaseClassName = futureEntity.get();
+        	entity = futureEntity.get();
         }
         catch( Exception exc ) {
             final String errMsg = "Unable to locate ${className} with id " + summary.get${className}Id();
@@ -203,7 +194,7 @@ extends BaseBusinessDelegate {
         finally {
         }        
         
-        return $lowercaseClassName;
+        return entity;
     }
 
 
@@ -213,12 +204,12 @@ extends BaseBusinessDelegate {
      * @return 	List<${className}FetchOneSummary> 
      * @exception ProcessingException Thrown if any problems
      */
-    public List<${className}Entity> getAll${className}() 
+    public List<${className}> getAll${className}() 
     throws ProcessingException {
-        List<${className}Entity> list = null;
+        List<${className}> list = null;
 
         try {
-        	CompletableFuture<List<${className}Entity>> futureList = queryGateway.query(new FindAll${className}Query(), ResponseTypes.multipleInstancesOf(${className}Entity.class));
+        	CompletableFuture<List<${className}>> futureList = queryGateway.query(new FindAll${className}Query(), ResponseTypes.multipleInstancesOf(${className}.class));
         	
         	list = futureList.get();
         }
@@ -244,7 +235,7 @@ extends BaseBusinessDelegate {
      * @param		${className}Enity child
      * @exception	ProcessingException
      */     
-	public void assign${roleName}( UUID ${lowercaseClassName}Id,  ${childType}Entity child ) throws ProcessingException{
+	public void assign${roleName}( UUID ${lowercaseClassName}Id,  ${childType} child ) throws ProcessingException{
 		if ( ${lowercaseClassName}Id == null ) {
 			throw new ProcessingException( "${lowercaseClassName}Id cannot be null" ); 
 		}
@@ -255,17 +246,17 @@ extends BaseBusinessDelegate {
 
 		load( ${lowercaseClassName}Id );
 
-		${className}Entity ${lowercaseClassName} = null; 
+		${className} ${lowercaseClassName} = null; 
 		
 		${childType}BusinessDelegate childDelegate 	= ${childType}BusinessDelegate.get${childType}Instance();
 		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();			
 
 		UUID childId 								= child.get${childType}Id();
 		try {
-			child = childDelegate.get${childType}( new ${childType}FetchOneSummary( childId.toString() ) );
+			child = childDelegate.get${childType}( new ${childType}FetchOneSummary( childId ) );
 		}
         catch( Throwable exc ) {
-			final String msg = "Failed to get ${childType} using id " + childId.toString();
+			final String msg = "Failed to get ${childType} using id " + childId;
 			LOGGER.info( msg );
 			throw new ProcessingException( msg, exc );
         }
@@ -277,7 +268,7 @@ extends BaseBusinessDelegate {
 			parentDelegate.update${className}( ${lowercaseClassName} );
 		}
 		catch( Exception exc ) {
-			final String msg = "Failed saving parent ${className} using Id " + ${lowercaseClassName}Id.toString();
+			final String msg = "Failed saving parent ${className} using Id " + ${lowercaseClassName}Id;
 			LOGGER.info( msg );
 			throw new ProcessingException( msg, exc );
 		}
@@ -316,7 +307,7 @@ extends BaseBusinessDelegate {
 				childDelegate.delete( childDelegate.load(childId) );
 			}
 			catch( Exception exc ) {
-				final String msg = "Failed to delete the child using Id " + childId.toString(); 
+				final String msg = "Failed to delete the child using Id " + childId; 
 				LOGGER.info( msg );
 				throw new ProcessingException( msg, exc );
 			}
@@ -332,11 +323,10 @@ extends BaseBusinessDelegate {
     /**
      * add ${childType} to ${roleName} 
      * @param		UUID ${lowercaseClassName}Id
-     * @param		${childType}Entity child 
+     * @param		${childType} child 
      * @exception	ProcessingException
      */     
-	public void addTo${roleName}(	UUID ${lowercaseClassName}Id, 
-												${childType}Entity child ) throws ProcessingException {
+	public void addTo${roleName}( UUID ${lowercaseClassName}Id, ${childType} child ) throws ProcessingException {
 		if ( child == null ) {
 			throw new ProcessingException( "$roleName entity arg cannot be null" ); 
 		}
@@ -355,7 +345,7 @@ extends BaseBusinessDelegate {
 				childDelegate.create${childType}( child );
 			}
 			catch( Exception exc ) {
-				final String msg = "Failed to get child ${childType} using id " + childId.toString(); 
+				final String msg = "Failed to get child ${childType} using id " + childId; 
 				LOGGER.info( msg );
 				throw new ProcessingException( msg, exc );
 			}
@@ -366,13 +356,13 @@ extends BaseBusinessDelegate {
 		else {
 			try {
 				// find the ${childType}
-				child = childDelegate.get${childType}( new ${childType}FetchOneSummary(childId.toString()) );
+				child = childDelegate.get${childType}( new ${childType}FetchOneSummary(childId) );
 				
 				// add it to the ${roleName}
 				${lowercaseClassName}.get${roleName}().add( child );
 			}
 			catch( Exception exc ) {
-				final String msg = "Failed to add child ${childType} using id " + childId.toString(); 
+				final String msg = "Failed to add child ${childType} using id " + childId; 
 				LOGGER.info( msg );
 				throw new ProcessingException( msg, exc );
 			}
@@ -392,10 +382,10 @@ extends BaseBusinessDelegate {
     /**
      * remove ${childType} from ${roleName}
      * @param		UUID ${lowercaseClassName}Id
-     * @param		${childType}Entity child
+     * @param		${childType} child
      * @exception	ProcessingException
      */     	
-	public void removeFrom${roleName}( 	UUID ${lowercaseClassName}Id, ${childType}Entity child ) throws ProcessingException {		
+	public void removeFrom${roleName}( UUID ${lowercaseClassName}Id, ${childType} child ) throws ProcessingException {		
 		if ( child == null ) {
 			throw new ProcessingException( "$roleName cannot be null" ); 
 		}
@@ -404,18 +394,18 @@ extends BaseBusinessDelegate {
 
 		${childType}BusinessDelegate childDelegate 	= ${childType}BusinessDelegate.get${childType}Instance();
 		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();
-		List<${childType}Entity> children = ${lowercaseClassName}.get${roleName}();
+		Set<${childType}> children = ${lowercaseClassName}.get${roleName}();
 
 		try {
 			// first remove the relevant child from the list
-			// child = childDelegate.get${childType}( new ${childType}FetchOneSummary(childId.toString()));
+			// child = childDelegate.get${childType}( new ${childType}FetchOneSummary(childId));
 			children.remove( child );
 			
 			// then safe to delete the child				
 			childDelegate.delete( child );
 		}
 		catch( Exception exc ) {
-			final String msg = "Failed to delete child using Id " + child.get${childType}Id().toString() ; 
+			final String msg = "Failed to delete child using Id " + child.get${childType}Id(); 
 			LOGGER.info( msg );
 			throw new ProcessingException( msg, exc );
 		}
@@ -440,10 +430,10 @@ extends BaseBusinessDelegate {
 	 * Internal helper method to load the root 
 	 * 
 	 * @param		id	UUID
-	 * @return		${className}Entity
+	 * @return		${className}
 	 */
-	public ${className}Entity load( UUID id ) throws ProcessingException {
-		${lowercaseClassName} = ${className}BusinessDelegate.get${className}Instance().get${className}( new ${className}FetchOneSummary(id.toString() ) );	
+	public ${className} load( UUID id ) throws ProcessingException {
+		${lowercaseClassName} = ${className}BusinessDelegate.get${className}Instance().get${className}( new ${className}FetchOneSummary(id) );	
 		return ${lowercaseClassName};
 	}
 
@@ -452,11 +442,9 @@ extends BaseBusinessDelegate {
 //************************************************************************
 // Attributes
 //************************************************************************
-    @Autowired
-    private ApplicationContext applicationContext;
 	private final QueryGateway queryGateway;
 	private final CommandGateway commandGateway;
-	private ${className}Entity ${lowercaseClassName} 	= null;
-    private static final Logger LOGGER 					= Logger.getLogger(${className}BusinessDelegate.class.getName());
+	private ${className} ${lowercaseClassName} 	= null;
+    private static final Logger LOGGER 			= Logger.getLogger(${className}BusinessDelegate.class.getName());
     
 }

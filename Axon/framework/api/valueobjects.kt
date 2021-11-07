@@ -1,5 +1,5 @@
 #header()
-package ${aib.getRootPackageName(true)}.valueobject;
+package ${aib.getRootPackageName(true)}.api;
 
 import java.util.*
 
@@ -7,9 +7,6 @@ import java.util.*
 #set( $includeId = false )
 #set( $forAggregate = false )
 #set( $forEntity = false )
-
-#set( $imports = [ "enumerator" ] )
-#importStatements( $imports )
 
 // --------------------------------------------
 // Valueobject Definitions

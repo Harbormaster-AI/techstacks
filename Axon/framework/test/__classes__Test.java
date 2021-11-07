@@ -1,4 +1,5 @@
-#header()#set($className=$classObject.getName())
+#header()
+#set($className=$classObject.getName())
 package ${aib.getRootPackageName(true)}.#getTestPackageName();
 
 import java.io.*;
@@ -21,80 +22,80 @@ public class ${classObject.getName()}Test{
         // ------------------------------------
 		// default constructor
 	    // ------------------------------------
-		public ${classObject.getName()}Test() {
-			LOGGER.setUseParentHandlers(false);	// only want to output to the provided LogHandler
+		public ${className}Test() {
 		}
 
 		// test methods
 		@Test
-		/**
-		 * Full Create-Read-Update-Delete of a ${classObject.getName()}, through a
-		 * ${classObject.getName()}Test.
+		/*
+		 * Initiate ${className}Test.
 		 */
-		public void testCRUD() throws Throwable {
+		public void startTest() throws Throwable {
 			try {
 				LOGGER.info("**********************************************************");
-				LOGGER.info("Beginning full test on ${classObject.getName()}Test...");
-
-				testCreate();
-				testRead();
-				testUpdate();
-				testGetAll();
-				testDelete();
-
-				LOGGER.info("Successfully ran a full test on ${classObject.getName()}Test...");
+				LOGGER.info("Beginning test on ${className}...");
 				LOGGER.info("**********************************************************");
-				LOGGER.info("");
+				
+				// ---------------------------------------------
+				// set up query subscriptions
+				// ---------------------------------------------
+				setUpQuerySubscriptions();
+
+				// ---------------------------------------------
+				// jumpstart process
+				// ---------------------------------------------
+				jumpStart();
+				
 			} catch (Throwable e) {
 				throw e;
 			} finally {
-				if (handler != null) {
-					handler.flush();
-					LOGGER.removeHandler(handler);
-				}
 			}
 		}
 
 		/** 
-		 * Tests creating a new ${classObject.getName()}.
+		 * Set up query subscriptions for creation, update, and delete of ${className}
 		 */
-		public void testCreate() throws Throwable {
-			LOGGER.info( "-- Attempting to create a ${classObject.getName()}");
+		public void setupSubscriptions() throws Throwable {
+			LOGGER.info( "\n======== Setting Up Query Subscriptions ======== ");
 
-			StringBuilder msg = new StringBuilder( "-- Failed to create a ${classObject.getName()}" );
-
-			try 
-			{            
-				${classObject.getName()}BusinessDelegate.get${classObject.getName()}Instance().create${classObject.getName()}( getNewBO() );
-				LOGGER.info( "-- Successfully created a ${classObject.getName()} with primary key" + thePrimaryKey );
+			try {            
+				LOGGER.info( "-- Successfully created a ${className} with primary key" + thePrimaryKey );
 			}
-			catch (Exception e) 
-			{
-				LOGGER.warning( unexpectedErrorMsg );
-				LOGGER.warning( msg.toString() + " : " + e );
-
+			catch (Exception e) {
+				LOGGER.warning( e );
 				throw e;
 			}
 		}
 
 		/** 
-		 * Tests reading a ${classObject.getName()}. 
+		 * Set up query subscriptions for creation, update, and delete of ${className}
 		 */
-		public ${classObject.getName()}Entity testRead() throws Throwable {
-			LOGGER.info( "-- Reading a previously created ${classObject.getName()}" );
+		public void jumpStart() throws Throwable {
+			LOGGER.info( "\n======== Setting Up Query Subscriptions ======== ");
+			${className} entity = ${className}BusinessDelegate.get${className}Instance().create${className}( generateNewEntity() );
+			thePrimaryKey = entity.get${className}Id();
+		}
 
-			${classObject.getName()}Entity entity = null;
-			StringBuilder msg = new StringBuilder( "-- Failed to read ${classObject.getName()} with primary key" );
+		
+		/** 
+		 * read a ${className}. 
+		 */
+		public ${className} read() throws Throwable {
+			LOGGER.info( "\n======== READ ======== ");
+			LOGGER.info( "-- Reading a previously created ${className}" );
+
+			${className} entity = null;
+			StringBuilder msg = new StringBuilder( "-- Failed to read ${className} with primary key" );
 			msg.append( thePrimaryKey );
 			
-			${className}FetchOneSummary fetchOneSummary = new ${className}FetchOneSummary( thePrimaryKey.toString() );
+			${className}FetchOneSummary fetchOneSummary = new ${className}FetchOneSummary( thePrimaryKey );
 
 			try {
-				entity = ${classObject.getName()}BusinessDelegate.get${classObject.getName()}Instance().get${classObject.getName()}( fetchOneSummary );
+				entity = ${className}BusinessDelegate.get${className}Instance().get${className}( fetchOneSummary );
 
 				assertNotNull( entity,msg.toString() );
 
-				LOGGER.info( "-- Successfully found ${classObject.getName()} " + entity.toString() );
+				LOGGER.info( "-- Successfully found ${className} " + entity.toString() );
 			}
 			catch ( Throwable e ) {
 				LOGGER.warning( unexpectedErrorMsg );
@@ -107,87 +108,92 @@ public class ${classObject.getName()}Test{
 		}
 
 		/** 
-		 * Tests updating a ${classObject.getName()}.
+		 * updating a ${className}.
 		 */
-		public void testUpdate() throws Throwable {
-			LOGGER.info( "-- Attempting to update a ${classObject.getName()}." );
+		public void update() throws Throwable {
+			LOGGER.info( "\n======== UPDATE ======== ");
+			LOGGER.info( "-- Attempting to update a ${className}." );
 
-			StringBuilder msg = new StringBuilder( "Failed to update a ${classObject.getName()} : " );        
-			${classObject.getName()}Entity entity = null;
+			StringBuilder msg = new StringBuilder( "Failed to update a ${className} : " );        
+			${className} entity = null;
 
 			try {            
 				entity = testRead();
 
 				assertNotNull( entity, msg.toString() );
 
-				LOGGER.info( "-- Now updating the created ${classObject.getName()}." );
+				LOGGER.info( "-- Now updating the created ${className}." );
 
 				// for use later on...
 				thePrimaryKey = entity.get${className}Id();
 
-				${classObject.getName()}BusinessDelegate proxy = ${classObject.getName()}BusinessDelegate.get${classObject.getName()}Instance();            
-				proxy.update${classObject.getName()}( entity );   
+				${className}BusinessDelegate proxy = ${className}BusinessDelegate.get${className}Instance();            
+				proxy.update${className}( entity );   
 
-				LOGGER.info( "-- Successfully saved ${classObject.getName()} - " + entity.toString() );
+				LOGGER.info( "-- Successfully saved ${className} - " + entity.toString() );
 			}
 			catch ( Throwable e ) {
 				LOGGER.warning( unexpectedErrorMsg );
-				LOGGER.warning( msg.toString() + " : primarykey-" + thePrimaryKey + " : entity-" +  entity + " : " + e );
+				LOGGER.warning( msg.toString() + " : primarykey = " + thePrimaryKey + " : entity-" +  entity + " : " + e );
 
 				throw e;
 			}
 		}
 
 		/** 
-		 * Tests deleting a ${classObject.getName()}.
+		 * delete a ${className}.
 		 */
-		public void testDelete() throws Throwable {
-			LOGGER.info( "-- Deleting a previously created ${classObject.getName()}." );
+		public void delete() throws Throwable {
+			LOGGER.info( "\n======== DELETE ======== ");
+			LOGGER.info( "-- Deleting a previously created ${className}." );
 
 			try{
-			    ${className}Entity entity = testRead(); 
-				${classObject.getName()}BusinessDelegate.get${classObject.getName()}Instance().delete( entity );
+			    ${className} entity = testRead(); 
+				${className}BusinessDelegate.get${className}Instance().delete( entity );
 
-				LOGGER.info( "-- Successfully deleted ${classObject.getName()} with primary key " + thePrimaryKey );            
+				LOGGER.info( "-- Successfully deleted ${className} with primary key " + thePrimaryKey );            
 			}
 			catch ( Throwable e ) {
 				LOGGER.warning( unexpectedErrorMsg );
-				LOGGER.warning( "-- Failed to delete ${classObject.getName()} with primary key " + thePrimaryKey );
+				LOGGER.warning( "-- Failed to delete ${className} with primary key " + thePrimaryKey );
 
 				throw e;
 			}
 		}
 
 		/**
-		 * Tests getting all ${classObject.getName()}s.
+		 * get all ${className}s.
 		 */
-		public void testGetAll() throws Throwable {    
-			LOGGER.info( "-- Retrieving Collection of ${classObject.getName()}s:" );
+		public void getAll() throws Throwable {    
+			LOGGER.info( "======== GETALL ======== ");
+			LOGGER.info( "-- Retrieving Collection of ${className}s:" );
 
-			StringBuilder msg = new StringBuilder( "-- Failed to get all ${classObject.getName()} : " );        
-			List<${classObject.getName()}Entity> collection  = null;
+			StringBuilder msg = new StringBuilder( "-- Failed to get all ${className} : " );        
+			List<${className}> collection  = null;
 
 			try {
-				// call the static get method on the ${classObject.getName()}BusinessDelegate
-				collection = ${classObject.getName()}BusinessDelegate.get${classObject.getName()}Instance().getAll${classObject.getName()}();
+				// call the static get method on the ${className}BusinessDelegate
+				collection = ${className}BusinessDelegate.get${className}Instance().getAll${className}();
 
 				if ( collection == null || collection.size() == 0 ) {
 					LOGGER.warning( unexpectedErrorMsg );
-					LOGGER.warning( "-- " + msg.toString() + " Empty collection returned."  );
+					LOGGER.warning( msg.toString() + " Empty collection returned."  );
 				}
 				else {
 					// Now print out the values
-					${classObject.getName()}Entity entity = null;            
-					Iterator<${classObject.getName()}Entity> iter = collection.iterator();
+					${className} entity = null;            
+					Iterator<${className}> iter = collection.iterator();
+					int index = 1;
 
 					while( iter.hasNext() ) {
 						// Retrieve the entity   
 						entity = iter.next();
 
 						assertNotNull( entity,"-- null entity in Collection." );
-						assertNotNull( entity.get${className}Id(), "-- entit in Collection has a null primary key" );        
+						assertNotNull( entity.get${className}Id(), "-- entity in Collection has a null primary key" );        
 
-						LOGGER.info( " - " + entity.toString() );
+						LOGGER.info( " - " + String.valueOf(index) + ". " + entity.toString() );
+						index++;
 					}
 				}
 			}
@@ -199,28 +205,34 @@ public class ${classObject.getName()}Test{
 			}
 		}
 
-		public ${classObject.getName()}Test setHandler(Handler handler) {
-			this.handler = handler;
-			LOGGER.addHandler(handler); // assign so the LOGGER can only output results to the Handler
+		/**
+		 * Assigns a common log handler for each test class in the suite 
+		 * in the event log output needs to go elsewhere
+		 * 
+		 * @param		handler	Handler
+		 * @return		${className}Test
+		 */
+		public ${className}Test setHandler(Handler handler) {
+			if ( handler != null )
+				LOGGER.addHandler(handler); 
 			return this;
 		}
 
 		/**
-		 * Returns a new populated ${classObject.getName()}
+		 * Returns a new populated ${className}
 		 * 
-		 * @return ${classObject.getName()}
+		 * @return ${className}
 		 */
-		protected ${classObject.getName()}Entity getNewBO() {
-			${classObject.getName()}Entity entity = null;
+		protected ${className} generateNewEntity() {
+#set( $args = "#determineDefaultArgs()" )	
+			${className} entity = new ${className}( $args );
 			
 			return( entity );
 		}
 
+		//-----------------------------------------------------
 		// attributes 
-
-		protected UUID thePrimaryKey = null;
-		protected Properties frameworkProperties = null;
-		private final Logger LOGGER 						= Logger.getLogger(${classObject.getName()}Test.class.getName());
-		private Handler handler = null;
-		private String unexpectedErrorMsg = ":::::::::::::: Unexpected Error :::::::::::::::::";
+		//-----------------------------------------------------
+		protected UUID thePrimaryKey 						= null;
+		private final Logger LOGGER 						= Logger.getLogger(${className}Test.class.getName());
 	}

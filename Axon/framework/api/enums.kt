@@ -1,5 +1,5 @@
 #header()
-package ${aib.getRootPackageName(true)}.enumerator;
+package ${aib.getRootPackageName(true)}.api;
 
 // --------------------------------------------
 // enum declarations

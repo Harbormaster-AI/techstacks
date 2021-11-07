@@ -6,19 +6,13 @@
 ##set( $pkExpression = "${lowercaseClassName}.${pk.getName()}" ) 
 package ${aib.getRootPackageName(true)}.#getRestControllerPackageName();
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-#set( $imports = [ "api", "delegate", "entity", "exception", "query" ] )
+#set( $imports = [ "api", "delegate", "entity", "exception", "handler" ] )
 #importStatements( $imports )
 
 /** 
@@ -38,11 +32,11 @@ import java.util.logging.Logger;
 public class ${className}RestController extends $parentController {
 
     /**
-     * Handles create a ${className}Entity.  if not key provided, calls create, otherwise calls save
-     * @param		${className}Entity	${lowercaseClassName}
+     * Handles create a ${className}.  if not key provided, calls create, otherwise calls save
+     * @param		${className}	${lowercaseClassName}
      */
-	@RequestMapping("/create")
-    public void create( @RequestBody ${className}Entity ${lowercaseClassName} ) {
+	@PostMapping("/create")
+    public void create( @RequestBody(required=true) ${className} ${lowercaseClassName} ) {
         try {       
 			${className}BusinessDelegate.get${className}Instance().create${className}( ${lowercaseClassName} );
         }
@@ -52,11 +46,11 @@ public class ${className}RestController extends $parentController {
     }
 
     /**
-     * Handles updating a ${className}Entity.  if not key provided, calls create, otherwise calls save
-     * @param		${className}Entity $lowercaseClassName
+     * Handles updating a ${className}.  if not key provided, calls create, otherwise calls save
+     * @param		${className} $lowercaseClassName
      */
-	@RequestMapping("/update")
-    public void update( @RequestBody ${className}Entity $lowercaseClassName ) {
+	@PutMapping("/update")
+    public void update( @RequestBody(required=true) ${className} $lowercaseClassName ) {
 	    try {                        	        
 			// create the ${className}Business Delegate            
 			${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
@@ -71,20 +65,20 @@ public class ${className}RestController extends $parentController {
 	}
  
     /**
-     * Handles deleting a ${className} BO
-     * @param		{className}Entity entity
+     * Handles deleting a ${className} entity
+     * @param		UUID ${lowercaseClassName}Id
      * @return		boolean
      */
-    @RequestMapping("/delete")    
-    public boolean delete( @RequestBody ${className}Entity $lowercaseClassName ) {                
+    @DeleteMapping("/delete")    
+    public boolean delete( @RequestParam(required=true) UUID ${lowercaseClassName}Id ) {                
         try {
         	${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
 
-        	delegate.delete( $lowercaseClassName );
-    		LOGGER.info( "Successfully deleted ${className} with key " + ${lowercaseClassName}.get${className}Id() );
+        	delegate.delete( load( new ${className}FetchOneSummary( ${lowercaseClassName}Id )) );
+    		LOGGER.info( "Successfully deleted ${className} with key " + ${lowercaseClassName}Id );
         }
         catch( Throwable exc ) {
-        	LOGGER.info( "${className}Controller:delete()" );
+        	LOGGER.info( exc.getMessage() );
         	return false;        	
         }
         
@@ -96,9 +90,9 @@ public class ${className}RestController extends $parentController {
      * @param		summary ${className}FetchOneSummary
      * @return		${className}FetchOneResponse
      */    
-    @RequestMapping("/load")
-    public ${className}Entity load( @RequestBody  ${className}FetchOneSummary summary ) {    	
-    	${className}Entity entity = null;
+    @PostMapping("/load")
+    public ${className} load( @RequestBody(required=true) ${className}FetchOneSummary summary ) {    	
+    	${className} entity = null;
 
     	try {  
     		entity = ${className}BusinessDelegate.get${className}Instance().get${className}( summary );   
@@ -113,11 +107,11 @@ public class ${className}RestController extends $parentController {
 
     /**
      * Handles loading all ${className} business objects
-     * @return		List<${className}>
+     * @return		Set<${className}>
      */
-    @RequestMapping("/")
-    public List<${className}Entity> loadAll() {                
-        List<${className}Entity> ${lowercaseClassName}List = null;
+    @GetMapping("/")
+    public List<${className}> loadAll() {                
+    	List<${className}> ${lowercaseClassName}List = null;
         
     	try {
             // load the ${className}
@@ -143,12 +137,11 @@ public class ${className}RestController extends $parentController {
     /**
      * save ${roleName} on ${className}
      * @param		UUID	${lowercaseClassName}Id
-     * @param		${childType}Entity entity
+     * @param		${childType} entity
      * @param		${className} $lowercaseClassName
      */     
-	@RequestMapping("/assign${roleName}")
-	public void assign${roleName}( 	@RequestParam(value="${pkExpression}", required=true) UUID ${lowercaseClassName}Id, 
-									@RequestBody ${childType}Entity entity ) {
+	@PutMapping("/assign${roleName}")
+	public void assign${roleName}( @RequestParam(required=true) UUID ${lowercaseClassName}Id, @RequestBody ${childType} entity ) {
 		try {
 			${className}BusinessDelegate.get${className}Instance().assign${roleName}( ${lowercaseClassName}Id, entity );   
 		}
@@ -160,10 +153,9 @@ public class ${className}RestController extends $parentController {
     /**
      * unassign ${roleName} on ${className}
      * @param		UUID	${lowercaseClassName}Id
-     * @param		${childType}Entity entity
      */     
-	@RequestMapping("/unAssign${roleName}")
-	public void unAssign${roleName}( @RequestParam(value="${pkExpression}", required=false) UUID ${lowercaseClassName}Id ) {
+	@PutMapping("/unAssign${roleName}")
+	public void unAssign${roleName}( @RequestParam(required=true) UUID ${lowercaseClassName}Id ) {
 		try {
 			${className}BusinessDelegate.get${className}Instance().unAssign${roleName}( ${lowercaseClassName}Id );   
 		}
@@ -181,33 +173,31 @@ public class ${className}RestController extends $parentController {
     /**
      * save ${roleName} on ${className}
      * @param		UUID ${lowercaseClassName}Id
-     * @param		${childType}Entity entity 
+     * @param		${childType} entity 
      */     
-	@RequestMapping("/addTo${roleName}")
-	public void addTo${roleName}( 	@RequestParam(value="${pkExpression}", required=false) UUID ${lowercaseClassName}Id, 
-									@RequestBody ${childType}Entity entity  ) {
+	@PutMapping("/addTo${roleName}")
+	public void addTo${roleName}( @RequestParam(required=true) UUID ${lowercaseClassName}Id, @RequestBody(required=true) ${childType} entity ) {
 		try {
 			${className}BusinessDelegate.get${className}Instance().addTo${roleName}( ${lowercaseClassName}Id, entity );   
 		}
 		catch( Exception exc ) {
-			LOGGER.info( "Failed to add to List $roleName" );
+			LOGGER.info( "Failed to add to Set $roleName" );
 		}
 	}
 
     /**
      * delete ${roleName} on ${className}
      * @param		UUID ${lowercaseClassName}Id
-     * @param		${childType}Entity entity
+     * @param		${childType} entity
      */     	
-	@RequestMapping("/removeFrom${roleName}")
-	public void removeFrom${roleName}( 	@RequestParam(value="${pkExpression}", required=true) UUID ${lowercaseClassName}Id, 
-												@RequestBody ${childType}Entity entity )
+	@PutMapping("/removeFrom${roleName}")
+	public void removeFrom${roleName}( 	@RequestParam(required=true) UUID ${lowercaseClassName}Id, @RequestBody(required=true) ${childType} entity )
 	{		
 		try {
 			${className}BusinessDelegate.get${className}Instance().removeFrom${roleName}( ${lowercaseClassName}Id, entity );
 		}
 		catch( Exception exc ) {
-			LOGGER.info( "Failed to remove from List ${roleName}" );
+			LOGGER.info( "Failed to remove from Set ${roleName}" );
 		}
 	}
 
@@ -225,10 +215,10 @@ public class ${className}RestController extends $parentController {
     /**
      * finder method to ${method.getName()}
      * @param 		$argType $argName
-     * @return		List<${className}>
+     * @return		Set<${className}>
      */     
-	@RequestMapping("/${method.getName()}")
-	public ${returnType} ${method.getName()}( @RequestParam(value="arg", required=true) $argType $argName ) {
+	@GetMapping("/${method.getName()}")
+	public ${returnType} ${method.getName()}( @RequestParam(required=true) $argType $argName ) {
 		$returnType ${lowercaseClassName} = null;
         try {  
             // call the query directly
@@ -251,7 +241,7 @@ public class ${className}RestController extends $parentController {
 //************************************************************************    
 // Attributes
 //************************************************************************
-    protected ${className}Entity $lowercaseClassName = null;
+    protected ${className} $lowercaseClassName = null;
     private static final Logger LOGGER = Logger.getLogger(${className}RestController.class.getName());
     
 }

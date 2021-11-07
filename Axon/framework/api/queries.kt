@@ -20,7 +20,7 @@ import javax.persistence.NamedQuery
 
 // $className Queries
 
-data class Load${className}Filter(val ${pk} : String = "" )
+data class Load${className}Filter(val ${pk} :  UUID? = null )
 
 class Find${className}Query(val filter: Load${className}Filter = Load${className}Filter()) {
     override fun toString(): String = "Load${className}Query"
@@ -30,7 +30,7 @@ class FindAll${className}Query() {
     override fun toString(): String = "LoadAll${className}Query"
 }
 
-data class ${className}FetchOneSummary(@Id var ${pk} : String) {
+data class ${className}FetchOneSummary(@Id var ${pk} : UUID? = null) {
 
 }
 

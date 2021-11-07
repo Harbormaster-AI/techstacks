@@ -4,7 +4,7 @@ package ${aib.getRootPackageName(true)}.entity;
 import java.util.*
 import javax.persistence.*
 
-#set( $imports = [ "enumerator", "valueobject" ] )
+#set( $imports = [ "api" ] )
 #importStatements( $imports )
 
 // --------------------------------------------
@@ -16,7 +16,7 @@ import javax.persistence.*
 #set( $forEntity = true )
 #foreach ( $class in $aib.getClassesToGenerate() )
 @Entity
-data class ${class.getName()}Entity(
+data class ${class.getName()}(
 #outputKotlinArgDeclarations( $class $includeAssociations  $includeId $forAggregate $forEntity )
 )
 

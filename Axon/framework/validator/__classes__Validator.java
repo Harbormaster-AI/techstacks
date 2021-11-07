@@ -26,9 +26,9 @@ public class ${className}Validator {
 	/**
 	 * handles creation validation for a $className
 	 */
-	public void validateCreation( Create${className}Command $lowercaseClassName ) throws Exception {
+	public void validate( Create${className}Command $lowercaseClassName ) throws Exception {
 		Assert.notNull( ${lowercaseClassName}, "Create${className}Command should not be null" );
-		Assert.isNull( ${lowercaseClassName}, "Create${className}Command identifier should be null" );
+		Assert.isNull( ${lowercaseClassName}.get${className}Id(), "Create${className}Command identifier should be null" );
 #set( $includePKs = false )          
 #foreach( $attribute in $classObject.getRequiredDirectAttributes( $includePKs ) )
 #set( $attributeName = $attribute.getName() )
@@ -40,7 +40,7 @@ public class ${className}Validator {
 	/**
 	 * handles update validation for a $className
 	 */
-	public void validateUpdate( Update${className}Command $lowercaseClassName ) throws Exception {
+	public void validate( Update${className}Command $lowercaseClassName ) throws Exception {
 		Assert.notNull( ${lowercaseClassName}, "Update${className}Command should not be null" );
 		Assert.notNull( ${lowercaseClassName}.get${className}Id(), "Update${className}Command identifier should not be null" );
 #foreach( $attribute in $classObject.getRequiredDirectAttributes( $includePKs ) )
@@ -53,7 +53,7 @@ public class ${className}Validator {
 	/**
 	 * handles delete validation for a $className
 	 */
-	public void validateDelete( Delete${className}Command $lowercaseClassName ) throws Exception {
+	public void validate( Delete${className}Command $lowercaseClassName ) throws Exception {
 		Assert.notNull( ${lowercaseClassName}, "Delete${className}Command should not be null" );
 		Assert.notNull( ${lowercaseClassName}.get${className}Id(), "Delete${className}Command identifier should not be null" );
 	}

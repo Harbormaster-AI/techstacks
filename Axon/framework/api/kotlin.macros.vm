@@ -60,15 +60,15 @@
 #set( $type = "${type}" )
 #set( $defaultValue = "${type}()" )
 #else
-#set( $type = "${type}Entity" )
-#set( $defaultValue = "${type}Entity()" )
+#set( $type = "${type}" )
+#set( $defaultValue = "${type}()" )
 #end##if ( $aib.isValueObject( ${attribute.getAssociation().getType()} == true )
 ######################################################################
 ## handle attribute as a multiple association
 ######################################################################
 #else ## attribute is from a multiple assoication
-#set( $type = "List<${attribute.getAssociation().getType()}Entity>" )
-#set( $defaultValue = "kotlin.collections.emptyList()" )
+#set( $type = "Set<${attribute.getAssociation().getType()}>" )
+#set( $defaultValue = "setOf()" )
 #end##if ( $attribution.isFromSingleValueAssociation() == true )
 #end##if ( $attribute.isFromAssociation() == false )
 ${type}? = null#end##macro( determineKotlinType inputType )
@@ -92,6 +92,7 @@ ${type}? = null#end##macro( determineKotlinType inputType )
     ${targetIdentifier}var ${pk}: UUID? = null,
 #end##if ( $includeId == true )
 #foreach( $attribute in $attributes )
+#set( $id = "${Utils.lowercaseFirstLetter( $attribute.getType() )}Id" )
 #set( $isValueObject = $aib.isValueObject( $attribute.getType() ) )
 #set( $isFromEnumeator = $attribute.isFromEnumerator() )
 #set( $isFromAssociation = $attribute.isFromAssociation() )
@@ -108,14 +109,18 @@ ${type}? = null#end##macro( determineKotlinType inputType )
 #set( $var = "${jpa-annotation}${attributeNodes}    var")
 #elseif ( $attribute.isFromSingleValueAssociation() == true )
 #if( $forEntity == true )
-#set( $jpa-annotation = "@OneToOne @JoinColumn(name = ${esc.quote}${id}${esc.quote}, referencedColumnName = ${esc.quote}${id}${esc.quote}) " )
+#set( $jpa-annotation = "@OneToOne(fetch = FetchType.EAGER) @JoinColumn(name = ${esc.quote}${id}${esc.quote}, referencedColumnName = ${esc.quote}${id}${esc.quote}) " )
 #end
-#set( $id = "${Utils.lowercaseFirstLetter( $attribute.getType() )}Id" )
 #set( $var = "${jpa-annotation}var")
 #elseif ( $attribute.isFromMultiValueAssociation() == true )
-#if( $forEntity == true )
-#set( $jpa-annotation = "@ElementCollection " )
-#end
+#if ( $forEntity == true )
+#set( $isClass = $aib.isClassType( $attribute.getType() ) )
+#if ( $isClass == true )
+#set( $jpa-annotation = "@OneToMany(fetch = FetchType.EAGER) @JoinColumn(name = ${esc.quote}${id}${esc.quote}, referencedColumnName = ${esc.quote}${id}${esc.quote}) " )
+#else
+#set( $jpa-annotation = "@ElementCollection (fetch = FetchType.EAGER)" )
+#end##if ( $isClass == true )
+#end##if ( $forEntity == true )
 #set( $var = "${jpa-annotation}var")
 #end##if ( $attribute.isFromEnumerator() == true )
 #set( $kotlinType = "#determineKotlinType( ${attribute} )" )

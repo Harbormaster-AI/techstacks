@@ -4,7 +4,7 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier
 import java.util.*
 import javax.persistence.*
 
-#set( $imports = [ "entity", "enumerator", "valueobject" ] )
+#set( $imports = [ "entity" ] )
 #importStatements( $imports )
 
 #set( $includeAssociations = true )
