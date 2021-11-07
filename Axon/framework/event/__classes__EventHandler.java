@@ -23,32 +23,31 @@ import java.util.stream.Collectors;
  * @author ${aib.getAuthor()}
  *
  */
-@Component
-@ProcessingGroup("${lowercaseClassName}")
+@Component("${lowercaseClassName}-handler")
+@ProcessingGroup("${lowercaseClassName}-processing-group")
 public class ${className}EventHandler {
-		
 	
 	// core constructor
-	${className}EventHandler(${className}EntityRepository ${lowercaseClassName}EntityRepository) {
-        this.${lowercaseClassName}EntityRepository = ${lowercaseClassName}EntityRepository;
+	${className}EventHandler(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }	
+	
 #set( $argName = "event" )
 #set( $argsAsInput = "#determineArgsAsInput( ${classObject} ${argName} )" )
-
     /*
      * @param	event Create${className}Event
      */
     @EventHandler
-    public void on( Created${className}Event event) {
-        ${lowercaseClassName}EntityRepository.save(new ${className}Entity(${argsAsInput}));
+    public void handle( Created${className}Event event) {
+        entityManager.persist(new ${className}(${argsAsInput}));
     }
 
     /*
      * @param	event Update${className}Event
      */
     @EventHandler
-    public void on( Updated${className}Event event) {
-        ${lowercaseClassName}EntityRepository.save(new ${className}Entity(${argsAsInput}));
+    public ${className} handle( Updated${className}Event event) {
+    	entityManager.merge(new ${className}(${argsAsInput}));
     }
     
     /*
@@ -56,7 +55,7 @@ public class ${className}EventHandler {
      */
     @EventHandler
     public void on( Deleted${className}Event event) {
-    	${className}Entity entity = new ${className}Entity();
+    	${className} entity = new ${className}();
    
     	// ------------------------------------------
     	// apply the ${className}Id
@@ -66,12 +65,11 @@ public class ${className}EventHandler {
     	// ------------------------------------------
     	// add to an Iterable and delete
     	// ------------------------------------------
-    	List<${className}Entity> deleteList = new ArrayList<>();
-    	deleteList.add( entity );
-        ${lowercaseClassName}EntityRepository.deleteAllInBatch( deleteList );
+    	entityManager.remove( entity );
     }    
     
     // attributes
-	private final ${className}EntityRepository ${lowercaseClassName}EntityRepository;
+	private final ${className}Repository ${lowercaseClassName}EntityRepository;
+    private static final Logger LOGGER 			= Logger.getLogger(${className}EventHandler.class.getName());
 
 }
