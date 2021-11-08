@@ -18,7 +18,9 @@ import javax.persistence.NamedQuery
 #set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
 #set( $pk = "${lowercaseClassName}Id" )
 
-// $className Queries
+// -----------------------------------------
+// $className Queries 
+// -----------------------------------------
 
 data class Load${className}Filter(val ${pk} :  UUID? = null )
 
@@ -31,10 +33,22 @@ class FindAll${className}Query() {
 }
 
 data class ${className}FetchOneSummary(@Id var ${pk} : UUID? = null) {
-
 }
 
+class FindAll${className}
+data class Find${className}(val ${lowercaseClassName}Id: UUID)
+#set( $includeComposites = false )
+#foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
+#set( $roleName = $singleAssociation.getRoleName() )
+class Find${roleName}For${className}(val ${pk} :  UUID)
+#end##foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
+#foreach( $multiAssociation in $class.getMultipleAssociations() )
+#set( $roleName = $multiAssociation.getRoleName() )
+class Find${roleName}For${className}(val ${pk} :  UUID)
+#end##foreach( $multiAssociation in $class.getMultipleAssociations() )
+
 #end##foreach( $class in $aib.getClassesToGenerate() )
+
 
 #*
 // Query Responses for entities and individually modeled queries
