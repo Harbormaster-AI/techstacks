@@ -4,13 +4,6 @@
 #set( $pk = "${className}Id" )		
 package ${aib.getRootPackageName(true)}.handler;
 
-import org.axonframework.config.ProcessingGroup;
-import org.axonframework.eventhandling.EventHandler;
-import org.axonframework.queryhandling.QueryHandler;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +11,15 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
+import org.axonframework.config.ProcessingGroup;
+import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.queryhandling.QueryHandler;
+import org.axonframework.queryhandling.QueryUpdateEmitter;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 
 #set( $imports = [ "api", "entity", "exception" ] )
 #importStatements( $imports )
@@ -36,19 +38,28 @@ import javax.persistence.Query;
 public class ${className}Handler {
 		
 	// core constructor
-	${className}Handler(EntityManager entityManager) {
+	public ${className}Handler(EntityManager entityManager, QueryUpdateEmitter queryUpdateEmitter ) {
         this.entityManager = entityManager;
+        this.queryUpdateEmitter = queryUpdateEmitter;
     }	
-	
-#set( $argName = "event" )
-#set( $argsAsInput = "#determineArgsAsInput( ${classObject} ${argName} )" )
     /*
      * @param	event Create${className}Event
      */
-    @EventHandler
+    @EventHandler( payloadType=Created${className}Event.class)
     public void handle( Created${className}Event event) {
-	LOGGER.info("handling Created${className}Event - " + event );
-        entityManager.persist(new ${className}(${argsAsInput}));
+	    LOGGER.info("handling Created${className}Event - " + event );
+	    
+	    $className entity = new ${className}();
+#determineArgsAsAssignment( ${classObject} "entity" "event" )        
+    	// ------------------------------------------
+    	// persist a new one
+    	// ------------------------------------------ 
+	    entityManager.persist(entity);
+        
+        // ------------------------------------------
+    	// emit to subscribers that find all
+    	// ------------------------------------------    	
+        emitFindAll${className}( entity );
     }
 
     /*
@@ -57,7 +68,24 @@ public class ${className}Handler {
     @EventHandler
     public void handle( Updated${className}Event event) {
     	LOGGER.info("handling Updated${className}Event - " + event );
-    	entityManager.merge(new ${className}(${argsAsInput}));
+    	
+    	$className entity = new ${className}();
+#determineArgsAsAssignment( ${classObject} "entity" "event" )        
+ 
+    	// ------------------------------------------
+    	// merge with an existing instance
+    	// ------------------------------------------ 
+    	entityManager.merge(entity);
+
+    	// ------------------------------------------
+    	// emit to subscribers that find one
+    	// ------------------------------------------    	
+        emitFind${className}( entity );
+
+    	// ------------------------------------------
+    	// emit to subscribers that find all
+    	// ------------------------------------------    	
+        emitFindAll${className}( entity );
     }
     
     /*
@@ -77,6 +105,12 @@ public class ${className}Handler {
     	// add to an Iterable and delete
     	// ------------------------------------------
     	entityManager.remove( entity );
+
+    	// ------------------------------------------
+    	// emit to subscribers that find all
+    	// ------------------------------------------    	
+        emitFindAll${className}( entity );
+
     }    
 
     /**
@@ -106,8 +140,32 @@ public class ${className}Handler {
     @QueryHandler
     public List<${className}> handle( FindAll${className}Query inputQuery ) throws ProcessingException {
     	LOGGER.info("handling FindAll${className}Query" );
+    	
     	Query query = entityManager.createQuery("SELECT e FROM ${className} e");
         return (List<${className}>) query.getResultList();
+    }
+
+    /**
+     * emit to subscription queries of type Find${className}, 
+     * but only if the id matches
+     * 
+     * @param		entity	${className}
+     */
+    protected void emitFind${className}( ${className} entity ) {
+        queryUpdateEmitter.emit(Find${className}.class,
+                                query -> query.get${className}Id().equals(entity.get${className}Id()),
+                                entity);
+    }
+
+    /**
+     * unconditionally emit to subscription queries of type FindAll${className}
+     * 
+     * @param		entity	${className}
+     */
+    protected void emitFindAll${className}( ${className} entity ) {
+        queryUpdateEmitter.emit(FindAll${className}.class,
+                                query -> true,
+                                entity);
     }
     
 #*    SECTION COMMENTED OUT
@@ -147,6 +205,8 @@ public class ${className}Handler {
     // --------------------------------------------------
 	@Autowired
     private final EntityManager entityManager;
+	@Autowired
+	private final QueryUpdateEmitter queryUpdateEmitter;
     private static final Logger LOGGER 	= Logger.getLogger(${className}Handler.class.getName());
 
 }
