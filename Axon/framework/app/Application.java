@@ -17,7 +17,7 @@ public class Application {
     	ApplicationContext context = SpringApplication.run(Application.class, args);
     	
 		System.out.println( "=================================" );
-		System.out.println( "Checking in ApplicationContext for discovered event/query handler components:\n" );
+		System.out.println( "Checking in ApplicationContext for discovered handler components:\n" );
 #foreach( $class in $aib.getClassesToGenerate() )
 #set( $className = ${class.getName()} )
 #set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
