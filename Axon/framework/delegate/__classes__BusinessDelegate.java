@@ -12,6 +12,7 @@ import java.util.concurrent.*;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.queryhandling.QueryGateway;
+import org.axonframework.queryhandling.QueryUpdateEmitter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -49,8 +50,9 @@ extends BaseBusinessDelegate {
      * Default Constructor 
      */
     public ${classObject.getName()}BusinessDelegate()  {
-    	queryGateway = applicationContext.getBean(QueryGateway.class);
-    	commandGateway = applicationContext.getBean(CommandGateway.class);
+    	queryGateway 		= applicationContext.getBean(QueryGateway.class);
+    	commandGateway 		= applicationContext.getBean(CommandGateway.class);
+    	queryUpdateEmitter  = applicationContext.getBean(QueryUpdateEmitter.class);
 	}
 
 #if ( $classObject.isAbstract() == false )
@@ -81,17 +83,20 @@ extends BaseBusinessDelegate {
 
 		try {
 
+			Create${className}Command command = new Create${className}Command( $argsAsInput );
+			
 			// --------------------------------------
-        	// assign identity now
+        	// assign identity now if none
         	// -------------------------------------- 
-			entity.set${className}Id( UUID.randomUUID() );
+			if ( command.get${className}Id() == null )
+				command.set${className}Id( UUID.randomUUID() );
 
-			Create${className}Command command = new Create${className}Command(${argsAsInput});
+			//Create${className}Command command = new Create${className}Command(${argsAsInput});
         	        	
     		// ---------------------------------------
     		// issue the create command
     		// ---------------------------------------
-        	commandGateway.sendAndWait( command );
+        	entity = commandGateway.sendAndWait( command );
         	
         }
         catch (Exception exc) {
@@ -235,7 +240,7 @@ extends BaseBusinessDelegate {
      * @param		${className}Enity child
      * @exception	ProcessingException
      */     
-	public void assign${roleName}( UUID ${lowercaseClassName}Id,  ${childType} child ) throws ProcessingException{
+	public void assign${roleName}( UUID ${lowercaseClassName}Id,  ${childType} child ) throws ProcessingException {
 		if ( ${lowercaseClassName}Id == null ) {
 			throw new ProcessingException( "${lowercaseClassName}Id cannot be null" ); 
 		}
@@ -244,16 +249,25 @@ extends BaseBusinessDelegate {
 			throw new ProcessingException( "$roleName cannot be null" ); 
 		}
 
+		// --------------------------------------------
+		// load the parent
+		// --------------------------------------------
 		load( ${lowercaseClassName}Id );
 
 		${className} ${lowercaseClassName} = null; 
 		
 		${childType}BusinessDelegate childDelegate 	= ${childType}BusinessDelegate.get${childType}Instance();
 		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();			
-
 		UUID childId 								= child.get${childType}Id();
+		
 		try {
-			child = childDelegate.get${childType}( new ${childType}FetchOneSummary( childId ) );
+	        // --------------------------------------------------------------
+			// if there is a childId it means the child exists, so get it
+	        // --------------------------------------------------------------
+			if ( childId != null )
+				child = childDelegate.get${childType}( new ${childType}FetchOneSummary( childId ) );
+			else // otherwise create it
+				child = childDelegate.create${childType}( child );
 		}
         catch( Throwable exc ) {
 			final String msg = "Failed to get ${childType} using id " + childId;
@@ -264,8 +278,18 @@ extends BaseBusinessDelegate {
 		${lowercaseClassName}.set${roleName}( child );
 	
 		try {
+	        // --------------------------------------------------------------
 			// save it
+	        // --------------------------------------------------------------
 			parentDelegate.update${className}( ${lowercaseClassName} );
+			
+	        // --------------------------------------------------------------
+	        // emit to subscription queries of type Find${roleName}For$className}, 
+	        // but only if the id matches. 
+	        // --------------------------------------------------------------
+	        queryUpdateEmitter.emit(Find${roleName}For${className}.class,
+	                                query -> query.get${className}Id().equals(${lowercaseClassName}Id),
+	                                child);			
 		}
 		catch( Exception exc ) {
 			final String msg = "Failed saving parent ${className} using Id " + ${lowercaseClassName}Id;
@@ -285,15 +309,20 @@ extends BaseBusinessDelegate {
 
 		if ( ${lowercaseClassName}.get${roleName}() != null ) {
 			UUID childId = ${lowercaseClassName}.get${roleName}().get${childType}Id();
-			
+
+	        // --------------------------------------------------------------
 			// null out the parent first so there's no constraint during deletion
+	        // --------------------------------------------------------------
 			${lowercaseClassName}.set${roleName}( null );
 
 			try {
 				${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();
 
+		        // --------------------------------------------------------------
 				// save it
+		        // --------------------------------------------------------------
 				parentDelegate.update${className}( ${lowercaseClassName} );
+						
 			}
 			catch( Exception exc ) {
 				final String msg = "Failed to save ${className}";
@@ -302,9 +331,19 @@ extends BaseBusinessDelegate {
 			}
 			
 			try {
+		        // --------------------------------------------------------------
 				// safe to delete the child			
+		        // --------------------------------------------------------------
 				${childType}BusinessDelegate childDelegate = ${childType}BusinessDelegate.get${childType}Instance();
 				childDelegate.delete( childDelegate.load(childId) );
+				
+		        // --------------------------------------------------------------
+		        // emit to subscription queries of type Find${roleName}For$className}, 
+		        // but only if the id matches. 
+		        // --------------------------------------------------------------
+		        queryUpdateEmitter.emit(Find${roleName}For${className}.class,
+		                                query -> query.get${className}Id().equals(${lowercaseClassName}Id),
+		                                null);	
 			}
 			catch( Exception exc ) {
 				final String msg = "Failed to delete the child using Id " + childId; 
@@ -327,21 +366,29 @@ extends BaseBusinessDelegate {
      * @exception	ProcessingException
      */     
 	public void addTo${roleName}( UUID ${lowercaseClassName}Id, ${childType} child ) throws ProcessingException {
+		
 		if ( child == null ) {
 			throw new ProcessingException( "$roleName entity arg cannot be null" ); 
 		}
 		
+		// -------------------------------------------
+		// load the parent
+		// -------------------------------------------
 		load( ${lowercaseClassName}Id );
 
 		${childType}BusinessDelegate childDelegate 	= ${childType}BusinessDelegate.get${childType}Instance();
 		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();		
 		UUID childId = child.get${childType}Id();
 		
-		// if no child id, then create the child first, otherwise load it for consistency sake then use it
+		// -------------------------------------------
+		// if no child id, then create the child first, 
+		// otherwise load it for consistency sake then use it
+		// -------------------------------------------
 		if ( childId == null  ) {
-			
 			try {
+				// -------------------------------------------
 				// create the ${childType}
+				// -------------------------------------------
 				childDelegate.create${childType}( child );
 			}
 			catch( Exception exc ) {
@@ -349,28 +396,39 @@ extends BaseBusinessDelegate {
 				LOGGER.info( msg );
 				throw new ProcessingException( msg, exc );
 			}
-			
-			// add it to the ${roleName} 
-			${lowercaseClassName}.get${roleName}().add( child );				
 		}
 		else {
 			try {
+				// -------------------------------------------			
 				// find the ${childType}
+				// -------------------------------------------
 				child = childDelegate.get${childType}( new ${childType}FetchOneSummary(childId) );
-				
-				// add it to the ${roleName}
-				${lowercaseClassName}.get${roleName}().add( child );
 			}
 			catch( Exception exc ) {
 				final String msg = "Failed to add child ${childType} using id " + childId; 
 				LOGGER.info( msg );
 				throw new ProcessingException( msg, exc );
 			}
+
+			// -------------------------------------------
+			// add it to the ${roleName}
+			// -------------------------------------------
+			${lowercaseClassName}.get${roleName}().add( child );
 		}
 
 		try {
+			// -------------------------------------------
 			// save the ${className}
+			// -------------------------------------------
 			parentDelegate.update${className}( ${lowercaseClassName} );
+
+			// --------------------------------------------------------------
+	        // emit to subscription queries of type Find${roleName}For$className}, 
+	        // but only if the id matches. 
+	        // --------------------------------------------------------------
+	        queryUpdateEmitter.emit(Find${roleName}For${className}.class,
+	                                query -> query.get${className}Id().equals(${lowercaseClassName}Id),
+	                                child);			
 		}
 		catch( Exception exc ) {
 			final String msg = "Failed saving parent ${className}" ; 
@@ -386,10 +444,14 @@ extends BaseBusinessDelegate {
      * @exception	ProcessingException
      */     	
 	public void removeFrom${roleName}( UUID ${lowercaseClassName}Id, ${childType} child ) throws ProcessingException {		
+		
 		if ( child == null ) {
-			throw new ProcessingException( "$roleName cannot be null" ); 
+			throw new ProcessingException( "$roleName identifier cannot be null" ); 
 		}
 		
+		// --------------------------------------------------------------
+		// load paremt
+		// --------------------------------------------------------------	
 		load( ${lowercaseClassName}Id );
 
 		${childType}BusinessDelegate childDelegate 	= ${childType}BusinessDelegate.get${childType}Instance();
@@ -397,11 +459,15 @@ extends BaseBusinessDelegate {
 		Set<${childType}> children = ${lowercaseClassName}.get${roleName}();
 
 		try {
+			// --------------------------------------------------------------
 			// first remove the relevant child from the list
 			// child = childDelegate.get${childType}( new ${childType}FetchOneSummary(childId));
+			// --------------------------------------------------------------
 			children.remove( child );
 			
+			// --------------------------------------------------------------
 			// then safe to delete the child				
+			// --------------------------------------------------------------
 			childDelegate.delete( child );
 		}
 		catch( Exception exc ) {
@@ -410,12 +476,25 @@ extends BaseBusinessDelegate {
 			throw new ProcessingException( msg, exc );
 		}
 			
+		// --------------------------------------------------------------
 		// assign the modified list of ${childType} back to the ${lowercaseClassName}
+		// --------------------------------------------------------------
 		${lowercaseClassName}.set${roleName}( children );			
 		
+		// --------------------------------------------------------------
 		// save it 
+		// --------------------------------------------------------------
 		try {
 			parentDelegate.update${className}( ${lowercaseClassName} );
+
+			// --------------------------------------------------------------
+	        // emit to subscription queries of type Find${roleName}For$className}, 
+	        // but only if the id matches. 
+	        // --------------------------------------------------------------
+	        queryUpdateEmitter.emit(Find${roleName}For${className}.class,
+	                                query -> query.get${className}Id().equals(${lowercaseClassName}Id),
+	                                null);			
+
 		}
 		catch( Throwable exc ) {
 			final String msg = "Failed to save the ${className}"; 
@@ -444,6 +523,7 @@ extends BaseBusinessDelegate {
 //************************************************************************
 	private final QueryGateway queryGateway;
 	private final CommandGateway commandGateway;
+	private final QueryUpdateEmitter queryUpdateEmitter;
 	private ${className} ${lowercaseClassName} 	= null;
     private static final Logger LOGGER 			= Logger.getLogger(${className}BusinessDelegate.class.getName());
     
