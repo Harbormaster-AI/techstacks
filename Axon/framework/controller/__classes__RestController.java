@@ -6,6 +6,7 @@
 ##set( $pkExpression = "${lowercaseClassName}.${pk.getName()}" ) 
 package ${aib.getRootPackageName(true)}.#getRestControllerPackageName();
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -36,9 +37,13 @@ public class ${className}RestController extends $parentController {
      * @param		${className}	${lowercaseClassName}
      */
 	@PostMapping("/create")
-    public void create( @RequestBody(required=true) ${className} ${lowercaseClassName} ) {
+    public void create( @RequestBody(required=true) Create${className}Command command ) {
         try {       
-			${className}BusinessDelegate.get${className}Instance().create${className}( ${lowercaseClassName} );
+        	$className entity = new $className();
+
+#determineArgsAsAssignment( ${classObject} "entity" "command" )       
+        	
+			${className}BusinessDelegate.get${className}Instance().create${className}( entity );
         }
         catch( Throwable exc ) {
         	LOGGER.info( exc.getMessage() );        	
@@ -50,11 +55,15 @@ public class ${className}RestController extends $parentController {
      * @param		${className} $lowercaseClassName
      */
 	@PutMapping("/update")
-    public void update( @RequestBody(required=true) ${className} $lowercaseClassName ) {
+    public void update( @RequestBody(required=true) Update${className}Command command ) {
 	    try {                        	        
+	    	$className entity = new $className();
+
+#determineArgsAsAssignment( ${classObject} "entity" "command" )       
+
 			// create the ${className}Business Delegate            
 			${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
-	        delegate.update${className}( ${lowercaseClassName} );
+	        delegate.update${className}( entity );
 	        
 	        if ( this.${lowercaseClassName} != null )
 	            LOGGER.info( "successfully updated ${className}" );
@@ -158,6 +167,7 @@ public class ${className}RestController extends $parentController {
 	public void unAssign${roleName}( @RequestParam(required=true) UUID ${lowercaseClassName}Id ) {
 		try {
 			${className}BusinessDelegate.get${className}Instance().unAssign${roleName}( ${lowercaseClassName}Id );   
+
 		}
 		catch( Exception exc ) {
 			LOGGER.info( "Failed to unassign ${roleName}" );
