@@ -17,7 +17,7 @@ import javax.persistence.*
 #foreach ( $class in $aib.getClassesToGenerate() )
 @Entity
 data class ${class.getName()}(
-#outputKotlinArgDeclarations( $class $includeAssociations  $includeId $forAggregate $forEntity )
+#outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
 #end##foreach ( $class in $aib.getClassesToGenerate() )
