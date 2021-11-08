@@ -10,7 +10,7 @@ import javax.persistence.*
 #set( $imports = [ "entity" ] )
 #importStatements( $imports )
 
-#set( $includeAssociations = true )
+#set( $includeAssociations = false )
 #set( $includeId = true )
 #set( $forAggregate = false )
 #set( $forEntity = true )
