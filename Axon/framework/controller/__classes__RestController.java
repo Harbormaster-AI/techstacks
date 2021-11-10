@@ -38,10 +38,12 @@ public class ${className}RestController extends $parentController {
      */
 	@PostMapping("/create")
     public void create( @RequestBody(required=true) Create${className}Command command ) {
-        try {       
-        	$className entity = new $className();
+    	$className entity = new $className();
 
-#determineArgsAsAssignment( ${classObject} "entity" "command" )       
+#set( $includeAssociations = false )
+#determineArgsAsAssignment( ${classObject} "entity" "command" ${includeAssociations} )       
+
+		try {       
         	
 			${className}BusinessDelegate.get${className}Instance().create${className}( entity );
         }
@@ -56,11 +58,12 @@ public class ${className}RestController extends $parentController {
      */
 	@PutMapping("/update")
     public void update( @RequestBody(required=true) Update${className}Command command ) {
-	    try {                        	        
-	    	$className entity = new $className();
+    	$className entity = new $className();
 
-#determineArgsAsAssignment( ${classObject} "entity" "command" )       
+#set( $includeAssociations = false )
+#determineArgsAsAssignment( ${classObject} "entity" "command" ${includeAssociations} )       
 
+		try {                        	        
 			// create the ${className}Business Delegate            
 			${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
 	        delegate.update${className}( entity );

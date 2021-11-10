@@ -28,6 +28,7 @@ data class Created${className}Event(
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
+#set( $includeAssociations = true )
 data class Updated${className}Event(
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate )
 )

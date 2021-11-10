@@ -34,19 +34,28 @@ public class ${className}Aggregate {
     public ${className}Aggregate() {
     }
     
-#set( $argName = "command" )
-#set( $argsAsInput = "#determineArgsAsInput( ${classObject} ${argName} )" )    
 
     @CommandHandler
     public ${className}Aggregate(Create${className}Command command) throws Exception {
     	LOGGER.info( "Applying event Created${className}Event" );
-        apply(new Created${className}Event(${argsAsInput}));
+    	Created${className}Event event = new Created${className}Event();
+
+#set( $includeAssociations = false )
+#determineArgsAsAssignment( ${classObject}  "event" "command" ${includeAssociations} )        
+    	
+        apply(event);
     }
 
+#set( $argsAsInput = "#determineArgsAsInput( ${classObject} ${argName} ${includeAssociations} )" )    
     @CommandHandler
     public void handle(Update${className}Command command) throws Exception {
     	LOGGER.info( "Applying event Updated${className}Event" );
-        apply(new Updated${className}Event(${argsAsInput}));
+    	Updated${className}Event event = new Updated${className}Event();
+
+#set( $includeAssociations = true )
+#determineArgsAsAssignment( ${classObject}  "event" "command" ${includeAssociations} )        
+    	
+        apply(event);
     }
 
     @CommandHandler
@@ -59,13 +68,15 @@ public class ${className}Aggregate {
     void on(Created${className}Event event ) {	
     	LOGGER.info( "Event sourcing Created${className}Event" );
     	this.${pk} = event.get${className}Id();
-#applyAggregateAttributes( $classObject, "event" )    
+#set( $includeAssociations = false )    	
+#applyAggregateAttributes( $classObject, "event", $includeAssociations )    
     }
     
     @EventSourcingHandler
     void on(Updated${className}Event event) {
     	LOGGER.info( "Event sourcing Updated${className}Event" );
-#applyAggregateAttributes( $classObject, "event" )    	
+#set( $includeAssociations = true )    	    	
+#applyAggregateAttributes( $classObject, "event", $includeAssociations )    	
     }   
     
     // ------------------------------------------
@@ -76,7 +87,6 @@ public class ${className}Aggregate {
     private UUID ${pk};
     
 #declareAggregateAttributes(  $classObject  )  
-
 #declareAggregateAssociations( $classObject )
 
     private static final Logger LOGGER 	= Logger.getLogger(${className}Aggregate.class.getName());

@@ -9,8 +9,9 @@
 
 #macro( declareAggregateAssociations $class )
 #foreach( $association in $class.getAssociations() )
-#set( $associationName = $Utils.lowercaseFirstLetter( $association.getRoleName() ) )
 #set( $associationType = $association.getType() )
+#if( $aib.isValueObject( $associationType ) == false )## value objecst are treated as attribuetes in declareAggregateAttributes
+#set( $associationName = $Utils.lowercaseFirstLetter( $association.getRoleName() ) )
 #set( $defaultValue = "null" )
 #set( $qualifier = "private ")
 #if( $association.isMultivalued() == true )
@@ -18,12 +19,17 @@
 #set( $defaultValue = "new HashSet<>()" )
 #end##if( $attribute.isMultivalued() == true )
     ${qualifier}${associationType} ${associationName} = $defaultValue;
+#end##if( $aib.isFromValueObject( $associationType ) == false )
 #end###foreach( $attribute in $class.getDirectAttributes( $includePKs ) )
 #end##macro( applyAggregateAttributes )
 
-#macro( applyAggregateAttributes $class $var )
+#macro( applyAggregateAttributes $class $var $includeAssociations )
 #set( $includePKs = false )
-#foreach( $attribute in $class.getDirectAttributes( $includePKs ) )
+#set( $listToUse = $class.getDirectAttributes( $includePKs ) )
+#if ( $includeAssociations == true )
+#set( $listToUse = $class.getAttributesOrderedInHierarchy( $includePKs ) )
+#end##if ( $includeAssociations == true )
+#foreach( $attribute in $listToUse )
 #set( $name = $Utils.lowercaseFirstLetter( $attribute.getName() ) )
         this.${name} = ${var}.get${Utils.capitalizeFirstLetter( $name )}();
 #end###foreach( $attribute in $class.getDirectAttributes( $includePKs ) )

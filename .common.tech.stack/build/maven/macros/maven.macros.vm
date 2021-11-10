@@ -851,13 +851,31 @@
 #end##macro( jbossJavaxTransactionDependencies )
 
 #macro( mySQLDependencies )
-<!-- MySQL -->
+        <!-- MySQL -->
 		<dependency>
           <groupId>mysql</groupId>
 	      <artifactId>mysql-connector-java</artifactId>
 	      <version>8.0.13</version>
 		</dependency>
 #end##macro( mySQLDependencies )
+
+#macro( h2Dependencies )
+        <!-- H2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+#end##macro( h2Dependencies )
+
+#macro( postgresDependencies )
+        <!-- Postgres -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.3.1</version>
+        </dependency>
+#end##macro( postgresDependencies )
 
 #macro( googleGsonDependencies )
 <!-- Google Gson -->

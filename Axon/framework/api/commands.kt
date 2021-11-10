@@ -25,6 +25,7 @@ data class Create${className}Command(
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
+#set( $includeAssociations = true)
 data class Update${className}Command(
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate )
 )

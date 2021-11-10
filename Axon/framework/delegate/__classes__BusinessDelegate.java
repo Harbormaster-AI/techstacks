@@ -57,9 +57,6 @@ extends BaseBusinessDelegate {
 
 #if ( $classObject.isAbstract() == false )
 
-#set( $argName = "entity" )
-#set($argsAsInput = "#determineArgsAsInput( ${classObject} ${argName} )" )
-
    /**
 	* ${className} Business Delegate Factory Method
 	*
@@ -81,10 +78,12 @@ extends BaseBusinessDelegate {
 	public ${className} create${className}( ${className} entity )
     throws ProcessingException, IllegalArgumentException {
 
-		try {
+		Create${className}Command command = new Create${className}Command();
 
-			Create${className}Command command = new Create${className}Command( $argsAsInput );
-			
+#set( $includeAssociations = false )
+#determineArgsAsAssignment( ${classObject}  "command" "entity" ${includeAssociations} )        
+
+		try {
 			// --------------------------------------
         	// assign identity now if none
         	// -------------------------------------- 
@@ -96,8 +95,14 @@ extends BaseBusinessDelegate {
     		// ---------------------------------------
     		// issue the create command
     		// ---------------------------------------
-        	entity = commandGateway.sendAndWait( command );
-        	
+			UUID id = commandGateway.sendAndWait( command );
+			LOGGER.warning( "UUID " + id + " return from Command Gateway for create${className}" );
+			
+			// ---------------------------------------
+			// assign just in case creating before (see above) 
+			// is ignored in favor of apply the id later
+			// ---------------------------------------
+			entity.set${className}Id( id );        	
         }
         catch (Exception exc) {
             final String errMsg = "Unable to create ${className} - " + exc;
@@ -119,9 +124,13 @@ extends BaseBusinessDelegate {
     */
     public void update${className}( ${className} entity ) 
     throws ProcessingException, IllegalArgumentException {
-    	
+
+		Update${className}Command command = new Update${className}Command();
+
+#set( $includeAssociations = true )
+#determineArgsAsAssignment( ${classObject}  "command" "entity" ${includeAssociations} )        
+
     	try {       
-    		Update${className}Command command = new Update${className}Command(${argsAsInput});
 
         	// --------------------------------------
         	// issue the update command
@@ -253,8 +262,6 @@ extends BaseBusinessDelegate {
 		// load the parent
 		// --------------------------------------------
 		load( ${lowercaseClassName}Id );
-
-		${className} ${lowercaseClassName} = null; 
 		
 		${childType}BusinessDelegate childDelegate 	= ${childType}BusinessDelegate.get${childType}Instance();
 		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();			

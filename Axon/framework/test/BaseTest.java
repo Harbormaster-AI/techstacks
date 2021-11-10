@@ -25,7 +25,7 @@ public class BaseTest
 #end ##if( ${containerObject} )
         try {
 #foreach( $class in $classesToUse )
-		    new ${class.getName()}Test().setHandler(logHandler).testCRUD();
+		    new ${class.getName()}Test().setHandler(logHandler).startTest();
 #end
         } catch( Throwable exc ) {
         	exc.printStackTrace();

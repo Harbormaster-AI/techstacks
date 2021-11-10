@@ -50,7 +50,8 @@ public class ${className}Handler {
 	    LOGGER.info("handling Created${className}Event - " + event );
 	    
 	    $className entity = new ${className}();
-#determineArgsAsAssignment( ${classObject} "entity" "event" )        
+#set( $includeAssociations = false )
+#determineArgsAsAssignment( ${classObject} "entity" "event" ${includeAssociations} )        
     	// ------------------------------------------
     	// persist a new one
     	// ------------------------------------------ 
@@ -70,7 +71,9 @@ public class ${className}Handler {
     	LOGGER.info("handling Updated${className}Event - " + event );
     	
     	$className entity = new ${className}();
-#determineArgsAsAssignment( ${classObject} "entity" "event" )        
+
+#set( $includeAssociations = true )    	
+#determineArgsAsAssignment( ${classObject} "entity" "event" ${includeAssociations} )        
  
     	// ------------------------------------------
     	// merge with an existing instance
