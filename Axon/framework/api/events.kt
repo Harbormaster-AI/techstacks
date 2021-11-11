@@ -10,7 +10,6 @@ import javax.persistence.*
 #set( $imports = [ "entity" ] )
 #importStatements( $imports )
 
-#set( $includeAssociations = false )
 #set( $includeId = true )
 #set( $forAggregate = false )
 #set( $forEntity = true )
@@ -25,11 +24,12 @@ import javax.persistence.*
 // $className Events
 
 data class Created${className}Event(
+#set( $includeAssociations = false )
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
-#set( $includeAssociations = true )
 data class Updated${className}Event(
+#set( $includeAssociations = true )
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate )
 )
 

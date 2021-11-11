@@ -7,7 +7,6 @@ import javax.persistence.*
 #set( $imports = [ "entity" ] )
 #importStatements( $imports )
 
-#set( $includeAssociations = false )
 #set( $includeId = true )
 #set( $forAggregate = true )
 #set( $forEntity = false )
@@ -20,14 +19,14 @@ import javax.persistence.*
 #set( $pk = "${lowercaseClassName}Id" )
 
 // $className Commands
-
 data class Create${className}Command(
+#set( $includeAssociations = false )
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
-#set( $includeAssociations = true)
 data class Update${className}Command(
-#outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate )
+#set( $includeAssociations = true)
+#outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
 data class Delete${className}Command(@TargetAggregateIdentifier val ${pk}: UUID)
