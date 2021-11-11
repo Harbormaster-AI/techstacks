@@ -388,39 +388,29 @@ extends BaseBusinessDelegate {
 		UUID childId = child.get${childType}Id();
 		
 		// -------------------------------------------
-		// if no child id, then create the child first, 
-		// otherwise load it for consistency sake then use it
+		// if no child id or the child is not found, 
+		// then create the child first, 
+		// otherwise add what was found
 		// -------------------------------------------
-		if ( childId == null  ) {
-			try {
-				// -------------------------------------------
-				// create the ${childType}
-				// -------------------------------------------
-				childDelegate.create${childType}( child );
+		try {		
+			${childType} childToAdd = childId == null ? null : childDelegate.get${childType}( new ${childType}FetchOneSummary(childId) );
+				
+			// -------------------------------------------
+			// if not found, create it
+			// -------------------------------------------
+			if ( childToAdd == null ) {
+				childToAdd = childDelegate.create${childType}( child );
 			}
-			catch( Exception exc ) {
-				final String msg = "Failed to get child ${childType} using id " + childId; 
-				LOGGER.info( msg );
-				throw new ProcessingException( msg, exc );
-			}
-		}
-		else {
-			try {
-				// -------------------------------------------			
-				// find the ${childType}
-				// -------------------------------------------
-				child = childDelegate.get${childType}( new ${childType}FetchOneSummary(childId) );
-			}
-			catch( Exception exc ) {
-				final String msg = "Failed to add child ${childType} using id " + childId; 
-				LOGGER.info( msg );
-				throw new ProcessingException( msg, exc );
-			}
-
+			
 			// -------------------------------------------
 			// add it to the ${roleName}
 			// -------------------------------------------
-			${lowercaseClassName}.get${roleName}().add( child );
+			${lowercaseClassName}.get${roleName}().add( childToAdd );
+		}
+		catch( Exception exc ) {
+			final String msg = "Failed to add a ${childType} as ${roleName} to ${parentName}" ; 
+			LOGGER.info( msg );
+			throw new ProcessingException( msg, exc );
 		}
 
 		try {
@@ -447,17 +437,17 @@ extends BaseBusinessDelegate {
     /**
      * remove ${childType} from ${roleName}
      * @param		UUID ${lowercaseClassName}Id
-     * @param		${childType} child
+     * @param		UUID childId
      * @exception	ProcessingException
      */     	
-	public void removeFrom${roleName}( UUID ${lowercaseClassName}Id, ${childType} child ) throws ProcessingException {		
+	public void removeFrom${roleName}( UUID ${lowercaseClassName}Id, UUID childId ) throws ProcessingException {		
 		
-		if ( child == null ) {
+		if ( childId == null ) {
 			throw new ProcessingException( "$roleName identifier cannot be null" ); 
 		}
 		
 		// --------------------------------------------------------------
-		// load paremt
+		// load parent
 		// --------------------------------------------------------------	
 		load( ${lowercaseClassName}Id );
 
@@ -470,15 +460,15 @@ extends BaseBusinessDelegate {
 			// first remove the relevant child from the list
 			// child = childDelegate.get${childType}( new ${childType}FetchOneSummary(childId));
 			// --------------------------------------------------------------
-			children.remove( child );
+			children.remove( childDelegate.get${childType}(new ${childType}FetchOneSummary( childId )) );
 			
 			// --------------------------------------------------------------
-			// then safe to delete the child				
+			// then safe to delete the child if allowed...deterred by default				
 			// --------------------------------------------------------------
-			childDelegate.delete( child );
+			// childDelegate.delete( child );
 		}
 		catch( Exception exc ) {
-			final String msg = "Failed to delete child using Id " + child.get${childType}Id(); 
+			final String msg = "Failed to remove child using Id " + childId; 
 			LOGGER.info( msg );
 			throw new ProcessingException( msg, exc );
 		}

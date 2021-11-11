@@ -201,13 +201,13 @@ public class ${className}RestController extends $parentController {
     /**
      * delete ${roleName} on ${className}
      * @param		UUID ${lowercaseClassName}Id
-     * @param		${childType} entity
+     * @param		UUID childId
      */     	
 	@PutMapping("/removeFrom${roleName}")
-	public void removeFrom${roleName}( 	@RequestParam(required=true) UUID ${lowercaseClassName}Id, @RequestBody(required=true) ${childType} entity )
+	public void removeFrom${roleName}( 	@RequestParam(required=true) UUID ${lowercaseClassName}Id, @RequestParam(required=true) UUID childId)
 	{		
 		try {
-			${className}BusinessDelegate.get${className}Instance().removeFrom${roleName}( ${lowercaseClassName}Id, entity );
+			${className}BusinessDelegate.get${className}Instance().removeFrom${roleName}( ${lowercaseClassName}Id, childId );
 		}
 		catch( Exception exc ) {
 			LOGGER.info( "Failed to remove from Set ${roleName}" );
