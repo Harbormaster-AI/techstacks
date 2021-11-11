@@ -60,7 +60,7 @@ public class ${className}RestController extends $parentController {
     public void update( @RequestBody(required=true) Update${className}Command command ) {
     	$className entity = new $className();
 
-#set( $includeAssociations = false )
+#set( $includeAssociations = true )
 #determineArgsAsAssignment( ${classObject} "entity" "command" ${includeAssociations} )       
 
 		try {                        	        
