@@ -7,8 +7,7 @@ import java.util.*;
 
 import javax.persistence.Entity
 import javax.persistence.Id
-import javax.persistence.NamedQueries
-import javax.persistence.NamedQuery
+
 
 //-----------------------------------------------------------
 // Query definitions
@@ -47,40 +46,26 @@ class Find${roleName}For${className}(val ${pk} :  UUID)
 class Find${roleName}For${className}(val ${pk} :  UUID)
 #end##foreach( $multiAssociation in $class.getMultipleAssociations() )
 
+#set( $queriesToGenerate = $aib.getQueriesToGenerate( $className ) )
+#foreach( $query in $queriesToGenerate )
+#set( $queryHandlers = $query.getHandlers() )
+#set( $queryHandlersSize = $queryHandlers.size() )
+#foreach( $handler in $queryHandlers )
+#set( $queryName = $Utils.capitalizeFirstLetter( $handler.getName() ) )
+#set( $method = $handler.getMethodObject() )
+#set( $methodArg = ${method.getArguments().getArgs().get(0)} )
+#set( $argName = ${methodArg.getName()} )
+#set( $argType = ${methodArg.getType()} )
+data class ${queryName}Filter(val ${argName}: ${argType}? = null)
+#if ( $handler.getSingleValueReturnValue() == false)
+class ${queryName}Query(val offset: Int, val limit: Int, val filter: ${queryName}Filter = ${queryName}Filter() )
+#else
+class ${queryName}Query(val filter: ${queryName}Filter = ${queryName}Filter())
+#end##if ( $handler.getSingleValueReturnValue() == false)
+
+#end##foreach( $handler in $query.getHandlers() )
+#end##foreach( $query in $queriesToGenerate )
+
 #end##foreach( $class in $aib.getClassesToGenerate() )
 
-
-#*
-// Query Responses for entities and individually modeled queries
-
-@Entity
-@NamedQueries(
-#for( $class = $aib.getClassesToGenerate() )
-#set( $className = ${class.getName()} )
-        NamedQuery(
-                name = "${className}.fetchOne",
-                query = "SELECT c FROM ${className} c WHERE c.id = (:inputId) ORDER BY c.id"
-        ),
-        NamedQuery(
-                name = "${className}.fetchAll",
-                query = "SELECT c FROM ${className}"
-        )
-#end##for( $class = $aib.getClassesToGenerate() )
-
-#foreach( $query in $aib.getQueriesToGenerate() )
-#set( $affiliate = $query.getAffiliate() )
-#foreach( $handler in $query.getHandlers() )
-#set( $queryName = $handler.getName() )
-#set( $method = $handler.getMethodObject() )
-#if ( ${method.hasArguments()} )	## should only be one argument
-#set( $argName = ${method.getArguments().getArgs().get(0).getName()} )
-        NamedQuery(
-                name = "${affiliate}.queryName",
-            query = "SELECT c FROM ${affiliate} WHERE c.${argName} = (:inputId) ORDER BY c.${argName}"
-        )
-#end##if ( ${method.hasArguments()} )
-#end##foreach( $handler in $query.getHandlers() )
-#end##foreach( $query = $aib.getQueriesToGenerate() )
-)
-*#
 

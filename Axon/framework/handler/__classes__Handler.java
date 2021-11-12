@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
@@ -171,13 +172,14 @@ public class ${className}Handler {
                                 entity);
     }
     
-#*    SECTION COMMENTED OUT
+#foreach( $query in $aib.getQueriesToGenerate(${className}) )
 #foreach( $handler in $query.getHandlers() )
 #set( $method = $handler.getMethodObject() )
-#if ( ${method.hasArguments()} )	## should only be one argument
+#set( $queryName = $Utils.capitalizeFirstLetter( $handler.getName() ) )
+#if ( ${method.hasArguments()} )##should only be one argument
 #set( $argType = ${method.getArguments().getArgs().get(0).getType()} )
 #set( $argName = ${method.getArguments().getArgs().get(0).getName()} )
-#set( $returnType = ${method.getReturnType()} )
+#set( $returnType = ${method.getArguments().getReturnType()} )
     /**
      * query method to ${method.getName()}
      * @param 		$argType $argName
@@ -185,23 +187,29 @@ public class ${className}Handler {
      */     
 	@SuppressWarnings("unused")
 	@QueryHandler
-	public $returnType ${method.getName()}( $argType $argName ) {
-		$returnType ${lowercaseClassName} = null;
+	public $returnType ${method.getName()}( ${queryName}Query query ) {
+		$returnType result = null;
         try {  
-            TypedQuery<CardSummary> jpaQuery = entityManager.createNamedQuery("${className}.fetchOne", ${className}.class);
-            jpaQuery.setParameter("${lowercaseClassName}Id", query.getFilter().get${className}Id());
+            TypedQuery<${className}> jpaQuery = entityManager.createNamedQuery("${className}.${method.getName()}", ${className}.class);
+            jpaQuery.setParameter("${argName}", query.getFilter().get${Utils.capitalizeFirstLetter(${argName})}());
+#if ( $handler.getSingleValueReturnValue() == false)
             jpaQuery.setFirstResult(query.getOffset());
-            jpaQuery.setMaxResults(query.getLimit());
-            return jpaQuery.getResultList();
+            jpaQuery.setMaxResults(query.getLimit());           
+            result = jpaQuery.getResultList();
+#else            
+            result = jpaQuery.getSingleResult();
+#end##if ( $handler.getSingleValueReturnValue() == false)
         }
         catch( Throwable exc ) {
-        	LOGGER.info(  "Failed to load ${returnType} - " + exc );
+        	LOGGER.log( Level.WARNING, "Failed to ${method.getName()} using " + query.getFilter(), exc );
         }
-        return {lowercaseClassName};
+        
+        return result;
 	}
 #end##if ( ${method.hasArguments()} )	## should only be one argument
 #end##foreach( $handler in $query.getHandlers() )
-*#
+#end##foreach( $query in $aib.getQueriesToGenerate() )
+
 
     //--------------------------------------------------
     // attributes

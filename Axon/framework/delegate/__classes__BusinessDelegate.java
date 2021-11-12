@@ -96,7 +96,7 @@ extends BaseBusinessDelegate {
     		// issue the create command
     		// ---------------------------------------
 			UUID id = commandGateway.sendAndWait( command );
-			LOGGER.warning( "UUID " + id + " return from Command Gateway for create${className}" );
+			LOGGER.log( Level.WARNING, "UUID " + id + " return from Command Gateway for create${className}" );
 			
 			// ---------------------------------------
 			// assign just in case creating before (see above) 
@@ -106,7 +106,7 @@ extends BaseBusinessDelegate {
         }
         catch (Exception exc) {
             final String errMsg = "Unable to create ${className} - " + exc;
-            LOGGER.warning( errMsg );
+            LOGGER.log( Level.WARNING, errMsg, exc );
             throw new ProcessingException( errMsg, exc );
         }
         finally {
@@ -140,7 +140,7 @@ extends BaseBusinessDelegate {
     	}
         catch (Exception exc) {
             final String errMsg = "Unable to save ${className} - " + exc;
-            LOGGER.warning( errMsg );
+            LOGGER.log( Level.WARNING, errMsg, exc );
             throw new ProcessingException( errMsg, exc );
         }
         
@@ -165,7 +165,7 @@ extends BaseBusinessDelegate {
         }
         catch (Exception exc) {
             final String errMsg = "Unable to delete ${className} using Id = "  + entity.get${className}Id();
-            LOGGER.warning( errMsg );
+            LOGGER.log( Level.WARNING, errMsg, exc );
             throw new ProcessingException( errMsg, exc );
         }
         finally {
@@ -202,7 +202,7 @@ extends BaseBusinessDelegate {
         }
         catch( Exception exc ) {
             final String errMsg = "Unable to locate ${className} with id " + summary.get${className}Id();
-            LOGGER.warning( errMsg );
+            LOGGER.log( Level.WARNING, errMsg, exc );
             throw new ProcessingException( errMsg, exc );
         }
         finally {
@@ -229,7 +229,7 @@ extends BaseBusinessDelegate {
         }
         catch( Exception exc ) {
             String errMsg = "Failed to get all ${className}";
-            LOGGER.warning( errMsg );
+            LOGGER.log( Level.WARNING, errMsg, exc );
             throw new ProcessingException( errMsg, exc );
         }
         finally {
@@ -278,7 +278,7 @@ extends BaseBusinessDelegate {
 		}
         catch( Throwable exc ) {
 			final String msg = "Failed to get ${childType} using id " + childId;
-			LOGGER.info( msg );
+			LOGGER.log( Level.WARNING,  msg );
 			throw new ProcessingException( msg, exc );
         }
 	
@@ -300,7 +300,7 @@ extends BaseBusinessDelegate {
 		}
 		catch( Exception exc ) {
 			final String msg = "Failed saving parent ${className} using Id " + ${lowercaseClassName}Id;
-			LOGGER.info( msg );
+			LOGGER.log( Level.WARNING, msg, exc );
 			throw new ProcessingException( msg, exc );
 		}
 	}
@@ -333,7 +333,7 @@ extends BaseBusinessDelegate {
 			}
 			catch( Exception exc ) {
 				final String msg = "Failed to save ${className}";
-				LOGGER.info( msg );
+				LOGGER.log( Level.WARNING, msg, exc );
 				throw new ProcessingException( msg, exc );
 			}
 			
@@ -354,7 +354,7 @@ extends BaseBusinessDelegate {
 			}
 			catch( Exception exc ) {
 				final String msg = "Failed to delete the child using Id " + childId; 
-				LOGGER.info( msg );
+				LOGGER.log( Level.WARNING, msg, exc );
 				throw new ProcessingException( msg, exc );
 			}
 		}
@@ -409,7 +409,7 @@ extends BaseBusinessDelegate {
 		}
 		catch( Exception exc ) {
 			final String msg = "Failed to add a ${childType} as ${roleName} to ${parentName}" ; 
-			LOGGER.info( msg );
+			LOGGER.log( Level.WARNING, msg, exc );
 			throw new ProcessingException( msg, exc );
 		}
 
@@ -429,7 +429,7 @@ extends BaseBusinessDelegate {
 		}
 		catch( Exception exc ) {
 			final String msg = "Failed saving parent ${className}" ; 
-			LOGGER.info( msg );
+			LOGGER.log( Level.WARNING, msg, exc );
 			throw new ProcessingException( msg, exc );
 		}
 	}
@@ -469,7 +469,7 @@ extends BaseBusinessDelegate {
 		}
 		catch( Exception exc ) {
 			final String msg = "Failed to remove child using Id " + childId; 
-			LOGGER.info( msg );
+			LOGGER.log( Level.WARNING, msg, exc );
 			throw new ProcessingException( msg, exc );
 		}
 			
@@ -495,12 +495,54 @@ extends BaseBusinessDelegate {
 		}
 		catch( Throwable exc ) {
 			final String msg = "Failed to save the ${className}"; 
-			LOGGER.info( msg );
+			LOGGER.log( Level.WARNING, msg, exc );
 			throw new ProcessingException( msg, exc );
 		}
 	}
 
 #end##foreach( $multiAssociation in $classObject.getMultipleAssociations() )
+
+#foreach( $query in $aib.getQueriesToGenerate(${className}) )
+#foreach( $handler in $query.getHandlers() )
+#set( $method = $handler.getMethodObject() )
+#if ( ${method.hasArguments()} )
+#set( $queryName = $Utils.capitalizeFirstLetter( $handler.getName() ) )
+#set( $argType = ${method.getArguments().getArgs().get(0).getType()} )
+#set( $argName = ${method.getArguments().getArgs().get(0).getName()} )
+#set( $returnType = ${method.getArguments().getReturnType()} )
+
+    /**
+     * finder method to ${method.getName()}
+     * @param 		$argType $argName
+     * @return		${returnType}
+     */     
+	public ${returnType} ${method.getName()}( ${queryName}Query query ) {
+		${returnType} result = null;
+        try {  
+#if ( $handler.getSingleValueReturnValue() == true )
+#set( $entityType = "ResponseTypes.instanceOf(${className}.class)" )
+#else
+#set( $entityType = "ResponseTypes.multipleInstancesOf(${className}.class)" )        	
+#end##if ( $handler.getSingleValueReturnValue() == true )
+#set( $queryHandlerType = $handler.getQueryHandlerType().toString() )
+#if( $queryHandlerType.equalsIgnoreCase("NORMAL") == true ) 
+		    CompletableFuture<${returnType}> futureResult = queryGateway.query(query, ${entityType});
+#elseif( $queryHandlerType.equalsIgnoreCase("SCATTER_GATHER") == true )
+		    CompletableFuture<${returnType}> futureResult = quertGateway.scatterGather(query, ${handler}.getTimeOut(), ${handler}.getTimeOutUnit())
+#elseif( $queryHandlerType.equalsIgnoreCase("SUBSCRIPTION") == true ) 
+		    // subscription generation not yet supported...defaulting ot normal
+		    CompletableFuture<${returnType}> futureResult = queryGateway.query(query, ${entityType});
+#end
+        	result = futureResult.get();
+        }
+        catch( Throwable exc ) {
+        	LOGGER.log( Level.WARNING, "Failed to execute ${method.getName()}", exc );
+        }
+        return result;
+	}
+#end##if ( ${method.hasArguments()} )
+#end##foreach( $handler in $query.getHandlers() )
+#end##foreach( $query in $aib.getQueriesToGenerate() )
 
 	/**
 	 * Internal helper method to load the root 
@@ -508,7 +550,7 @@ extends BaseBusinessDelegate {
 	 * @param		id	UUID
 	 * @return		${className}
 	 */
-	public ${className} load( UUID id ) throws ProcessingException {
+	protected ${className} load( UUID id ) throws ProcessingException {
 		${lowercaseClassName} = ${className}BusinessDelegate.get${className}Instance().get${className}( new ${className}FetchOneSummary(id) );	
 		return ${lowercaseClassName};
 	}

@@ -48,7 +48,7 @@ public class ${className}RestController extends $parentController {
 			${className}BusinessDelegate.get${className}Instance().create${className}( entity );
         }
         catch( Throwable exc ) {
-        	LOGGER.info( exc.getMessage() );        	
+        	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
         }
     }
 
@@ -69,10 +69,10 @@ public class ${className}RestController extends $parentController {
 	        delegate.update${className}( entity );
 	        
 	        if ( this.${lowercaseClassName} != null )
-	            LOGGER.info( "successfully updated ${className}" );
+	            LOGGER.log( Level.WARNING, "successfully updated ${className}" );
 	    }
 	    catch( Throwable exc ) {
-	    	LOGGER.info( "${className}Controller:update() - successfully update ${className} - " + exc.getMessage());        	
+	    	LOGGER.log( Level.WARNING, "${className}Controller:update() - successfully update ${className} - " + exc.getMessage());        	
 	    }
 	}
  
@@ -87,10 +87,10 @@ public class ${className}RestController extends $parentController {
         	${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
 
         	delegate.delete( load( new ${className}FetchOneSummary( ${lowercaseClassName}Id )) );
-    		LOGGER.info( "Successfully deleted ${className} with key " + ${lowercaseClassName}Id );
+    		LOGGER.log( Level.WARNING, "Successfully deleted ${className} with key " + ${lowercaseClassName}Id );
         }
         catch( Throwable exc ) {
-        	LOGGER.info( exc.getMessage() );
+        	LOGGER.log( Level.WARNING, exc.getMessage() );
         	return false;        	
         }
         
@@ -110,7 +110,7 @@ public class ${className}RestController extends $parentController {
     		entity = ${className}BusinessDelegate.get${className}Instance().get${className}( summary );   
         }
         catch( Throwable exc ) {
-            LOGGER.info( "failed to load ${className} using Id " + summary.get${className}Id() );
+            LOGGER.log( Level.WARNING, "failed to load ${className} using Id " + summary.get${className}Id() );
             return null;
         }
 
@@ -130,10 +130,10 @@ public class ${className}RestController extends $parentController {
             ${lowercaseClassName}List = ${className}BusinessDelegate.get${className}Instance().getAll${className}();
             
             if ( ${lowercaseClassName}List != null )
-                LOGGER.info(  "successfully loaded all ${className}s" );
+                LOGGER.log( Level.INFO,  "successfully loaded all ${className}s" );
         }
         catch( Throwable exc ) {
-            LOGGER.info(  "failed to load all ${className}s " );
+            LOGGER.log( Level.WARNING,  "failed to load all ${className}s ", exc );
         	return null;
         }
 
@@ -158,7 +158,7 @@ public class ${className}RestController extends $parentController {
 			${className}BusinessDelegate.get${className}Instance().assign${roleName}( ${lowercaseClassName}Id, entity );   
 		}
         catch( Throwable exc ) {
-        	LOGGER.info( "Failed to assign ${roleName}" );
+        	LOGGER.log( Level.WARNING, "Failed to assign ${roleName}", exc );
         }
 	}
 
@@ -170,10 +170,9 @@ public class ${className}RestController extends $parentController {
 	public void unAssign${roleName}( @RequestParam(required=true) UUID ${lowercaseClassName}Id ) {
 		try {
 			${className}BusinessDelegate.get${className}Instance().unAssign${roleName}( ${lowercaseClassName}Id );   
-
 		}
 		catch( Exception exc ) {
-			LOGGER.info( "Failed to unassign ${roleName}" );
+			LOGGER.log( Level.WARNING, "Failed to unassign ${roleName}", exc );
 		}
 	}
 	
@@ -194,7 +193,7 @@ public class ${className}RestController extends $parentController {
 			${className}BusinessDelegate.get${className}Instance().addTo${roleName}( ${lowercaseClassName}Id, entity );   
 		}
 		catch( Exception exc ) {
-			LOGGER.info( "Failed to add to Set $roleName" );
+			LOGGER.log( Level.WARNING, "Failed to add to Set $roleName", exc );
 		}
 	}
 
@@ -210,46 +209,44 @@ public class ${className}RestController extends $parentController {
 			${className}BusinessDelegate.get${className}Instance().removeFrom${roleName}( ${lowercaseClassName}Id, childId );
 		}
 		catch( Exception exc ) {
-			LOGGER.info( "Failed to remove from Set ${roleName}" );
+			LOGGER.log( Level.WARNING, "Failed to remove from Set ${roleName}", exc );
 		}
 	}
 
 #end
 
-#* QUERIES COMMENTED OUT
-#foreach( $query in $aib.getQueriesToGenerate() )
-#if ( $className.equalsIgnoreCase( $query.getAffiliate() ) )
+#foreach( $query in $aib.getQueriesToGenerate(${className}) )
 #foreach( $handler in $query.getHandlers() )
 #set( $method = $handler.getMethodObject() )
-#if ( ${method.hasArguments()} )	## should only be one argument
+#if ( ${method.hasArguments()} )
+#set( $queryName = $Utils.capitalizeFirstLetter( $handler.getName() ) )
 #set( $argType = ${method.getArguments().getArgs().get(0).getType()} )
 #set( $argName = ${method.getArguments().getArgs().get(0).getName()} )
-#set( $returnType = ${method.getReturnType()} )
+#set( $returnType = ${method.getArguments().getReturnType()} )
     /**
      * finder method to ${method.getName()}
      * @param 		$argType $argName
-     * @return		Set<${className}>
+     * @return		$returnType
      */     
-	@GetMapping("/${method.getName()}")
-	public ${returnType} ${method.getName()}( @RequestParam(required=true) $argType $argName ) {
-		$returnType ${lowercaseClassName} = null;
+	@PostMapping("/${method.getName()}")
+	public ${returnType} ${method.getName()}( @RequestBody(required=true) ${queryName}Query query ) {
+		${returnType} result = null;
         try {  
-            // call the query directly
-            ${lowercaseClassName} = new ${className}BusinessDelegate().${method.getName()}(${arg});
+            // call the delegate directly
+        	result = new ${className}BusinessDelegate().${method.getName()}(query);
             
-            if ( ${lowercaseClassName} != null )
-                LOGGER.info(  "successfully read ${method.getName()}" );
+            if ( result != null )
+                LOGGER.log( Level.WARNING,  "successfully executed ${method.getName()}" );
         }
         catch( Throwable exc ) {
-        	LOGGER.info(  "failed to read ${className}s for ${method.getName()}" );
+        	LOGGER.log( Level.WARNING,  "failed to execute ${method.getName()}" );
         }
-        return {lowercaseClassName};
+        return result;
 	}
-#end##if ( ${method.hasArguments()} )	## should only be one argument
+#end##if ( ${method.hasArguments()} )
 #end##foreach( $handler in $query.getHandlers() )
-#end##if ( $className.equalsIgnoreCase( $query.getAffiliate() ) )
 #end##foreach( $query in $aib.getQueriesToGenerate() )
-*#
+
 
 //************************************************************************    
 // Attributes
