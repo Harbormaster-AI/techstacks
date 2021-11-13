@@ -89,11 +89,14 @@ extends BaseBusinessDelegate {
         	// -------------------------------------- 
 			if ( command.get${className}Id() == null )
 				command.set${className}Id( UUID.randomUUID() );
+				
+			// --------------------------------------
+        	// validate the command
+        	// --------------------------------------    	
+        	${className}Validator.getInstance().validate( command );    
 
-			//Create${className}Command command = new Create${className}Command(${argsAsInput});
-        	        	
     		// ---------------------------------------
-    		// issue the create command
+    		// issue the command
     		// ---------------------------------------
 			UUID id = commandGateway.sendAndWait( command );
 			LOGGER.log( Level.WARNING, "UUID " + id + " return from Command Gateway for create${className}" );
@@ -132,8 +135,13 @@ extends BaseBusinessDelegate {
 
     	try {       
 
+			// --------------------------------------
+        	// validate 
+        	// --------------------------------------    	
+        	${className}Validator.getInstance().validate( command );    
+
         	// --------------------------------------
-        	// issue the update command
+        	// issue the command
         	// --------------------------------------    	
     		commandGateway.sendAndWait( command );
 
@@ -156,6 +164,11 @@ extends BaseBusinessDelegate {
     	
         try {  
         	Delete${className}Command command = new Delete${className}Command( entity.get${className}Id() );
+
+			// --------------------------------------
+        	// validate the command
+        	// --------------------------------------    	
+        	${className}Validator.getInstance().validate( command );    
 
         	// --------------------------------------
         	// issue the update command
@@ -191,7 +204,7 @@ extends BaseBusinessDelegate {
         	// --------------------------------------
         	// validate the fetch one summary
         	// --------------------------------------    	
-        	${className}Validator.getInstance().validateFetchOne( summary );    
+        	${className}Validator.getInstance().validate( summary );    
         	
         	// --------------------------------------
         	// use queryGateway to send request to Find a $className
@@ -275,6 +288,22 @@ extends BaseBusinessDelegate {
 				child = childDelegate.get${childType}( new ${childType}FetchOneSummary( childId ) );
 			else // otherwise create it
 				child = childDelegate.create${childType}( child );
+
+			// --------------------------------------
+	    	// instantiate the command
+	    	// --------------------------------------    
+			Assign${roleName}To${className}Command command = new Assign${roleName}To${className}Command( ${lowercaseClassName}Id, child );
+
+			// --------------------------------------
+	    	// validate the command
+	    	// --------------------------------------    
+	    	${className}Validator.getInstance().validate( command );    
+
+	    	// --------------------------------------
+        	// issue the command
+        	// --------------------------------------    	
+    		commandGateway.sendAndWait( command );
+
 		}
         catch( Throwable exc ) {
 			final String msg = "Failed to get ${childType} using id " + childId;
@@ -282,6 +311,7 @@ extends BaseBusinessDelegate {
 			throw new ProcessingException( msg, exc );
         }
 	
+		/*
 		${lowercaseClassName}.set${roleName}( child );
 	
 		try {
@@ -303,6 +333,7 @@ extends BaseBusinessDelegate {
 			LOGGER.log( Level.WARNING, msg, exc );
 			throw new ProcessingException( msg, exc );
 		}
+		*/
 	}
 
     /**
@@ -312,11 +343,35 @@ extends BaseBusinessDelegate {
      */     
 	public void unAssign${roleName}( UUID ${lowercaseClassName}Id ) throws ProcessingException {
 
+		try {
+			// --------------------------------------
+	    	// instantiate the command
+	    	// --------------------------------------    
+			UnAssign${roleName}From${className}Command command = new UnAssign${roleName}From${className}Command( ${lowercaseClassName}Id );
+	
+			// --------------------------------------
+	    	// validate the command
+	    	// --------------------------------------    
+	    	${className}Validator.getInstance().validate( command );    
+	
+	    	// --------------------------------------
+	    	// issue the command
+	    	// --------------------------------------    	
+			commandGateway.sendAndWait( command );
+		}
+		catch( Exception exc ) {
+			final String msg = "Failed to unassign $roleName on ${className}";
+			LOGGER.log( Level.WARNING, msg, exc );
+			throw new ProcessingException( msg, exc );
+		}
+
+		/*		
 		load( ${lowercaseClassName}Id );
 
 		if ( ${lowercaseClassName}.get${roleName}() != null ) {
 			UUID childId = ${lowercaseClassName}.get${roleName}().get${childType}Id();
 
+			
 	        // --------------------------------------------------------------
 			// null out the parent first so there's no constraint during deletion
 	        // --------------------------------------------------------------
@@ -358,6 +413,7 @@ extends BaseBusinessDelegate {
 				throw new ProcessingException( msg, exc );
 			}
 		}
+	*/
 	}
 	
 #end##foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
@@ -401,11 +457,26 @@ extends BaseBusinessDelegate {
 			if ( childToAdd == null ) {
 				childToAdd = childDelegate.create${childType}( child );
 			}
+
+			// --------------------------------------
+	    	// instantiate the command
+	    	// --------------------------------------    
+			Add${roleName}To${className}Command command = new Add${roleName}To${className}Command( ${lowercaseClassName}Id, childToAdd );
+
+			// --------------------------------------
+	    	// validate the command
+	    	// --------------------------------------    
+	    	${className}Validator.getInstance().validate( command );    
+
+	    	// --------------------------------------
+        	// issue the command
+        	// --------------------------------------    	
+    		commandGateway.sendAndWait( command );
 			
 			// -------------------------------------------
 			// add it to the ${roleName}
 			// -------------------------------------------
-			${lowercaseClassName}.get${roleName}().add( childToAdd );
+//			${lowercaseClassName}.get${roleName}().add( childToAdd );
 		}
 		catch( Exception exc ) {
 			final String msg = "Failed to add a ${childType} as ${roleName} to ${parentName}" ; 
@@ -413,7 +484,7 @@ extends BaseBusinessDelegate {
 			throw new ProcessingException( msg, exc );
 		}
 
-		try {
+/*		try {
 			// -------------------------------------------
 			// save the ${className}
 			// -------------------------------------------
@@ -432,6 +503,7 @@ extends BaseBusinessDelegate {
 			LOGGER.log( Level.WARNING, msg, exc );
 			throw new ProcessingException( msg, exc );
 		}
+	*/
 	}
 
     /**
@@ -445,22 +517,41 @@ extends BaseBusinessDelegate {
 		if ( childId == null ) {
 			throw new ProcessingException( "$roleName identifier cannot be null" ); 
 		}
+
 		
 		// --------------------------------------------------------------
 		// load parent
 		// --------------------------------------------------------------	
-		load( ${lowercaseClassName}Id );
+//		load( ${lowercaseClassName}Id );
 
 		${childType}BusinessDelegate childDelegate 	= ${childType}BusinessDelegate.get${childType}Instance();
-		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();
-		Set<${childType}> children = ${lowercaseClassName}.get${roleName}();
+//		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();
+//		Set<${childType}> children = ${lowercaseClassName}.get${roleName}();
 
 		try {
+			
+			$childType childToRemove = childDelegate.get${childType}(new ${childType}FetchOneSummary( childId ));
+			
+			// --------------------------------------
+	    	// instantiate the command
+	    	// --------------------------------------    
+			Remove${roleName}From${className}Command command = new Remove${roleName}From${className}Command( ${lowercaseClassName}Id, childToRemove );
+
+			// --------------------------------------
+	    	// validate the command
+	    	// --------------------------------------    
+	    	${className}Validator.getInstance().validate( command );    
+
+	    	// --------------------------------------
+	    	// issue the command
+	    	// --------------------------------------    	
+			commandGateway.sendAndWait( command );
+
 			// --------------------------------------------------------------
 			// first remove the relevant child from the list
 			// child = childDelegate.get${childType}( new ${childType}FetchOneSummary(childId));
 			// --------------------------------------------------------------
-			children.remove( childDelegate.get${childType}(new ${childType}FetchOneSummary( childId )) );
+	//		children.remove( childDelegate.get${childType}(new ${childType}FetchOneSummary( childId )) );
 			
 			// --------------------------------------------------------------
 			// then safe to delete the child if allowed...deterred by default				
@@ -472,7 +563,7 @@ extends BaseBusinessDelegate {
 			LOGGER.log( Level.WARNING, msg, exc );
 			throw new ProcessingException( msg, exc );
 		}
-			
+/*			
 		// --------------------------------------------------------------
 		// assign the modified list of ${childType} back to the ${lowercaseClassName}
 		// --------------------------------------------------------------
@@ -498,6 +589,7 @@ extends BaseBusinessDelegate {
 			LOGGER.log( Level.WARNING, msg, exc );
 			throw new ProcessingException( msg, exc );
 		}
+*/
 	}
 
 #end##foreach( $multiAssociation in $classObject.getMultipleAssociations() )

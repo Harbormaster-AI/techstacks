@@ -21,15 +21,15 @@ import java.util.logging.Logger;
  *
  * @author $aib.getAuthor()
  */
+@CrossOrigin
+@RestController
+@RequestMapping("/${className}")
 ##if ( $classObject.hasParent() == true )
 ##	#set( $parentController = "${classObject.getParentName()}RestController" )
 ##	#set( $parentName = $classObject.getParentName() )
 ##else
 	#set( $parentController = "BaseSpringRestController" )
 ##end
-@CrossOrigin
-@RestController
-@RequestMapping("/${className}")
 public class ${className}RestController extends $parentController {
 
     /**
@@ -86,7 +86,7 @@ public class ${className}RestController extends $parentController {
         try {
         	${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
 
-        	delegate.delete( load( new ${className}FetchOneSummary( ${lowercaseClassName}Id )) );
+        	delegate.delete( this.load( ${lowercaseClassName}Id ) );
     		LOGGER.log( Level.WARNING, "Successfully deleted ${className} with key " + ${lowercaseClassName}Id );
         }
         catch( Throwable exc ) {
@@ -98,19 +98,19 @@ public class ${className}RestController extends $parentController {
 	}        
 	
     /**
-     * Handles loading a ${className}FetchOneSummary
-     * @param		summary ${className}FetchOneSummary
-     * @return		${className}FetchOneResponse
+     * Handles loading a ${className} using a UUID
+     * @param		UUID uuid 
+     * @return		${className}
      */    
-    @PostMapping("/load")
-    public ${className} load( @RequestBody(required=true) ${className}FetchOneSummary summary ) {    	
+    @GetMapping("/load")
+    public ${className} load( @RequestParam(required=true) UUID uuid ) {    	
     	${className} entity = null;
 
     	try {  
-    		entity = ${className}BusinessDelegate.get${className}Instance().get${className}( summary );   
+    		entity = ${className}BusinessDelegate.get${className}Instance().get${className}( new ${className}FetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
-            LOGGER.log( Level.WARNING, "failed to load ${className} using Id " + summary.get${className}Id() );
+            LOGGER.log( Level.WARNING, "failed to load ${className} using Id " + uuid );
             return null;
         }
 
@@ -145,7 +145,6 @@ public class ${className}RestController extends $parentController {
 #foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
 #set( $roleName = $singleAssociation.getRoleName() )
 #set( $childType = $singleAssociation.getType() )
-#set( $parentName  = $classObject.getName() )
     /**
      * save ${roleName} on ${className}
      * @param		UUID	${lowercaseClassName}Id
@@ -181,7 +180,6 @@ public class ${className}RestController extends $parentController {
 #foreach( $multiAssociation in $classObject.getMultipleAssociations() )
 #set( $roleName = $multiAssociation.getRoleName() )
 #set( $childType = $multiAssociation.getType() )
-#set( $parentName  = $classObject.getName() )
     /**
      * save ${roleName} on ${className}
      * @param		UUID ${lowercaseClassName}Id

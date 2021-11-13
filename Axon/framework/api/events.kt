@@ -1,8 +1,6 @@
 #header()
 package ${aib.getRootPackageName(true)}.api;
 
-import org.axonframework.modelling.command.TargetAggregateIdentifier
-
 import java.time.Instant
 import java.util.*
 import javax.persistence.*
@@ -16,8 +14,8 @@ import javax.persistence.*
 //-----------------------------------------------------------
 // Event definitions
 //-----------------------------------------------------------
-#foreach( $class in $aib.getClassesToGenerate() )
-#set( $className = ${class.getName()} )
+#foreach( $classToGenerate in $aib.getClassesToGenerate() )
+#set( $className = ${classToGenerate.getName()} )
 #set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
 #set( $pk = "${lowercaseClassName}Id" )
 
@@ -25,16 +23,33 @@ import javax.persistence.*
 
 data class Created${className}Event(
 #set( $includeAssociations = false )
-#outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
+#outputKotlinArgDeclarations( $classToGenerate $includeAssociations $includeId $forAggregate $forEntity )
 )
 
 data class Updated${className}Event(
 #set( $includeAssociations = true )
-#outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate )
+#outputKotlinArgDeclarations( $classToGenerate $includeAssociations $includeId $forAggregate )
 )
 
-data class Deleted${className}Event(@TargetAggregateIdentifier val ${pk}: UUID)
+data class Deleted${className}Event(@Id val ${pk}: UUID)
 
-#end##foreach( $class in $aib.getClassesToGenerate() )
+// single association events
+#set( $includeComposites = false )
+#foreach( $singleAssociation in $classToGenerate.getSingleAssociations( ${includeComposites} ) )
+#set( $roleName = $Utils.capitalizeFirstLetter( $singleAssociation.getRoleName() ) )
+#set( $childType = $singleAssociation.getType() )
+data class Assigned${roleName}To${className}Event(@Id val ${pk}: UUID, val assignment: $childType )
+data class UnAssigned${roleName}From${className}Event(@Id val ${pk}: UUID? = null )
+#end##foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
+
+// multiple association events
+#foreach( $multiAssociation in $classToGenerate.getMultipleAssociations() )
+#set( $roleName = $Utils.capitalizeFirstLetter( $multiAssociation.getRoleName() ) )
+#set( $childType = $multiAssociation.getType() )
+data class Added${roleName}To${className}Event(@Id val ${pk}: UUID, val addTo: $childType )
+data class Removed${roleName}From${className}Event(@Id val ${pk}: UUID, val removeFrom: $childType )
+#end##foreach( $multiAssociation in $class.getMultipleAssociations() )
+
+#end##foreach( $classToGenerate in $aib.getClassesToGenerate() )
 
 

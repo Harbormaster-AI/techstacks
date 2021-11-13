@@ -43,10 +43,11 @@ public class ${className}Handler {
         this.entityManager = entityManager;
         this.queryUpdateEmitter = queryUpdateEmitter;
     }	
-    /*
+
+	/*
      * @param	event Create${className}Event
      */
-    @EventHandler( payloadType=Created${className}Event.class)
+    @EventHandler( payloadType=Created${className}Event.class )
     public void handle( Created${className}Event event) {
 	    LOGGER.info("handling Created${className}Event - " + event );
 	    
@@ -67,7 +68,7 @@ public class ${className}Handler {
     /*
      * @param	event Update${className}Event
      */
-    @EventHandler
+    @EventHandler( payloadType=Updated${className}Event.class )
     public void handle( Updated${className}Event event) {
     	LOGGER.info("handling Updated${className}Event - " + event );
     	
@@ -95,18 +96,14 @@ public class ${className}Handler {
     /*
      * @param	event Delete${className}Event
      */
-    @EventHandler
+    @EventHandler( payloadType=Deleted${className}Event.class )
     public void handle( Deleted${className}Event event) {
     	LOGGER.info("handling Deleted${className}Event - " + event );
-    	${className} entity = new ${className}();
-   
-    	// ------------------------------------------
-    	// apply only the ${className}Id
-    	// ------------------------------------------
-    	entity.set${className}Id( event.get${className}Id() );
+    	
+    	$className entity = entityManager.find(${className}.class, event.get${className}Id());
     	
     	// ------------------------------------------
-    	// add to an Iterable and delete
+    	// delete what is discovered via find on the embedded identifier
     	// ------------------------------------------
     	entityManager.remove( entity );
 
@@ -116,6 +113,133 @@ public class ${className}Handler {
         emitFindAll${className}( entity );
 
     }    
+
+#set( $includeComposites = false )
+#foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
+#set( $roleName = $Utils.capitalizeFirstLetter( $singleAssociation.getRoleName() ) )
+#set( $lowercaseRoleName = $Utils.lowercaseFirstLetter( $roleName ) )
+#set( $childType = $singleAssociation.getType() )
+    /*
+     * @param	event Assigned${roleName}To${className}Event
+     */
+    @EventHandler( payloadType=Assigned${roleName}To${className}Event.class)
+    public void handle( Assigned${roleName}To${className}Event event) {
+	    LOGGER.info("handling Assigned${roleName}To${className}Event - " + event );
+	    
+	    $className entity = entityManager.find(${className}.class, event.get${className}Id());
+	    $childType assignment = entityManager.find(${childType}.class, event.getAssignment().get${childType}Id());
+	    entity.set${roleName}( assignment );
+
+	    // ------------------------------------------
+    	// persist 
+    	// ------------------------------------------ 
+	    entityManager.persist(entity);
+        
+    	// ------------------------------------------
+    	// emit to subscribers that find one
+    	// ------------------------------------------    	
+        emitFind${className}( entity );
+
+    	// ------------------------------------------
+    	// emit to subscribers that find all
+    	// ------------------------------------------    	
+        emitFindAll${className}( entity );
+    }
+    
+
+/*
+ * @param	event UnAssigned${roleName}FromEvent
+ */
+@EventHandler( payloadType=UnAssigned${roleName}From${className}Event.class)
+public void handle( UnAssigned${roleName}From${className}Event event) {
+    LOGGER.info("handling UnAssigned${roleName}From${className}Event - " + event );
+    
+    $className entity = entityManager.find(${className}.class, event.get${className}Id());
+    
+    entity.set${roleName}(null);
+
+    // ------------------------------------------
+	// persist 
+	// ------------------------------------------ 
+    entityManager.persist(entity);
+    
+	// ------------------------------------------
+	// emit to subscribers that find one
+	// ------------------------------------------    	
+    emitFind${className}( entity );
+
+	// ------------------------------------------
+	// emit to subscribers that find all
+	// ------------------------------------------    	
+    emitFindAll${className}( entity );
+}
+
+#end##foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
+
+#set( $includeComposites = false )
+#foreach( $multiAssociation in $classObject.getMultipleAssociations() )
+#set( $roleName = $Utils.capitalizeFirstLetter( $multiAssociation.getRoleName() ) )
+#set( $lowercaseRoleName = $Utils.lowercaseFirstLetter( $roleName ) )    
+#set( $childType = $multiAssociation.getType() )
+    /*
+     * @param	event Added${roleName}To${className}Event
+     */
+    @EventHandler( payloadType=Added${roleName}To${className}Event.class)
+    public void handle( Added${roleName}To${className}Event event) {
+	    LOGGER.info("handling Added${roleName}To${className}Event - " + event );
+	    
+	    $className entity = entityManager.find(${className}.class, event.get${className}Id());
+	    $childType child = entityManager.find(${childType}.class, event.getAddTo().get${childType}Id());
+	    
+	    entity.get${roleName}().add( child );
+
+	    // ------------------------------------------
+    	// persist 
+    	// ------------------------------------------ 
+	    entityManager.persist(entity);
+        
+    	// ------------------------------------------
+    	// emit to subscribers that find one
+    	// ------------------------------------------    	
+        emitFind${className}( entity );
+
+    	// ------------------------------------------
+    	// emit to subscribers that find all
+    	// ------------------------------------------    	
+        emitFindAll${className}( entity );
+    }
+    
+
+/*
+ * @param	event RemovedFrom${roleName}Event
+ */
+@EventHandler( payloadType=Removed${roleName}From${className}Event.class)
+public void handle( Removed${roleName}From${className}Event event) {
+    LOGGER.info("handling Removed${roleName}From${className}Event - " + event );
+    
+    $className entity = entityManager.find(${className}.class, event.get${className}Id());
+    $childType child = entityManager.find(${childType}.class, event.getRemoveFrom().get${childType}Id() );
+    
+    entity.get${roleName}().remove( child );
+
+    // ------------------------------------------
+	// persist 
+	// ------------------------------------------ 
+    entityManager.persist(entity);
+    
+	// ------------------------------------------
+	// emit to subscribers that find one
+	// ------------------------------------------    	
+    emitFind${className}( entity );
+
+	// ------------------------------------------
+	// emit to subscribers that find all
+	// ------------------------------------------    	
+    emitFindAll${className}( entity );
+}
+
+#end##foreach( $multiAssociation in $classObject.getMultipleAssociations() )
+
 
     /**
      * Method to retrieve the ${className} via an ${className}PrimaryKey.
