@@ -31,7 +31,7 @@ data class Updated${className}Event(
 #outputKotlinArgDeclarations( $classToGenerate $includeAssociations $includeId $forAggregate )
 )
 
-data class Deleted${className}Event(@Id val ${pk}: UUID)
+data class Deleted${className}Event(@Id val ${pk}: UUID? = null)
 
 // single association events
 #set( $includeComposites = false )
