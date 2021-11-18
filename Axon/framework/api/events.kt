@@ -11,6 +11,7 @@ import javax.persistence.*
 #set( $includeId = true )
 #set( $forAggregate = false )
 #set( $forEntity = true )
+
 //-----------------------------------------------------------
 // Event definitions
 //-----------------------------------------------------------
@@ -21,17 +22,17 @@ import javax.persistence.*
 
 // $className Events
 
-data class Created${className}Event(
+data class ${classToGenerate.getCreateEventAlias()}(
 #set( $includeAssociations = false )
 #outputKotlinArgDeclarations( $classToGenerate $includeAssociations $includeId $forAggregate $forEntity )
 )
 
-data class Updated${className}Event(
+data class ${classToGenerate.getUpdateEventAlias()}(
 #set( $includeAssociations = true )
-#outputKotlinArgDeclarations( $classToGenerate $includeAssociations $includeId $forAggregate )
+#outputKotlinArgDeclarations( $classToGenerate $includeAssociations $includeId $forAggregate $immutable)
 )
 
-data class Deleted${className}Event(@Id val ${pk}: UUID? = null)
+data class ${classToGenerate.getDeleteEventAlias()}(@Id val ${pk}: UUID? = null)
 
 // single association events
 #set( $includeComposites = false )

@@ -19,23 +19,24 @@ import javax.persistence.*
 #set( $pk = "${lowercaseClassName}Id" )
 
 // $className Commands
-data class Create${className}Command(
+data class ${class.getCreateCommandAlias()}(
 #set( $includeAssociations = false )
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
-data class Update${className}Command(
+data class ${class.getUpdateCommandAlias()}(
 #set( $includeAssociations = true)
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
-data class Delete${className}Command(@TargetAggregateIdentifier val ${pk}: UUID)
+data class ${class.getDeleteCommandAlias()}(@TargetAggregateIdentifier val ${pk}: UUID)
 
 // single association commands
 #set( $includeComposites = false )
 #foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
 #set( $roleName = $Utils.capitalizeFirstLetter( $singleAssociation.getRoleName() ) )
 #set( $childType = $singleAssociation.getType() )
+#set( $childClass = $aib.getClassObject( $childType ) )
 data class Assign${roleName}To${className}Command(@TargetAggregateIdentifier val ${pk}: UUID, val assignment: $childType )
 data class UnAssign${roleName}From${className}Command(@TargetAggregateIdentifier val ${pk}: UUID )
 #end##foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )

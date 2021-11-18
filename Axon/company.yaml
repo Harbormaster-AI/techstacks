@@ -23,6 +23,13 @@ entities:
           - name: "billingAddress"
             type: "Address"
             multiplicity: "OneToOne"
+      aliases:
+          - createCommandAlias: "createCompanyCommand"
+            createEventAlias: "createdCompanyEvent"
+            updateCommandAlias: "refreshCompanyCommand"
+            updateEventAlias: "refreshedCompanyEvent"
+            deleteCommandAlias: "closeCompanyCommand"
+            deleteEventAlias: "closedCompanyEvent"
     - name: "Division"
       data:
           - name: "name"
@@ -111,7 +118,7 @@ messages:
                   - type: "Company"
                     singleValue: "true"
               - name: "findCompaniesByIndustry"
-                type: "ScatterGather"
+                type: "Normal"
                 scatterGatherTimeOut: "10"
                 scatterGatherTimeUnit: "seconds"
                 inputArgs:
@@ -122,7 +129,7 @@ messages:
                     singleValue: "false"
               - name: "findByType"
                 queryName: "findCompaniesByType"
-                type: "Subscription"
+                type: "Normal"
                 generateStubQueryHandler: "true"
                 generateStubEventHandler: "true"
                 inputArgs:

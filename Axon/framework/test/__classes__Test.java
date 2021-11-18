@@ -57,7 +57,7 @@ public class ${classObject.getName()}Test{
 		LOGGER.info( "\n======== create instances to get the ball rolling  ======== ");
 
 		${lowercaseClassName}Id = ${className}BusinessDelegate.get${className}Instance()
-		.create${className}( generateNewEntity() )
+		.create${className}( generateNewCommand() )
 		.get${className}Id();
 
 		// ---------------------------------------------
@@ -66,7 +66,7 @@ public class ${classObject.getName()}Test{
 		setUpQuerySubscriptions();
 
 		${className}BusinessDelegate.get${className}Instance()
-					.create${className}( generateNewEntity() );
+					.create${className}( generateNewCommand() );
 
 	}
 
@@ -169,11 +169,13 @@ public class ${classObject.getName()}Test{
 		LOGGER.info( "-- Attempting to update a ${className}." );
 
 		StringBuilder msg = new StringBuilder( "Failed to update a ${className} : " );        
-		${className} entity = null;
+		${classObject.getUpdateCommandAlias()} command = new ${classObject.getUpdateCommandAlias()}();
+		${className} entity = read();
+
+#set( $includeAssociations = false )
+#determineArgsAsAssignment( ${classObject}  "command" "entity" ${includeAssociations} ) 
 
 		try {            
-			entity = read();
-
 			assertNotNull( entity, msg.toString() );
 
 			LOGGER.info( "-- Now updating the created ${className}." );
@@ -181,14 +183,15 @@ public class ${classObject.getName()}Test{
 			// for use later on...
 			${lowercaseClassName}Id = entity.get${className}Id();
 
-			${className}BusinessDelegate proxy = ${className}BusinessDelegate.get${className}Instance();            
-			proxy.update${className}( entity );   
+			${className}BusinessDelegate proxy = ${className}BusinessDelegate.get${className}Instance();  
+
+			proxy.update${className}( command );   
 
 			LOGGER.info( "-- Successfully saved ${className} - " + entity.toString() );
 		}
 		catch ( Throwable e ) {
 			LOGGER.warning( unexpectedErrorMsg );
-			LOGGER.warning( msg.toString() + " : primarykey = " + ${lowercaseClassName}Id + " : entity-" +  entity + " : " + e );
+			LOGGER.warning( msg.toString() + " : primarykey = " + ${lowercaseClassName}Id + " : command -" +  command + " : " + e );
 
 			throw e;
 		}
@@ -201,15 +204,28 @@ public class ${classObject.getName()}Test{
 		LOGGER.info( "\n======== DELETE ======== ");
 		LOGGER.info( "-- Deleting a previously created ${className}." );
 
+		${className} entity = new ${className}();
+		
 		try{
-		    ${className} entity = read(); 
-			${className}BusinessDelegate.get${className}Instance().delete( entity );
+		    entity = read(); 
 
-			LOGGER.info( "-- Successfully deleted ${className} with primary key " + ${lowercaseClassName}Id );            
+			LOGGER.info( "-- Successfully read ${className} with id " + ${lowercaseClassName}Id );            
 		}
 		catch ( Throwable e ) {
 			LOGGER.warning( unexpectedErrorMsg );
-			LOGGER.warning( "-- Failed to delete ${className} with primary key " + ${lowercaseClassName}Id );
+			LOGGER.warning( "-- Failed to read ${className} with id " + ${lowercaseClassName}Id );
+
+			throw e;
+		}
+
+		try{
+			${className}BusinessDelegate.get${className}Instance().delete( new ${classObject.getDeleteCommandAlias()}( entity.get${className}Id() ) );
+
+			LOGGER.info( "-- Successfully deleted ${className} with id " + ${lowercaseClassName}Id );            
+		}
+		catch ( Throwable e ) {
+			LOGGER.warning( unexpectedErrorMsg );
+			LOGGER.warning( "-- Failed to delete ${className} with id " + ${lowercaseClassName}Id );
 
 			throw e;
 		}
@@ -272,13 +288,13 @@ public class ${classObject.getName()}Test{
 	/**
 	 * Returns a new populated ${className}
 	 * 
-	 * @return ${className}
+	 * @return ${classObject.getCreateCommandAlias()} alias
 	 */
-		protected ${className} generateNewEntity() {
+		protected ${classObject.getCreateCommandAlias()} generateNewCommand() {
 #set( $args = "#determineDefaultArgs()" )	
-		${className} entity = new ${className}( $args );
+        ${classObject.getCreateCommandAlias()} command = new ${classObject.getCreateCommandAlias()}( $args );
 		
-		return( entity );
+		return( command );
 	}
 
 	//-----------------------------------------------------

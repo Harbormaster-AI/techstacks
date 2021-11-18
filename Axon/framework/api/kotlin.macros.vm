@@ -73,7 +73,7 @@
 #end##if ( $attribute.isFromAssociation() == false )
 ${type}? = null#end##macro( determineKotlinType inputType )
 
-#macro( outputKotlinArgDeclarations $class $includeAssociations $includeId $forAggregate $forEntity )
+#macro( outputKotlinArgDeclarations $class $includeAssociations $includeId $forAggregate $forEntity $mutable )
 #set( $className = ${class.getName()} )
 #set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
 #set( $pk = "${lowercaseClassName}Id" )

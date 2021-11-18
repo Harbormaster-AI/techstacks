@@ -37,36 +37,32 @@ public class ${className}RestController extends $parentController {
      * @param		${className}	${lowercaseClassName}
      */
 	@PostMapping("/create")
-    public void create( @RequestBody(required=true) Create${className}Command command ) {
-    	$className entity = new $className();
-
-#set( $includeAssociations = false )
-#determineArgsAsAssignment( ${classObject} "entity" "command" ${includeAssociations} )       
-
+    public $className create( @RequestBody(required=true) ${classObject.getCreateCommandAlias()} command ) {
+		$className entity = null;
 		try {       
         	
-			${className}BusinessDelegate.get${className}Instance().create${className}( entity );
+			entity = ${className}BusinessDelegate.get${className}Instance().create${className}( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
         }
+		
+		return entity;
     }
 
     /**
-     * Handles updating a ${className}.  if not key provided, calls create, otherwise calls save
+     * Handles updating a ${className}.  if no key provided, calls create, otherwise calls save
      * @param		${className} $lowercaseClassName
+     * @return		$className
      */
 	@PutMapping("/update")
-    public void update( @RequestBody(required=true) Update${className}Command command ) {
-    	$className entity = new $className();
-
-#set( $includeAssociations = true )
-#determineArgsAsAssignment( ${classObject} "entity" "command" ${includeAssociations} )       
-
+    public $className update( @RequestBody(required=true) ${classObject.getUpdateCommandAlias()} command ) {
+		$className entity = null;
+		
 		try {                        	        
 			// create the ${className}Business Delegate            
 			${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
-	        delegate.update${className}( entity );
+	        entity = delegate.update${className}(command);
 	        
 	        if ( this.${lowercaseClassName} != null )
 	            LOGGER.log( Level.WARNING, "successfully updated ${className}" );
@@ -74,20 +70,22 @@ public class ${className}RestController extends $parentController {
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "${className}Controller:update() - successfully update ${className} - " + exc.getMessage());        	
 	    }
+		
+		return entity;
 	}
  
     /**
      * Handles deleting a ${className} entity
-     * @param		UUID ${lowercaseClassName}Id
+     * @param		command ${class.getDeleteCommandAlias()}
      * @return		boolean
      */
     @DeleteMapping("/delete")    
-    public boolean delete( @RequestParam(required=true) UUID ${lowercaseClassName}Id ) {                
+    public boolean delete( @RequestBody(required=true) ${classObject.getDeleteCommandAlias()} command ) {                
         try {
         	${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
 
-        	delegate.delete( this.load( ${lowercaseClassName}Id ) );
-    		LOGGER.log( Level.WARNING, "Successfully deleted ${className} with key " + ${lowercaseClassName}Id );
+        	delegate.delete( command );
+    		LOGGER.log( Level.WARNING, "Successfully deleted ${className} with key " + command.get${className}Id() );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage() );
@@ -147,14 +145,12 @@ public class ${className}RestController extends $parentController {
 #set( $childType = $singleAssociation.getType() )
     /**
      * save ${roleName} on ${className}
-     * @param		UUID	${lowercaseClassName}Id
-     * @param		${childType} entity
-     * @param		${className} $lowercaseClassName
+     * @param		command Assign${roleName}To${className}Command
      */     
 	@PutMapping("/assign${roleName}")
-	public void assign${roleName}( @RequestParam(required=true) UUID ${lowercaseClassName}Id, @RequestBody ${childType} entity ) {
+	public void assign${roleName}( @RequestBody Assign${roleName}To${className}Command command ) {
 		try {
-			${className}BusinessDelegate.get${className}Instance().assign${roleName}( ${lowercaseClassName}Id, entity );   
+			${className}BusinessDelegate.get${className}Instance().assign${roleName}( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign ${roleName}", exc );
@@ -163,12 +159,12 @@ public class ${className}RestController extends $parentController {
 
     /**
      * unassign ${roleName} on ${className}
-     * @param		UUID	${lowercaseClassName}Id
+     * @param		 command UnAssign${roleName}From${className}Command
      */     
 	@PutMapping("/unAssign${roleName}")
-	public void unAssign${roleName}( @RequestParam(required=true) UUID ${lowercaseClassName}Id ) {
+	public void unAssign${roleName}( @RequestBody(required=true)  UnAssign${roleName}From${className}Command command ) {
 		try {
-			${className}BusinessDelegate.get${className}Instance().unAssign${roleName}( ${lowercaseClassName}Id );   
+			${className}BusinessDelegate.get${className}Instance().unAssign${roleName}( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign ${roleName}", exc );
@@ -182,13 +178,12 @@ public class ${className}RestController extends $parentController {
 #set( $childType = $multiAssociation.getType() )
     /**
      * save ${roleName} on ${className}
-     * @param		UUID ${lowercaseClassName}Id
-     * @param		${childType} entity 
+     * @param		Add${roleName}To${className}Command command
      */     
 	@PutMapping("/addTo${roleName}")
-	public void addTo${roleName}( @RequestParam(required=true) UUID ${lowercaseClassName}Id, @RequestBody(required=true) ${childType} entity ) {
+	public void addTo${roleName}( @RequestBody(required=true) Add${roleName}To${className}Command command ) {
 		try {
-			${className}BusinessDelegate.get${className}Instance().addTo${roleName}( ${lowercaseClassName}Id, entity );   
+			${className}BusinessDelegate.get${className}Instance().addTo${roleName}( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set $roleName", exc );
@@ -197,14 +192,13 @@ public class ${className}RestController extends $parentController {
 
     /**
      * delete ${roleName} on ${className}
-     * @param		UUID ${lowercaseClassName}Id
-     * @param		UUID childId
+     * @param		Remove${roleName}From${className}Command command
      */     	
 	@PutMapping("/removeFrom${roleName}")
-	public void removeFrom${roleName}( 	@RequestParam(required=true) UUID ${lowercaseClassName}Id, @RequestParam(required=true) UUID childId)
+	public void removeFrom${roleName}( 	@RequestBody(required=true) Remove${roleName}From${className}Command command )
 	{		
 		try {
-			${className}BusinessDelegate.get${className}Instance().removeFrom${roleName}( ${lowercaseClassName}Id, childId );
+			${className}BusinessDelegate.get${className}Instance().removeFrom${roleName}( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set ${roleName}", exc );

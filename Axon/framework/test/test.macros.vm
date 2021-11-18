@@ -1,6 +1,6 @@
 #macro( determineDefaultArgs )
 #set( $includePKs = false )
-#set( $attributes = ${classObject.getAttributesOrderedInHierarchy( $includePKs )} )
+#set( $attributes = ${classObject.getDirectAttributes( $includePKs )} )
 #set( $args = "null" )
 #if ( $attributes.size() > 0 )
 #set( $args = "null, " )
