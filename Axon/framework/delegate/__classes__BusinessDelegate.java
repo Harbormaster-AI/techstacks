@@ -69,20 +69,18 @@ extends BaseBusinessDelegate {
 	}
  
    /**
-    * Creates the provided BO.
-    * @param		${className} entity
+    * Creates the provided command.
+    * 
+    * @param		command ${class.getCreateCommandAlias()}
     * @exception    ProcessingException
     * @exception	IllegalArgumentException
     * @return		${className}
     */
-	public ${className} create${className}( ${className} entity )
+	public ${className} create${className}( ${classObject.getCreateCommandAlias()} command )
     throws ProcessingException, IllegalArgumentException {
 
-		Create${className}Command command = new Create${className}Command();
-
-#set( $includeAssociations = false )
-#determineArgsAsAssignment( ${classObject}  "command" "entity" ${includeAssociations} )        
-
+		$className entity = null;
+		
 		try {
 			// --------------------------------------
         	// assign identity now if none
@@ -98,14 +96,11 @@ extends BaseBusinessDelegate {
     		// ---------------------------------------
     		// issue the command
     		// ---------------------------------------
-			UUID id = commandGateway.sendAndWait( command );
-			LOGGER.log( Level.WARNING, "UUID " + id + " return from Command Gateway for create${className}" );
+        	CompletableFuture<${className}> futureEntity = commandGateway.send( command );
+			entity = futureEntity.get();
 			
-			// ---------------------------------------
-			// assign just in case creating before (see above) 
-			// is ignored in favor of apply the id later
-			// ---------------------------------------
-			entity.set${className}Id( id );        	
+			LOGGER.log( Level.INFO, "return from Command Gateway for create of ${className} is " + entity );
+			
         }
         catch (Exception exc) {
             final String errMsg = "Unable to create ${className} - " + exc;
@@ -119,20 +114,17 @@ extends BaseBusinessDelegate {
     }
 
    /**
-    * Saves the underlying BO.
-    * @param		entity 	${className}
+    * Update the provided command.
+    * @param		command ${classObject.getUpdateCommandAlias()}
     * @exception    ProcessingException
     * @exception  	IllegalArgumentException
     * @return		${className}
     */
-    public void update${className}( ${className} entity ) 
+    public $className update${className}( ${classObject.getUpdateCommandAlias()} command ) 
     throws ProcessingException, IllegalArgumentException {
 
-		Update${className}Command command = new Update${className}Command();
-
-#set( $includeAssociations = true )
-#determineArgsAsAssignment( ${classObject}  "command" "entity" ${includeAssociations} )        
-
+    	$className entity = null;
+    	
     	try {       
 
 			// --------------------------------------
@@ -143,8 +135,12 @@ extends BaseBusinessDelegate {
         	// --------------------------------------
         	// issue the command
         	// --------------------------------------    	
-    		commandGateway.sendAndWait( command );
+        	CompletableFuture<${className}> futureEntity = commandGateway.send( command );
 
+        	entity = futureEntity.get();
+        	
+			LOGGER.log( Level.INFO, "return from Command Gateway for update of ${className} is " + entity );
+        	
     	}
         catch (Exception exc) {
             final String errMsg = "Unable to save ${className} - " + exc;
@@ -152,19 +148,18 @@ extends BaseBusinessDelegate {
             throw new ProcessingException( errMsg, exc );
         }
         
+    	return entity;
     }
    
    /**
     * Deletes the associatied value object
-    * @param		${className}	entity 
+    * @param		command ${classObject.getDeleteCommandAlias()}
     * @exception 	ProcessingException
     */
-    public void delete( ${className} entity ) 
+    public void delete( ${classObject.getDeleteCommandAlias()} command ) 
     throws ProcessingException, IllegalArgumentException {	
     	
         try {  
-        	Delete${className}Command command = new Delete${className}Command( entity.get${className}Id() );
-
 			// --------------------------------------
         	// validate the command
         	// --------------------------------------    	
@@ -173,11 +168,11 @@ extends BaseBusinessDelegate {
         	// --------------------------------------
         	// issue the update command
         	// --------------------------------------    	
-    		commandGateway.sendAndWait( command );
+    		commandGateway.send( command );
 
         }
         catch (Exception exc) {
-            final String errMsg = "Unable to delete ${className} using Id = "  + entity.get${className}Id();
+            final String errMsg = "Unable to delete ${className} using Id = "  + command.get${className}Id();
             LOGGER.log( Level.WARNING, errMsg, exc );
             throw new ProcessingException( errMsg, exc );
         }
@@ -258,44 +253,38 @@ extends BaseBusinessDelegate {
 #set( $parentName  = $classObject.getName() )
     /**
      * assign ${roleName} on ${className}
-     * @param		${lowercaseClassName}Id	UUID	
-     * @param		${className}Enity child
+     * @param		Assign${roleName}To${className}Command command	
      * @exception	ProcessingException
      */     
-	public void assign${roleName}( UUID ${lowercaseClassName}Id,  ${childType} child ) throws ProcessingException {
-		if ( ${lowercaseClassName}Id == null ) {
-			throw new ProcessingException( "${lowercaseClassName}Id cannot be null" ); 
-		}
-		
-		if ( child == null ) {
-			throw new ProcessingException( "$roleName cannot be null" ); 
-		}
+	public void assign${roleName}( Assign${roleName}To${className}Command command ) throws ProcessingException {
 
 		// --------------------------------------------
 		// load the parent
 		// --------------------------------------------
-		load( ${lowercaseClassName}Id );
+		load( command.get${className}Id() );
 		
 		${childType}BusinessDelegate childDelegate 	= ${childType}BusinessDelegate.get${childType}Instance();
 		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();			
-		UUID childId 								= child.get${childType}Id();
+		UUID childId = command.getAssignment().get${childType}Id();
+		${childType} child = null;
 		
 		try {
 	        // --------------------------------------------------------------
 			// if there is a childId it means the child exists, so get it
+			// to ensure we have the "most up to date" version
 	        // --------------------------------------------------------------
-			if ( childId != null )
+/*			if ( childId != null )
 				child = childDelegate.get${childType}( new ${childType}FetchOneSummary( childId ) );
 			else // otherwise create it
 				child = childDelegate.create${childType}( child );
 
 			// --------------------------------------
-	    	// instantiate the command
+	    	// update the command
 	    	// --------------------------------------    
-			Assign${roleName}To${className}Command command = new Assign${roleName}To${className}Command( ${lowercaseClassName}Id, child );
-
+			command.setAssignment( child );
+*/
 			// --------------------------------------
-	    	// validate the command
+	    	// best to validate the command now
 	    	// --------------------------------------    
 	    	${className}Validator.getInstance().validate( command );    
 
@@ -310,45 +299,16 @@ extends BaseBusinessDelegate {
 			LOGGER.log( Level.WARNING,  msg );
 			throw new ProcessingException( msg, exc );
         }
-	
-		/*
-		${lowercaseClassName}.set${roleName}( child );
-	
-		try {
-	        // --------------------------------------------------------------
-			// save it
-	        // --------------------------------------------------------------
-			parentDelegate.update${className}( ${lowercaseClassName} );
-			
-	        // --------------------------------------------------------------
-	        // emit to subscription queries of type Find${roleName}For$className}, 
-	        // but only if the id matches. 
-	        // --------------------------------------------------------------
-	        queryUpdateEmitter.emit(Find${roleName}For${className}.class,
-	                                query -> query.get${className}Id().equals(${lowercaseClassName}Id),
-	                                child);			
-		}
-		catch( Exception exc ) {
-			final String msg = "Failed saving parent ${className} using Id " + ${lowercaseClassName}Id;
-			LOGGER.log( Level.WARNING, msg, exc );
-			throw new ProcessingException( msg, exc );
-		}
-		*/
 	}
 
     /**
      * unAssign ${roleName} on ${className}
-     * @param		${lowercaseClassName}Id	UUID	
+     * @param		UnAssign${roleName}From${className}Command command	
      * @exception	ProcessingException
      */     
-	public void unAssign${roleName}( UUID ${lowercaseClassName}Id ) throws ProcessingException {
+	public void unAssign${roleName}( UnAssign${roleName}From${className}Command command ) throws ProcessingException {
 
 		try {
-			// --------------------------------------
-	    	// instantiate the command
-	    	// --------------------------------------    
-			UnAssign${roleName}From${className}Command command = new UnAssign${roleName}From${className}Command( ${lowercaseClassName}Id );
-	
 			// --------------------------------------
 	    	// validate the command
 	    	// --------------------------------------    
@@ -364,56 +324,6 @@ extends BaseBusinessDelegate {
 			LOGGER.log( Level.WARNING, msg, exc );
 			throw new ProcessingException( msg, exc );
 		}
-
-		/*		
-		load( ${lowercaseClassName}Id );
-
-		if ( ${lowercaseClassName}.get${roleName}() != null ) {
-			UUID childId = ${lowercaseClassName}.get${roleName}().get${childType}Id();
-
-			
-	        // --------------------------------------------------------------
-			// null out the parent first so there's no constraint during deletion
-	        // --------------------------------------------------------------
-			${lowercaseClassName}.set${roleName}( null );
-
-			try {
-				${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();
-
-		        // --------------------------------------------------------------
-				// save it
-		        // --------------------------------------------------------------
-				parentDelegate.update${className}( ${lowercaseClassName} );
-						
-			}
-			catch( Exception exc ) {
-				final String msg = "Failed to save ${className}";
-				LOGGER.log( Level.WARNING, msg, exc );
-				throw new ProcessingException( msg, exc );
-			}
-			
-			try {
-		        // --------------------------------------------------------------
-				// safe to delete the child			
-		        // --------------------------------------------------------------
-				${childType}BusinessDelegate childDelegate = ${childType}BusinessDelegate.get${childType}Instance();
-				childDelegate.delete( childDelegate.load(childId) );
-				
-		        // --------------------------------------------------------------
-		        // emit to subscription queries of type Find${roleName}For$className}, 
-		        // but only if the id matches. 
-		        // --------------------------------------------------------------
-		        queryUpdateEmitter.emit(Find${roleName}For${className}.class,
-		                                query -> query.get${className}Id().equals(${lowercaseClassName}Id),
-		                                null);	
-			}
-			catch( Exception exc ) {
-				final String msg = "Failed to delete the child using Id " + childId; 
-				LOGGER.log( Level.WARNING, msg, exc );
-				throw new ProcessingException( msg, exc );
-			}
-		}
-	*/
 	}
 	
 #end##foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
@@ -424,24 +334,20 @@ extends BaseBusinessDelegate {
 #set( $parentName  = $classObject.getName() )
     /**
      * add ${childType} to ${roleName} 
-     * @param		UUID ${lowercaseClassName}Id
-     * @param		${childType} child 
+     * @param		Add${roleName}To${className}Command command command
      * @exception	ProcessingException
      */     
-	public void addTo${roleName}( UUID ${lowercaseClassName}Id, ${childType} child ) throws ProcessingException {
+	public void addTo${roleName}( Add${roleName}To${className}Command command ) throws ProcessingException {
 		
-		if ( child == null ) {
-			throw new ProcessingException( "$roleName entity arg cannot be null" ); 
-		}
 		
 		// -------------------------------------------
 		// load the parent
 		// -------------------------------------------
-		load( ${lowercaseClassName}Id );
+		load( command.get${className}Id() );
 
 		${childType}BusinessDelegate childDelegate 	= ${childType}BusinessDelegate.get${childType}Instance();
 		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();		
-		UUID childId = child.get${childType}Id();
+		UUID childId = command.getAddTo().get${childType}Id();
 		
 		// -------------------------------------------
 		// if no child id or the child is not found, 
@@ -449,20 +355,20 @@ extends BaseBusinessDelegate {
 		// otherwise add what was found
 		// -------------------------------------------
 		try {		
-			${childType} childToAdd = childId == null ? null : childDelegate.get${childType}( new ${childType}FetchOneSummary(childId) );
+	/*		${childType} childToAdd = childId == null ? null : childDelegate.get${childType}( new ${childType}FetchOneSummary(childId) );
 				
 			// -------------------------------------------
 			// if not found, create it
 			// -------------------------------------------
 			if ( childToAdd == null ) {
-				childToAdd = childDelegate.create${childType}( child );
+				childToAdd = childDelegate.create${childType}( command );
 			}
 
 			// --------------------------------------
-	    	// instantiate the command
+	    	// assign the most recent version
 	    	// --------------------------------------    
-			Add${roleName}To${className}Command command = new Add${roleName}To${className}Command( ${lowercaseClassName}Id, childToAdd );
-
+			command.setAddTo( childToAdd );
+	*/		
 			// --------------------------------------
 	    	// validate the command
 	    	// --------------------------------------    
@@ -471,12 +377,7 @@ extends BaseBusinessDelegate {
 	    	// --------------------------------------
         	// issue the command
         	// --------------------------------------    	
-    		commandGateway.sendAndWait( command );
-			
-			// -------------------------------------------
-			// add it to the ${roleName}
-			// -------------------------------------------
-//			${lowercaseClassName}.get${roleName}().add( childToAdd );
+    		commandGateway.sendAndWait( command );			
 		}
 		catch( Exception exc ) {
 			final String msg = "Failed to add a ${childType} as ${roleName} to ${parentName}" ; 
@@ -484,58 +385,26 @@ extends BaseBusinessDelegate {
 			throw new ProcessingException( msg, exc );
 		}
 
-/*		try {
-			// -------------------------------------------
-			// save the ${className}
-			// -------------------------------------------
-			parentDelegate.update${className}( ${lowercaseClassName} );
-
-			// --------------------------------------------------------------
-	        // emit to subscription queries of type Find${roleName}For$className}, 
-	        // but only if the id matches. 
-	        // --------------------------------------------------------------
-	        queryUpdateEmitter.emit(Find${roleName}For${className}.class,
-	                                query -> query.get${className}Id().equals(${lowercaseClassName}Id),
-	                                child);			
-		}
-		catch( Exception exc ) {
-			final String msg = "Failed saving parent ${className}" ; 
-			LOGGER.log( Level.WARNING, msg, exc );
-			throw new ProcessingException( msg, exc );
-		}
-	*/
 	}
 
     /**
      * remove ${childType} from ${roleName}
-     * @param		UUID ${lowercaseClassName}Id
-     * @param		UUID childId
+     * @param		Remove${roleName}From${className}Command command
      * @exception	ProcessingException
      */     	
-	public void removeFrom${roleName}( UUID ${lowercaseClassName}Id, UUID childId ) throws ProcessingException {		
+	public void removeFrom${roleName}( Remove${roleName}From${className}Command command ) throws ProcessingException {		
 		
-		if ( childId == null ) {
-			throw new ProcessingException( "$roleName identifier cannot be null" ); 
-		}
-
-		
-		// --------------------------------------------------------------
-		// load parent
-		// --------------------------------------------------------------	
-//		load( ${lowercaseClassName}Id );
-
 		${childType}BusinessDelegate childDelegate 	= ${childType}BusinessDelegate.get${childType}Instance();
-//		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();
-//		Set<${childType}> children = ${lowercaseClassName}.get${roleName}();
+		UUID childId = command.getRemoveFrom().get${childType}Id();
 
 		try {
 			
-			$childType childToRemove = childDelegate.get${childType}(new ${childType}FetchOneSummary( childId ));
+//			$childType childToRemove = childDelegate.get${childType}(new ${childType}FetchOneSummary( childId ));
 			
 			// --------------------------------------
-	    	// instantiate the command
+	    	// assign most recent version to the command
 	    	// --------------------------------------    
-			Remove${roleName}From${className}Command command = new Remove${roleName}From${className}Command( ${lowercaseClassName}Id, childToRemove );
+//			command.setRemoveFrom( childToRemove );
 
 			// --------------------------------------
 	    	// validate the command
@@ -547,49 +416,12 @@ extends BaseBusinessDelegate {
 	    	// --------------------------------------    	
 			commandGateway.sendAndWait( command );
 
-			// --------------------------------------------------------------
-			// first remove the relevant child from the list
-			// child = childDelegate.get${childType}( new ${childType}FetchOneSummary(childId));
-			// --------------------------------------------------------------
-	//		children.remove( childDelegate.get${childType}(new ${childType}FetchOneSummary( childId )) );
-			
-			// --------------------------------------------------------------
-			// then safe to delete the child if allowed...deterred by default				
-			// --------------------------------------------------------------
-			// childDelegate.delete( child );
 		}
 		catch( Exception exc ) {
 			final String msg = "Failed to remove child using Id " + childId; 
 			LOGGER.log( Level.WARNING, msg, exc );
 			throw new ProcessingException( msg, exc );
 		}
-/*			
-		// --------------------------------------------------------------
-		// assign the modified list of ${childType} back to the ${lowercaseClassName}
-		// --------------------------------------------------------------
-		${lowercaseClassName}.set${roleName}( children );			
-		
-		// --------------------------------------------------------------
-		// save it 
-		// --------------------------------------------------------------
-		try {
-			parentDelegate.update${className}( ${lowercaseClassName} );
-
-			// --------------------------------------------------------------
-	        // emit to subscription queries of type Find${roleName}For$className}, 
-	        // but only if the id matches. 
-	        // --------------------------------------------------------------
-	        queryUpdateEmitter.emit(Find${roleName}For${className}.class,
-	                                query -> query.get${className}Id().equals(${lowercaseClassName}Id),
-	                                null);			
-
-		}
-		catch( Throwable exc ) {
-			final String msg = "Failed to save the ${className}"; 
-			LOGGER.log( Level.WARNING, msg, exc );
-			throw new ProcessingException( msg, exc );
-		}
-*/
 	}
 
 #end##foreach( $multiAssociation in $classObject.getMultipleAssociations() )
