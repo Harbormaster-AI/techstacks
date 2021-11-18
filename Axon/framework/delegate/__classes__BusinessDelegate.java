@@ -281,7 +281,7 @@ extends BaseBusinessDelegate {
 			// --------------------------------------
 	    	// update the command
 	    	// --------------------------------------    
-			command.setAssignment( child );
+			commandAssignment( child );
 */
 			// --------------------------------------
 	    	// best to validate the command now

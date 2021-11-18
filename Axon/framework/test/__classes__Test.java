@@ -169,11 +169,11 @@ public class ${classObject.getName()}Test{
 		LOGGER.info( "-- Attempting to update a ${className}." );
 
 		StringBuilder msg = new StringBuilder( "Failed to update a ${className} : " );        
-		${classObject.getUpdateCommandAlias()} command = new ${classObject.getUpdateCommandAlias()}();
 		${className} entity = read();
-
-#set( $includeAssociations = false )
-#determineArgsAsAssignment( ${classObject}  "command" "entity" ${includeAssociations} ) 
+#set( $includeAssociations = true )
+#set( $varName = "entity" )
+#set( $args = "#determineArgsAsInput( $classObject, $varName, $includeAssociations )" ) 		
+		${classObject.getUpdateCommandAlias()} command = new ${classObject.getUpdateCommandAlias()}(${args});
 
 		try {            
 			assertNotNull( entity, msg.toString() );
@@ -204,11 +204,10 @@ public class ${classObject.getName()}Test{
 		LOGGER.info( "\n======== DELETE ======== ");
 		LOGGER.info( "-- Deleting a previously created ${className}." );
 
-		${className} entity = new ${className}();
+		${className} entity = null;
 		
 		try{
 		    entity = read(); 
-
 			LOGGER.info( "-- Successfully read ${className} with id " + ${lowercaseClassName}Id );            
 		}
 		catch ( Throwable e ) {
@@ -220,7 +219,6 @@ public class ${classObject.getName()}Test{
 
 		try{
 			${className}BusinessDelegate.get${className}Instance().delete( new ${classObject.getDeleteCommandAlias()}( entity.get${className}Id() ) );
-
 			LOGGER.info( "-- Successfully deleted ${className} with id " + ${lowercaseClassName}Id );            
 		}
 		catch ( Throwable e ) {

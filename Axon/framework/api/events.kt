@@ -10,7 +10,7 @@ import javax.persistence.*
 
 #set( $includeId = true )
 #set( $forAggregate = false )
-#set( $forEntity = true )
+#set( $forEntity = false )
 
 //-----------------------------------------------------------
 // Event definitions

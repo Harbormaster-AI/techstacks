@@ -37,30 +37,28 @@ public class ${className}Aggregate {
     // -----------------------------------------
     public ${className}Aggregate() {
     }
-    
+
 	// ----------------------------------------------
 	// intrinsic command handlers
 	// ----------------------------------------------
-
+#set( $includeAssociations = false )
+#set( $varName = "command" )
+#set( $args = "#determineArgsAsInput( $classObject $varName $includeAssociations )" )
     @CommandHandler
     public ${className}Aggregate(${classObject.getCreateCommandAlias()} command) throws Exception {
     	LOGGER.info( "Applying event ${classObject.getCreateEventAlias()}" );
-    	${classObject.getCreateEventAlias()} event = new ${classObject.getCreateEventAlias()}();
-
-#set( $includeAssociations = false )
-#determineArgsAsAssignment( ${classObject}  "event" "command" ${includeAssociations} )        
+    	${classObject.getCreateEventAlias()} event = new ${classObject.getCreateEventAlias()}(${args});
     	
         apply(event);
     }
 
-#set( $argsAsInput = "#determineArgsAsInput( ${classObject} ${argName} ${includeAssociations} )" )    
+#set( $includeAssociations = true )
+#set( $varName = "command" )
+#set( $args = "#determineArgsAsInput( $classObject $varName $includeAssociations )" )
     @CommandHandler
     public void handle(${classObject.getUpdateCommandAlias()} command) throws Exception {
     	LOGGER.info( "Applying event ${classObject.getUpdateEventAlias()}" );
-    	${classObject.getUpdateEventAlias()} event = new ${classObject.getUpdateEventAlias()}();
-
-#set( $includeAssociations = true )
-#determineArgsAsAssignment( ${classObject}  "event" "command" ${includeAssociations} )        
+    	${classObject.getUpdateEventAlias()} event = new ${classObject.getUpdateEventAlias()}(${args});        
     	
         apply(event);
     }

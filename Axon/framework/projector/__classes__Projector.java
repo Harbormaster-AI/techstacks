@@ -50,10 +50,10 @@ public class ${className}Projector {
     @EventHandler( payloadType=${classObject.getCreateEventAlias()}.class )
     public $className handle( ${classObject.getCreateEventAlias()} event) {
 	    LOGGER.info("handling ${classObject.getCreateEventAlias()} - " + event );
-	    
 	    $className entity = new ${className}();
 #set( $includeAssociations = false )
-#determineArgsAsAssignment( ${classObject} "entity" "event" ${includeAssociations} )        
+#determineArgsAsAssignment( ${classObject} "entity" "event" ${includeAssociations} )  
+	    
     	// ------------------------------------------
     	// persist a new one
     	// ------------------------------------------ 
@@ -74,10 +74,9 @@ public class ${className}Projector {
     public $className handle( ${classObject.getUpdateEventAlias()} event) {
     	LOGGER.info("handling ${classObject.getUpdateEventAlias()} - " + event );
     	
-    	$className entity = new ${className}();
-
-#set( $includeAssociations = true )    	
-#determineArgsAsAssignment( ${classObject} "entity" "event" ${includeAssociations} )        
+	    $className entity = new ${className}();
+#set( $includeAssociations = true )
+#determineArgsAsAssignment( ${classObject} "entity" "event" ${includeAssociations} )  
  
     	// ------------------------------------------
     	// merge with an existing instance
