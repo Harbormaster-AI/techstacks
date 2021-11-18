@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 #importStatements( $imports )
 
 /**
- * Handler for ${className} as outlined for the CQRS pattern.  All event handling and query handling related to ${className} are invoked here
+ * Projector for ${className} as outlined for the CQRS pattern.  All event handling and query handling related to ${className} are invoked here
  * and dispersed as an event to be handled elsewhere.
  * 
  * Commands are handled by ${className}Aggregate
@@ -36,20 +36,20 @@ import org.springframework.stereotype.Component;
  */
 @ProcessingGroup("${lowercaseClassName}")
 @Component("${lowercaseClassName}-handler")
-public class ${className}Handler {
+public class ${className}Projector {
 		
 	// core constructor
-	public ${className}Handler(EntityManager entityManager, QueryUpdateEmitter queryUpdateEmitter ) {
+	public ${className}Projector(EntityManager entityManager, QueryUpdateEmitter queryUpdateEmitter ) {
         this.entityManager = entityManager;
         this.queryUpdateEmitter = queryUpdateEmitter;
     }	
 
 	/*
-     * @param	event Create${className}Event
+     * @param	event ${classObject.getCreateEventAlias()}
      */
-    @EventHandler( payloadType=Created${className}Event.class )
-    public void handle( Created${className}Event event) {
-	    LOGGER.info("handling Created${className}Event - " + event );
+    @EventHandler( payloadType=${classObject.getCreateEventAlias()}.class )
+    public $className handle( ${classObject.getCreateEventAlias()} event) {
+	    LOGGER.info("handling ${classObject.getCreateEventAlias()} - " + event );
 	    
 	    $className entity = new ${className}();
 #set( $includeAssociations = false )
@@ -63,14 +63,16 @@ public class ${className}Handler {
     	// emit to subscribers that find all
     	// ------------------------------------------    	
         emitFindAll${className}( entity );
+        
+        return entity;
     }
 
     /*
-     * @param	event Update${className}Event
+     * @param	event ${classObject.getUpdateEventAlias()}
      */
-    @EventHandler( payloadType=Updated${className}Event.class )
-    public void handle( Updated${className}Event event) {
-    	LOGGER.info("handling Updated${className}Event - " + event );
+    @EventHandler( payloadType=${classObject.getUpdateEventAlias()}.class )
+    public $className handle( ${classObject.getUpdateEventAlias()} event) {
+    	LOGGER.info("handling ${classObject.getUpdateEventAlias()} - " + event );
     	
     	$className entity = new ${className}();
 
@@ -91,14 +93,16 @@ public class ${className}Handler {
     	// emit to subscribers that find all
     	// ------------------------------------------    	
         emitFindAll${className}( entity );
+        
+        return entity;
     }
     
     /*
-     * @param	event Delete${className}Event
+     * @param	event ${classObject.getDeleteEventAlias()}
      */
-    @EventHandler( payloadType=Deleted${className}Event.class )
-    public void handle( Deleted${className}Event event) {
-    	LOGGER.info("handling Deleted${className}Event - " + event );
+    @EventHandler( payloadType=${classObject.getDeleteEventAlias()}.class )
+    public void handle( ${classObject.getDeleteEventAlias()} event) {
+    	LOGGER.info("handling ${classObject.getCreateEventAlias()} - " + event );
     	
     	$className entity = entityManager.find(${className}.class, event.get${className}Id());
     	
@@ -342,6 +346,6 @@ public void handle( Removed${roleName}From${className}Event event) {
     private final EntityManager entityManager;
 	@Autowired
 	private final QueryUpdateEmitter queryUpdateEmitter;
-    private static final Logger LOGGER 	= Logger.getLogger(${className}Handler.class.getName());
+    private static final Logger LOGGER 	= Logger.getLogger(${className}Projector.class.getName());
 
 }
