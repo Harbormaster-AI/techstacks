@@ -35,43 +35,37 @@ public class ${className}RestController extends $parentController {
     /**
      * Handles create a ${className}.  if not key provided, calls create, otherwise calls save
      * @param		${className}	${lowercaseClassName}
+     * @return		${classObject.getCreateCommandAlias()}
      */
 	@PostMapping("/create")
-    public $className create( @RequestBody(required=true) ${classObject.getCreateCommandAlias()} command ) {
-		$className entity = null;
+    public ${classObject.getCreateCommandAlias()} create( @RequestBody(required=true) ${classObject.getCreateCommandAlias()} command ) {
 		try {       
         	
-			entity = ${className}BusinessDelegate.get${className}Instance().create${className}( command );
+			command = ${className}BusinessDelegate.get${className}Instance().create${className}( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
         }
 		
-		return entity;
+		return command;
     }
 
     /**
      * Handles updating a ${className}.  if no key provided, calls create, otherwise calls save
      * @param		${className} $lowercaseClassName
-     * @return		$className
      */
 	@PutMapping("/update")
-    public $className update( @RequestBody(required=true) ${classObject.getUpdateCommandAlias()} command ) {
-		$className entity = null;
+    public void update( @RequestBody(required=true) ${classObject.getUpdateCommandAlias()} command ) {
 		
 		try {                        	        
-			// create the ${className}Business Delegate            
-			${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
-	        entity = delegate.update${className}(command);
-	        
-	        if ( this.${lowercaseClassName} != null )
-	            LOGGER.log( Level.WARNING, "successfully updated ${className}" );
+			// -----------------------------------------------
+			// delegate the ${classObject.getUpdateCommandAlias()}
+			// -----------------------------------------------
+			${className}BusinessDelegate.get${className}Instance().update${className}(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "${className}Controller:update() - successfully update ${className} - " + exc.getMessage());        	
-	    }
-		
-		return entity;
+	    }		
 	}
  
     /**

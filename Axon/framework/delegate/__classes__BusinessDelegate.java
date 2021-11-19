@@ -74,13 +74,11 @@ extends BaseBusinessDelegate {
     * @param		command ${class.getCreateCommandAlias()}
     * @exception    ProcessingException
     * @exception	IllegalArgumentException
-    * @return		${className}
+    * @return		${classObject.getCreateCommandAlias()}
     */
-	public ${className} create${className}( ${classObject.getCreateCommandAlias()} command )
+	public ${classObject.getCreateCommandAlias()} create${className}( ${classObject.getCreateCommandAlias()} command )
     throws ProcessingException, IllegalArgumentException {
 
-		$className entity = null;
-		
 		try {
 			// --------------------------------------
         	// assign identity now if none
@@ -94,12 +92,18 @@ extends BaseBusinessDelegate {
         	${className}Validator.getInstance().validate( command );    
 
     		// ---------------------------------------
-    		// issue the command
+    		// issue the ${classObject.getCreateCommandAlias()} - by convention the future return value for a create command
+        	// that is handled by the constructor of an aggregate will return the UUID 
     		// ---------------------------------------
-        	CompletableFuture<${className}> futureEntity = commandGateway.send( command );
-			entity = futureEntity.get();
+        	CompletableFuture<UUID> future = commandGateway.send( command );
+        	
+        	// ----------------------------------------
+        	// re-assign in the event assignment does not
+        	// take place above or is overridden
+        	// ----------------------------------------
+        	command.set${className}Id( future.get() );
 			
-			LOGGER.log( Level.INFO, "return from Command Gateway for create of ${className} is " + entity );
+			LOGGER.log( Level.INFO, "return from Command Gateway for ${classObject.getCreateCommandAlias()} of ${className} is " + command );
 			
         }
         catch (Exception exc) {
@@ -110,7 +114,7 @@ extends BaseBusinessDelegate {
         finally {
         }        
         
-        return entity;
+        return command;
     }
 
    /**
@@ -118,13 +122,10 @@ extends BaseBusinessDelegate {
     * @param		command ${classObject.getUpdateCommandAlias()}
     * @exception    ProcessingException
     * @exception  	IllegalArgumentException
-    * @return		${className}
     */
-    public $className update${className}( ${classObject.getUpdateCommandAlias()} command ) 
+    public void update${className}( ${classObject.getUpdateCommandAlias()} command ) 
     throws ProcessingException, IllegalArgumentException {
 
-    	$className entity = null;
-    	
     	try {       
 
 			// --------------------------------------
@@ -133,14 +134,16 @@ extends BaseBusinessDelegate {
         	${className}Validator.getInstance().validate( command );    
 
         	// --------------------------------------
-        	// issue the command
+        	// issue the ${classObject.getUpdateCommandAlias()} and return right away
         	// --------------------------------------    	
-        	CompletableFuture<${className}> futureEntity = commandGateway.send( command );
-
-        	entity = futureEntity.get();
-        	
-			LOGGER.log( Level.INFO, "return from Command Gateway for update of ${className} is " + entity );
-        	
+        	commandGateway.send( command )
+    			.whenComplete((Object result, Throwable throwable) -> {
+                	if ( throwable == null )
+                		LOGGER.log( Level.INFO, "Successfully executed ${classObject.getUpdateCommandAlias()} of ${className} is " + command );
+                	else {
+                		LOGGER.log( Level.WARNING, "Failure during execution of ${classObject.getUpdateCommandAlias()} on ${className} " + command, throwable );
+                	}
+    		});
     	}
         catch (Exception exc) {
             final String errMsg = "Unable to save ${className} - " + exc;
@@ -148,7 +151,6 @@ extends BaseBusinessDelegate {
             throw new ProcessingException( errMsg, exc );
         }
         
-    	return entity;
     }
    
    /**
@@ -164,11 +166,18 @@ extends BaseBusinessDelegate {
         	// validate the command
         	// --------------------------------------    	
         	${className}Validator.getInstance().validate( command );    
-
+        	
         	// --------------------------------------
-        	// issue the update command
+        	// issue the ${classObject.getDeleteCommandAlias()} and return right away
         	// --------------------------------------    	
-    		commandGateway.send( command );
+        	commandGateway.send( command ) 
+        		.whenComplete((Object result, Throwable throwable) -> {
+                	if ( throwable == null )
+                		LOGGER.log( Level.INFO, "Successfully executed ${classObject.getDeleteCommandAlias()} of ${className} is " + command );
+                	else {
+                		LOGGER.log( Level.WARNING, "Failure during execution of ${classObject.getDeleteCommandAlias()} on ${className} " + command, throwable );
+                	}
+        	});
 
         }
         catch (Exception exc) {
