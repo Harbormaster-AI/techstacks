@@ -72,44 +72,56 @@ public class ${className}Validator {
 #set( $includeComposites = false )
 #foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
 #set( $roleName = $Utils.capitalizeFirstLetter( $singleAssociation.getRoleName() ) )
+#set( $alias = ${singleAssociation.getAssignToCommandAlias()} )
 	/**
 	 * handles assign ${roleName} validation for a $className
+	 * 
+	 * @param	command ${alias}
 	 */	
-	public void validate( Assign${roleName}To${className}Command command ) throws Exception {
-		Assert.notNull( command, "Assign${roleName}To${className}Command should not be null" );
-		Assert.notNull( command.get${className}Id(), "Assign${roleName}To${className}Command identifier should not be null" );
-		Assert.notNull( command.getAssignment(), "Assign${roleName}To${className}Command assignment should not be null" );
+	public void validate( ${alias} command ) throws Exception {
+		Assert.notNull( command, "${alias} should not be null" );
+		Assert.notNull( command.get${className}Id(), "${alias} identifier should not be null" );
+		Assert.notNull( command.getAssignment(), "${alias} assignment should not be null" );
 	}
 
+#set( $alias = ${singleAssociation.getUnAssignFromCommandAlias()} )
 	/**
-	 * handles assign ${roleName} validation for a $className
+	 * handles unassign ${roleName} validation for a $className
+	 * 
+	 * @param	command ${alias}
 	 */	
-	public void validate( UnAssign${roleName}From${className}Command command ) throws Exception {
-		Assert.notNull( command, "UnAssign${roleName}To${className}Command should not be null" );
-		Assert.notNull( command.get${className}Id(), "UnAssign${roleName}To${className}Command identifier should not be null" );
+	public void validate( ${alias} command ) throws Exception {
+		Assert.notNull( command, "${alias} should not be null" );
+		Assert.notNull( command.get${className}Id(), "${alias} identifier should not be null" );
 	}
 #end##foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
 
 #foreach( $multiAssociation in $classObject.getMultipleAssociations() )
 #set( $roleName = $Utils.capitalizeFirstLetter( $multiAssociation.getRoleName() ) )
 #set( $childType = $multiAssociation.getType() )
+#set( $alias = ${multiAssociation.getAddToCommandAlias()} )
 	/**
 	 * handles add to ${roleName} validation for a $className
+	 * 
+	 * @param	command ${alias}
 	 */	
-	public void validate( Add${roleName}To${className}Command command ) throws Exception {
-		Assert.notNull( command, "Add${roleName}To${className}Command should not be null" );
-		Assert.notNull( command.get${className}Id(), "Add${roleName}To${className}Command identifier should not be null" );
-		Assert.notNull( command.getAddTo(), "Add${roleName}To${className}Command addTo attribute should not be null" );
+	public void validate( ${alias} command ) throws Exception {
+		Assert.notNull( command, "${alias} should not be null" );
+		Assert.notNull( command.get${className}Id(), "${alias} identifier should not be null" );
+		Assert.notNull( command.getAddTo(), "${alias} addTo attribute should not be null" );
 	}
 
+#set( $alias = ${multiAssociation.getRemoveFromCommandAlias()} )
 	/**
 	 * handles remove from ${roleName} validation for a $className
+	 * 
+	 * @param	command ${alias}
 	 */	
-	public void validate( Remove${roleName}From${className}Command command ) throws Exception {
-		Assert.notNull( command, "Remove${roleName}From${className}Command should not be null" );
-		Assert.notNull( command.get${className}Id(), "Remove${roleName}From${className}Command identifier should not be null" );
-		Assert.notNull( command.getRemoveFrom(), "Add${roleName}To${className}Command removeFrom attribute should not be null" );
-		Assert.notNull( command.getRemoveFrom().get${childType}Id(), "Add${roleName}To${className}Command removeFrom attribubte identifier should not be null" );
+	public void validate( ${alias} command ) throws Exception {
+		Assert.notNull( command, "${alias} should not be null" );
+		Assert.notNull( command.get${className}Id(), "${alias} identifier should not be null" );
+		Assert.notNull( command.getRemoveFrom(), "${alias} removeFrom attribute should not be null" );
+		Assert.notNull( command.getRemoveFrom().get${childType}Id(), "${alias} removeFrom attribubte identifier should not be null" );
 	}
 	
 #end##foreach( $multiAssociation in $classObject.getMultipeSingleAssociations() )

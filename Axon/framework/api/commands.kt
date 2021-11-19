@@ -37,8 +37,8 @@ data class ${class.getDeleteCommandAlias()}(@TargetAggregateIdentifier val ${pk}
 #set( $roleName = $Utils.capitalizeFirstLetter( $singleAssociation.getRoleName() ) )
 #set( $childType = $singleAssociation.getType() )
 #set( $childClass = $aib.getClassObject( $childType ) )
-data class Assign${roleName}To${className}Command(@TargetAggregateIdentifier val ${pk}: UUID, val assignment: $childType )
-data class UnAssign${roleName}From${className}Command(@TargetAggregateIdentifier val ${pk}: UUID )
+data class ${singleAssociation.getAssignToCommandAlias()}(@TargetAggregateIdentifier val ${pk}: UUID, val assignment: $childType )
+data class ${singleAssociation.getUnAssignFromCommandAlias()}(@TargetAggregateIdentifier val ${pk}: UUID )
 #end##foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
 
 // multiple association commands
@@ -47,8 +47,8 @@ data class UnAssign${roleName}From${className}Command(@TargetAggregateIdentifier
 #set( $roleName = $Utils.capitalizeFirstLetter( $multiAssociation.getRoleName() ) )
 #set( $childType = $multiAssociation.getType() )
 #set( $childClass = $aib.getClassObject( $childType ) )
-data class Add${roleName}To${className}Command(@TargetAggregateIdentifier val ${pk}: UUID, val addTo: $childType )
-data class Remove${roleName}From${className}Command(@TargetAggregateIdentifier val ${pk}: UUID, val removeFrom: $childType )
+data class ${multiAssociation.getAddToCommandAlias()}(@TargetAggregateIdentifier val ${pk}: UUID, val addTo: $childType )
+data class ${multiAssociation.getRemoveFromCommandAlias()}(@TargetAggregateIdentifier val ${pk}: UUID, val removeFrom: $childType )
 #end##foreach( $multiAssociation in $classObject.getMultipleAssociations() )
 
 #end##foreach( $class in $aib.getClassesToGenerate() )

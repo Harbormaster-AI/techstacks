@@ -119,11 +119,11 @@ public class ${className}Projector {
 #set( $lowercaseRoleName = $Utils.lowercaseFirstLetter( $roleName ) )
 #set( $childType = $singleAssociation.getType() )
     /*
-     * @param	event Assigned${roleName}To${className}Event
+     * @param	event ${singleAssociation.getAssignToEventAlias()}
      */
-    @EventHandler( payloadType=Assigned${roleName}To${className}Event.class)
-    public void handle( Assigned${roleName}To${className}Event event) {
-	    LOGGER.info("handling Assigned${roleName}To${className}Event - " + event );
+    @EventHandler( payloadType=${singleAssociation.getAssignToEventAlias()}.class)
+    public void handle( ${singleAssociation.getAssignToEventAlias()} event) {
+	    LOGGER.info("handling ${singleAssociation.getAssignToEventAlias()} - " + event );
 	    
 	    $className entity = entityManager.find(${className}.class, event.get${className}Id());
 	    $childType assignment = entityManager.find(${childType}.class, event.getAssignment().get${childType}Id());
@@ -147,11 +147,11 @@ public class ${className}Projector {
     
 
 /*
- * @param	event UnAssigned${roleName}FromEvent
+ * @param	event ${singleAssociation.getUnAssignFromEventAlias()}
  */
-@EventHandler( payloadType=UnAssigned${roleName}From${className}Event.class)
-public void handle( UnAssigned${roleName}From${className}Event event) {
-    LOGGER.info("handling UnAssigned${roleName}From${className}Event - " + event );
+@EventHandler( payloadType=${singleAssociation.getUnAssignFromEventAlias()}.class)
+public void handle( ${singleAssociation.getUnAssignFromEventAlias()} event) {
+    LOGGER.info("handling ${singleAssociation.getUnAssignFromEventAlias()} - " + event );
     
     $className entity = entityManager.find(${className}.class, event.get${className}Id());
     
@@ -181,11 +181,11 @@ public void handle( UnAssigned${roleName}From${className}Event event) {
 #set( $lowercaseRoleName = $Utils.lowercaseFirstLetter( $roleName ) )    
 #set( $childType = $multiAssociation.getType() )
     /*
-     * @param	event Added${roleName}To${className}Event
+     * @param	event ${multiAssociation.getAddToEventAlias()}
      */
-    @EventHandler( payloadType=Added${roleName}To${className}Event.class)
-    public void handle( Added${roleName}To${className}Event event) {
-	    LOGGER.info("handling Added${roleName}To${className}Event - " + event );
+    @EventHandler( payloadType=${multiAssociation.getAddToEventAlias()}.class)
+    public void handle( ${multiAssociation.getAddToEventAlias()} event) {
+	    LOGGER.info("handling ${multiAssociation.getAddToEventAlias()} - " + event );
 	    
 	    $className entity = entityManager.find(${className}.class, event.get${className}Id());
 	    $childType child = entityManager.find(${childType}.class, event.getAddTo().get${childType}Id());
@@ -210,11 +210,11 @@ public void handle( UnAssigned${roleName}From${className}Event event) {
     
 
 /*
- * @param	event RemovedFrom${roleName}Event
+ * @param	event ${multiAssociation.getRemoveFromEventAlias()}
  */
-@EventHandler( payloadType=Removed${roleName}From${className}Event.class)
-public void handle( Removed${roleName}From${className}Event event) {
-    LOGGER.info("handling Removed${roleName}From${className}Event - " + event );
+@EventHandler( payloadType=${multiAssociation.getRemoveFromEventAlias()}.class)
+public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
+    LOGGER.info("handling ${multiAssociation.getRemoveFromEventAlias()} - " + event );
     
     $className entity = entityManager.find(${className}.class, event.get${className}Id());
     $childType child = entityManager.find(${childType}.class, event.getRemoveFrom().get${childType}Id() );

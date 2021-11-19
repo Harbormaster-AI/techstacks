@@ -249,12 +249,13 @@ extends BaseBusinessDelegate {
 #set( $roleName = $singleAssociation.getRoleName() )
 #set( $childType = $singleAssociation.getType() )
 #set( $parentName  = $classObject.getName() )
+#set( $alias = ${singleAssociation.getAssignToCommandAlias()} )
     /**
      * assign ${roleName} on ${className}
-     * @param		Assign${roleName}To${className}Command command	
+     * @param		command ${alias}	
      * @exception	ProcessingException
      */     
-	public void assign${roleName}( Assign${roleName}To${className}Command command ) throws ProcessingException {
+	public void assign${roleName}( ${alias} command ) throws ProcessingException {
 
 		// --------------------------------------------
 		// load the parent
@@ -299,12 +300,13 @@ extends BaseBusinessDelegate {
         }
 	}
 
+#set( $alias = ${singleAssociation.getUnAssignFromCommandAlias()} )	
     /**
      * unAssign ${roleName} on ${className}
-     * @param		UnAssign${roleName}From${className}Command command	
+     * @param		command ${alias}
      * @exception	ProcessingException
      */     
-	public void unAssign${roleName}( UnAssign${roleName}From${className}Command command ) throws ProcessingException {
+	public void unAssign${roleName}( ${alias} command ) throws ProcessingException {
 
 		try {
 			// --------------------------------------
@@ -330,12 +332,13 @@ extends BaseBusinessDelegate {
 #set( $roleName = $multiAssociation.getRoleName() )
 #set( $childType = $multiAssociation.getType() )
 #set( $parentName  = $classObject.getName() )
+#set( $alias = ${multiAssociation.getAddToCommandAlias()} )
     /**
      * add ${childType} to ${roleName} 
-     * @param		Add${roleName}To${className}Command command command
+     * @param		command ${alias}
      * @exception	ProcessingException
      */     
-	public void addTo${roleName}( Add${roleName}To${className}Command command ) throws ProcessingException {
+	public void addTo${roleName}( ${alias} command ) throws ProcessingException {
 		
 		
 		// -------------------------------------------
@@ -385,12 +388,13 @@ extends BaseBusinessDelegate {
 
 	}
 
+#set( $alias = ${multiAssociation.getRemoveFromCommandAlias()} )
     /**
      * remove ${childType} from ${roleName}
-     * @param		Remove${roleName}From${className}Command command
+     * @param		command ${alias}
      * @exception	ProcessingException
      */     	
-	public void removeFrom${roleName}( Remove${roleName}From${className}Command command ) throws ProcessingException {		
+	public void removeFrom${roleName}( ${alias} command ) throws ProcessingException {		
 		
 		${childType}BusinessDelegate childDelegate 	= ${childType}BusinessDelegate.get${childType}Instance();
 		UUID childId = command.getRemoveFrom().get${childType}Id();

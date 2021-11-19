@@ -46,7 +46,7 @@ public class ${className}Aggregate {
 #set( $args = "#determineArgsAsInput( $classObject $varName $includeAssociations )" )
     @CommandHandler
     public ${className}Aggregate(${classObject.getCreateCommandAlias()} command) throws Exception {
-    	LOGGER.info( "Applying event ${classObject.getCreateEventAlias()}" );
+    	LOGGER.info( "Handlingn command ${classObject.getCreateCommandAlias()}" );
     	${classObject.getCreateEventAlias()} event = new ${classObject.getCreateEventAlias()}(${args});
     	
         apply(event);
@@ -57,7 +57,7 @@ public class ${className}Aggregate {
 #set( $args = "#determineArgsAsInput( $classObject $varName $includeAssociations )" )
     @CommandHandler
     public void handle(${classObject.getUpdateCommandAlias()} command) throws Exception {
-    	LOGGER.info( "Applying event ${classObject.getUpdateEventAlias()}" );
+    	LOGGER.info( "handling command ${classObject.getUpdateCommandAlias()}" );
     	${classObject.getUpdateEventAlias()} event = new ${classObject.getUpdateEventAlias()}(${args});        
     	
         apply(event);
@@ -65,7 +65,7 @@ public class ${className}Aggregate {
 
     @CommandHandler
     public void handle(${classObject.getDeleteCommandAlias()} command) throws Exception {
-    	LOGGER.info( "Applying event ${classObject.getDeleteEventAlias()}" );
+    	LOGGER.info( "Handling command ${classObject.getDeleteCommandAlias()}" );
         apply(new ${classObject.getDeleteEventAlias()}(command.get${className}Id()));
     }
 
@@ -79,25 +79,26 @@ public class ${className}Aggregate {
 #set( $roleName = $singleAssociation.getRoleName() )
 #set( $childType = $singleAssociation.getType() )
 #set( $lowercaseRoleName = $Utils.lowercaseFirstLetter( $roleName ) )
-
+#set( $alias = ${singleAssociation.getAssignToCommandAlias()})
     @CommandHandler
-    public void handle(Assign${roleName}To${className}Command command) throws Exception {
-    	LOGGER.info( "Applying event Assign${roleName}To${className}Event" );
+    public void handle(${alias} command) throws Exception {
+    	LOGGER.info( "Handling command ${alias}" );
     	
     	if (  ${lowercaseRoleName}.get${childType}Id() == command.getAssignment().get${childType}Id() )
     		throw new ProcessingException( "${roleName} already assigned with id " + command.getAssignment().get${childType}Id() );  
     		
-        apply(new Assigned${roleName}To${className}Event(command.get${className}Id(), command.getAssignment()));
+        apply(new ${singleAssociation.getAssignToEventAlias()}(command.get${className}Id(), command.getAssignment()));
     }
 
+#set( $alias = ${singleAssociation.getUnAssignFromCommandAlias()})
     @CommandHandler
-    public void handle(UnAssign${roleName}From${className}Command command) throws Exception {
-    	LOGGER.info( "Applying event UnAssign${roleName}From${className}Event" );
+    public void handle(${alias} command) throws Exception {
+    	LOGGER.info( "Handlign command ${alias}" );
 
     	if (  $lowercaseRoleName == null )
     		throw new ProcessingException( "${roleName} already has nothing assigned." );  
 
-    	apply(new UnAssigned${roleName}From${className}Event(command.get${className}Id()));
+    	apply(new ${singleAssociation.getUnAssignFromEventAlias()}(command.get${className}Id()));
     }
 #end##foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
 
@@ -107,25 +108,26 @@ public class ${className}Aggregate {
 #set( $roleName = $multiAssociation.getRoleName() )
 #set( $childType = $multiAssociation.getType() )
 #set( $lowercaseRoleName = $Utils.lowercaseFirstLetter( $roleName ) )
-
+#set( $alias = ${multiAssociation.getAddToCommandAlias()})
     @CommandHandler
-    public void handle(Add${roleName}To${className}Command command) throws Exception {
-    	LOGGER.info( "Applying event Add${roleName}To${className}Event" );
+    public void handle(${alias} command) throws Exception {
+    	LOGGER.info( "Handling command ${alias}" );
     	
     	if ( ${lowercaseRoleName}.contains( command.getAddTo() ) )
     		throw new ProcessingException( "${roleName} already contains an entity with id " + command.getAddTo().get${childType}Id() );
 
-    	apply(new Added${roleName}To${className}Event(command.get${className}Id(), command.getAddTo()));
+    	apply(new ${multiAssociation.getAddToEventAlias()}(command.get${className}Id(), command.getAddTo()));
     }
 
+#set( $alias = ${multiAssociation.getRemoveFromCommandAlias()})
     @CommandHandler
-    public void handle(Remove${roleName}From${className}Command command) throws Exception {
-    	LOGGER.info( "Applying event Remove${roleName}From${className}Event" );
+    public void handle(${alias} command) throws Exception {
+    	LOGGER.info( "Handling command ${alias}" );
     	
     	if ( !${lowercaseRoleName}.contains( command.getRemoveFrom() ) )
     		throw new ProcessingException( "${roleName} does not contain an entity with id " + command.getRemoveFrom().get${childType}Id() );
 
-        apply(new Removed${roleName}From${className}Event(command.get${className}Id(), command.getRemoveFrom()));
+        apply(new ${multiAssociation.getRemoveFromEventAlias()}(command.get${className}Id(), command.getRemoveFrom()));
     }
 #end##foreach( $multiAssociation in $classObject.getMultipleAssociations() )
 
@@ -134,7 +136,7 @@ public class ${className}Aggregate {
 	// ----------------------------------------------
     @EventSourcingHandler
     void on(${classObject.getCreateEventAlias()} event) {	
-    	LOGGER.info( "Event sourcing Created${className}Event" );
+    	LOGGER.info( "Event sourcing ${classObject.getCreateEventAlias()}" );
     	this.${pk} = event.get${className}Id();
 #set( $includeAssociations = false )    	
 #applyAggregateAttributes( $classObject, "event", $includeAssociations )    
@@ -142,7 +144,7 @@ public class ${className}Aggregate {
     
     @EventSourcingHandler
     void on(${classObject.getUpdateEventAlias()} event) {
-    	LOGGER.info( "Event sourcing Updated${className}Event" );
+    	LOGGER.info( "Event sourcing classObject.getUpdateEventAlias()}" );
 #set( $includeAssociations = true )    	    	
 #applyAggregateAttributes( $classObject, "event", $includeAssociations )    	
     }   
@@ -154,17 +156,18 @@ public class ${className}Aggregate {
 #foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
 #set( $roleName = $Utils.capitalizeFirstLetter( $singleAssociation.getRoleName() ) )
 #set( $lowercaseRoleName = $Utils.lowercaseFirstLetter( $roleName ) )
-
+#set( $alias = ${singleAssociation.getAssignToEventAlias()} )
 	// single associations
     @EventSourcingHandler
-    void on(Assigned${roleName}To${className}Event event ) {	
-    	LOGGER.info( "Event sourcing Assigned${roleName}To${className}Event" );
+    void on(${alias} event ) {	
+    	LOGGER.info( "Event sourcing ${alias}" );
     	this.${lowercaseRoleName} = event.getAssignment();
     }
 
+#set( $alias = $singleAssociation.getUnAssignFromEventAlias() )
 	@EventSourcingHandler
-	void on(UnAssigned${roleName}From${className}Event event ) {	
-		LOGGER.info( "UnAssigned${roleName}From${className}Event" );
+	void on(${alias} event ) {	
+		LOGGER.info( "Event sourcing ${alias}" );
 		this.${lowercaseRoleName} = null;
 	}
 #end##foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
@@ -173,16 +176,18 @@ public class ${className}Aggregate {
 #foreach( $multipleAssociation in $classObject.getMultipleAssociations() )
 #set( $roleName = $Utils.capitalizeFirstLetter( $multipleAssociation.getRoleName() ) )
 #set( $lowercaseRoleName = $Utils.lowercaseFirstLetter( $roleName ) )
+#set( $alias = ${multipleAssociation.getAddToEventAlias()} )
 	// multiple associations
     @EventSourcingHandler
-    void on(Added${roleName}To${className}Event event ) {
-    	LOGGER.info( "Event sourcing Added${roleName}To${className}Event" );
+    void on(${alias} event ) {
+    	LOGGER.info( "Event sourcing ${alias}" );
     	this.${lowercaseRoleName}.add( event.getAddTo() );
     }
 
+#set( $alias = $multipleAssociation.getRemoveFromEventAlias() )
 	@EventSourcingHandler
-	void on(Removed${roleName}From${className}Event event ) {	
-		LOGGER.info( "Event sourcing Removed${roleName}From${className}Event" );
+	void on(${alias} event ) {	
+		LOGGER.info( "Event sourcing ${alias}" );
 		this.${lowercaseRoleName}.remove( event.getRemoveFrom() );
 	}
 	

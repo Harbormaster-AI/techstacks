@@ -142,12 +142,13 @@ public class ${className}RestController extends $parentController {
 #foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
 #set( $roleName = $singleAssociation.getRoleName() )
 #set( $childType = $singleAssociation.getType() )
+#set( $alias = ${singleAssociation.getAssignToCommandAlias()} )
     /**
      * save ${roleName} on ${className}
-     * @param		command Assign${roleName}To${className}Command
+     * @param		command $alias
      */     
 	@PutMapping("/assign${roleName}")
-	public void assign${roleName}( @RequestBody Assign${roleName}To${className}Command command ) {
+	public void assign${roleName}( @RequestBody ${alias} command ) {
 		try {
 			${className}BusinessDelegate.get${className}Instance().assign${roleName}( command );   
 		}
@@ -156,12 +157,13 @@ public class ${className}RestController extends $parentController {
         }
 	}
 
+#set( $alias = ${singleAssociation.getUnAssignFromCommandAlias()} )	
     /**
      * unassign ${roleName} on ${className}
-     * @param		 command UnAssign${roleName}From${className}Command
+     * @param		 command ${alias}
      */     
 	@PutMapping("/unAssign${roleName}")
-	public void unAssign${roleName}( @RequestBody(required=true)  UnAssign${roleName}From${className}Command command ) {
+	public void unAssign${roleName}( @RequestBody(required=true)  ${alias} command ) {
 		try {
 			${className}BusinessDelegate.get${className}Instance().unAssign${roleName}( command );   
 		}
@@ -175,12 +177,13 @@ public class ${className}RestController extends $parentController {
 #foreach( $multiAssociation in $classObject.getMultipleAssociations() )
 #set( $roleName = $multiAssociation.getRoleName() )
 #set( $childType = $multiAssociation.getType() )
+#set( $alias = ${multiAssociation.getAddToCommandAlias()} )
     /**
      * save ${roleName} on ${className}
-     * @param		Add${roleName}To${className}Command command
+     * @param		command ${alias}
      */     
 	@PutMapping("/addTo${roleName}")
-	public void addTo${roleName}( @RequestBody(required=true) Add${roleName}To${className}Command command ) {
+	public void addTo${roleName}( @RequestBody(required=true) ${alias} command ) {
 		try {
 			${className}BusinessDelegate.get${className}Instance().addTo${roleName}( command );   
 		}
@@ -189,12 +192,13 @@ public class ${className}RestController extends $parentController {
 		}
 	}
 
+#set( $alias = ${multiAssociation.getRemoveFromCommandAlias()} )	
     /**
-     * delete ${roleName} on ${className}
-     * @param		Remove${roleName}From${className}Command command
+     * remove ${roleName} on ${className}
+     * @param		command ${alias}
      */     	
 	@PutMapping("/removeFrom${roleName}")
-	public void removeFrom${roleName}( 	@RequestBody(required=true) Remove${roleName}From${className}Command command )
+	public void removeFrom${roleName}( 	@RequestBody(required=true) ${alias} command )
 	{		
 		try {
 			${className}BusinessDelegate.get${className}Instance().removeFrom${roleName}( command );
