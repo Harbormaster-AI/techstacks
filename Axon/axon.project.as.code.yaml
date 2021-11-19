@@ -20,7 +20,7 @@ project:
                            #     harbormaster_cli stack_list --output pretty
 
     model:
-        name:             company-model-alias-v2
+        name:             company-model-alias-v4
                            # options:     Unique name of an existing model, a URL to a model file or Git repo, 
                            #                or full/relative path to a model file.
                            #

@@ -7,7 +7,6 @@ entities:
           - name: "industry"
             type: "Industry"
           - name: "establishedOn"
-            type: "Date"
           - name: "revenue"
             type: "Double"
       relations:
@@ -17,6 +16,11 @@ entities:
           - name: "boardMembers"
             type: "Employee"
             multiplicity: "OneToMany"
+            aliases:
+            - addToCommandAlias: "promoteToBoardMemberCommand"
+              addToEventAlias: "promotedToBoardMemberEvent"
+              removeFromCommandAlias: "demoteFromBoardMemberCommand"
+              removeFromEventAlias: "demomotedFromBoardMemberCommand"
           - name: "address"
             type: "Address"
             multiplicity: "OneToOne"
@@ -37,10 +41,14 @@ entities:
           - name: "head"
             type: "Employee"
             multiplicity: OneToOne"
+            aliases:
+            - assignToCommandAlias: "promoteToDivisionHeadCommand"
+              assignToEventAlias: "promotedToDivisionHeadEvent"
+              unAssignFromCommandAlias: "demoteFromDivisionHeadCommand"
+              unAssignFromEventAlias: "demomotedFromDivisionHeadCommand"            
           - name: "departments"
             type: "Department"
             multiplicity: "OneToMany"
-
     - name: "Department"
       data:
           - name: "name"
