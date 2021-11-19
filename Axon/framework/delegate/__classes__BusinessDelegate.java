@@ -74,11 +74,13 @@ extends BaseBusinessDelegate {
     * @param		command ${class.getCreateCommandAlias()}
     * @exception    ProcessingException
     * @exception	IllegalArgumentException
-    * @return		${classObject.getCreateCommandAlias()}
+    * @return		CompletableFuture<UUID>
     */
-	public ${classObject.getCreateCommandAlias()} create${className}( ${classObject.getCreateCommandAlias()} command )
+	public CompletableFuture<UUID> create${className}( ${classObject.getCreateCommandAlias()} command )
     throws ProcessingException, IllegalArgumentException {
 
+		CompletableFuture<UUID> completableFuture = null;
+				
 		try {
 			// --------------------------------------
         	// assign identity now if none
@@ -95,14 +97,8 @@ extends BaseBusinessDelegate {
     		// issue the ${classObject.getCreateCommandAlias()} - by convention the future return value for a create command
         	// that is handled by the constructor of an aggregate will return the UUID 
     		// ---------------------------------------
-        	CompletableFuture<UUID> future = commandGateway.send( command );
+        	completableFuture = commandGateway.send( command );
         	
-        	// ----------------------------------------
-        	// re-assign in the event assignment does not
-        	// take place above or is overridden
-        	// ----------------------------------------
-        	command.set${className}Id( future.get() );
-			
 			LOGGER.log( Level.INFO, "return from Command Gateway for ${classObject.getCreateCommandAlias()} of ${className} is " + command );
 			
         }
@@ -114,18 +110,20 @@ extends BaseBusinessDelegate {
         finally {
         }        
         
-        return command;
+        return completableFuture;
     }
 
    /**
     * Update the provided command.
     * @param		command ${classObject.getUpdateCommandAlias()}
+    * @return		CompletableFuture<Void>
     * @exception    ProcessingException
     * @exception  	IllegalArgumentException
     */
-    public void update${className}( ${classObject.getUpdateCommandAlias()} command ) 
+    public CompletableFuture<Void> update${className}( ${classObject.getUpdateCommandAlias()} command ) 
     throws ProcessingException, IllegalArgumentException {
-
+    	CompletableFuture<Void> completableFuture = null;
+    	
     	try {       
 
 			// --------------------------------------
@@ -136,14 +134,7 @@ extends BaseBusinessDelegate {
         	// --------------------------------------
         	// issue the ${classObject.getUpdateCommandAlias()} and return right away
         	// --------------------------------------    	
-        	commandGateway.send( command )
-    			.whenComplete((Object result, Throwable throwable) -> {
-                	if ( throwable == null )
-                		LOGGER.log( Level.INFO, "Successfully executed ${classObject.getUpdateCommandAlias()} of ${className} is " + command );
-                	else {
-                		LOGGER.log( Level.WARNING, "Failure during execution of ${classObject.getUpdateCommandAlias()} on ${className} " + command, throwable );
-                	}
-    		});
+        	completableFuture = commandGateway.send( command );
     	}
         catch (Exception exc) {
             final String errMsg = "Unable to save ${className} - " + exc;
@@ -151,15 +142,19 @@ extends BaseBusinessDelegate {
             throw new ProcessingException( errMsg, exc );
         }
         
+    	return completableFuture;
     }
    
    /**
     * Deletes the associatied value object
     * @param		command ${classObject.getDeleteCommandAlias()}
+    * @return		CompletableFuture<Void>
     * @exception 	ProcessingException
     */
-    public void delete( ${classObject.getDeleteCommandAlias()} command ) 
+    public CompletableFuture<Void> delete( ${classObject.getDeleteCommandAlias()} command ) 
     throws ProcessingException, IllegalArgumentException {	
+    	
+    	CompletableFuture<Void> completableFuture = null;
     	
         try {  
 			// --------------------------------------
@@ -170,15 +165,7 @@ extends BaseBusinessDelegate {
         	// --------------------------------------
         	// issue the ${classObject.getDeleteCommandAlias()} and return right away
         	// --------------------------------------    	
-        	commandGateway.send( command ) 
-        		.whenComplete((Object result, Throwable throwable) -> {
-                	if ( throwable == null )
-                		LOGGER.log( Level.INFO, "Successfully executed ${classObject.getDeleteCommandAlias()} of ${className} is " + command );
-                	else {
-                		LOGGER.log( Level.WARNING, "Failure during execution of ${classObject.getDeleteCommandAlias()} on ${className} " + command, throwable );
-                	}
-        	});
-
+        	completableFuture = commandGateway.send( command );
         }
         catch (Exception exc) {
             final String errMsg = "Unable to delete ${className} using Id = "  + command.get${className}Id();
@@ -187,6 +174,8 @@ extends BaseBusinessDelegate {
         }
         finally {
         }
+        
+        return completableFuture;
     }
 
     /**

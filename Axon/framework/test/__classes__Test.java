@@ -58,7 +58,7 @@ public class ${classObject.getName()}Test{
 
 		${lowercaseClassName}Id = ${className}BusinessDelegate.get${className}Instance()
 		.create${className}( generateNewCommand() )
-		.get${className}Id();
+		.get();
 
 		// ---------------------------------------------
 		// set up query subscriptions after the 1st create

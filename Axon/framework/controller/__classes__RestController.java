@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,58 +36,62 @@ public class ${className}RestController extends $parentController {
     /**
      * Handles create a ${className}.  if not key provided, calls create, otherwise calls save
      * @param		${className}	${lowercaseClassName}
-     * @return		${classObject.getCreateCommandAlias()}
+     * @return		CompletableFuture<UUID> 
      */
 	@PostMapping("/create")
-    public ${classObject.getCreateCommandAlias()} create( @RequestBody(required=true) ${classObject.getCreateCommandAlias()} command ) {
+    public CompletableFuture<UUID> create( @RequestBody(required=true) ${classObject.getCreateCommandAlias()} command ) {
+		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			command = ${className}BusinessDelegate.get${className}Instance().create${className}( command );
+			completableFuture = ${className}BusinessDelegate.get${className}Instance().create${className}( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
         }
 		
-		return command;
+		return completableFuture;
     }
 
     /**
      * Handles updating a ${className}.  if no key provided, calls create, otherwise calls save
      * @param		${className} $lowercaseClassName
+     * @return		CompletableFuture<Void>
      */
 	@PutMapping("/update")
-    public void update( @RequestBody(required=true) ${classObject.getUpdateCommandAlias()} command ) {
-		
+    public CompletableFuture<Void> update( @RequestBody(required=true) ${classObject.getUpdateCommandAlias()} command ) {
+		CompletableFuture<Void> completableFuture = null;
 		try {                        	        
 			// -----------------------------------------------
 			// delegate the ${classObject.getUpdateCommandAlias()}
 			// -----------------------------------------------
-			${className}BusinessDelegate.get${className}Instance().update${className}(command);;
+			completableFuture = ${className}BusinessDelegate.get${className}Instance().update${className}(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "${className}Controller:update() - successfully update ${className} - " + exc.getMessage());        	
 	    }		
+		
+		return completableFuture;
 	}
  
     /**
      * Handles deleting a ${className} entity
      * @param		command ${class.getDeleteCommandAlias()}
-     * @return		boolean
+     * @return		CompletableFuture<Void>
      */
     @DeleteMapping("/delete")    
-    public boolean delete( @RequestBody(required=true) ${classObject.getDeleteCommandAlias()} command ) {                
-        try {
+    public CompletableFuture<Void> delete( @RequestBody(required=true) ${classObject.getDeleteCommandAlias()} command ) {                
+    	CompletableFuture<Void> completableFuture = null;
+    	try {
         	${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
 
-        	delegate.delete( command );
+        	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted ${className} with key " + command.get${className}Id() );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage() );
-        	return false;        	
         }
         
-        return true;
+        return completableFuture;
 	}        
 	
     /**
