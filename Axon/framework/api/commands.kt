@@ -29,7 +29,7 @@ data class ${class.getUpdateCommandAlias()}(
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
-data class ${class.getDeleteCommandAlias()}(@TargetAggregateIdentifier val ${pk}: UUID)
+data class ${class.getDeleteCommandAlias()}(@TargetAggregateIdentifier var ${pk}: UUID? = null)
 
 // single association commands
 #set( $includeComposites = false )
