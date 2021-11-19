@@ -48,7 +48,7 @@ public class ${className}Projector {
      * @param	event ${classObject.getCreateEventAlias()}
      */
     @EventHandler( payloadType=${classObject.getCreateEventAlias()}.class )
-    public $className handle( ${classObject.getCreateEventAlias()} event) {
+    public void handle( ${classObject.getCreateEventAlias()} event) {
 	    LOGGER.info("handling ${classObject.getCreateEventAlias()} - " + event );
 	    $className entity = new ${className}();
 #set( $includeAssociations = false )
@@ -63,15 +63,13 @@ public class ${className}Projector {
     	// emit to subscribers that find all
     	// ------------------------------------------    	
         emitFindAll${className}( entity );
-        
-        return entity;
     }
 
     /*
      * @param	event ${classObject.getUpdateEventAlias()}
      */
     @EventHandler( payloadType=${classObject.getUpdateEventAlias()}.class )
-    public $className handle( ${classObject.getUpdateEventAlias()} event) {
+    public void handle( ${classObject.getUpdateEventAlias()} event) {
     	LOGGER.info("handling ${classObject.getUpdateEventAlias()} - " + event );
     	
 	    $className entity = new ${className}();
@@ -91,9 +89,7 @@ public class ${className}Projector {
     	// ------------------------------------------
     	// emit to subscribers that find all
     	// ------------------------------------------    	
-        emitFindAll${className}( entity );
-        
-        return entity;
+        emitFindAll${className}( entity );        
     }
     
     /*
