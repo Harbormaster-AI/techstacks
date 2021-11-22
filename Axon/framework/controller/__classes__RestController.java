@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 #importStatements( $imports )
 
 /** 
- * Implements Struts action processing for business entity ${className}.
+ * Implements Spring Rest Controller for ${className}.
  *
  * @author $aib.getAuthor()
  */
@@ -58,7 +58,7 @@ public class ${className}RestController extends $parentController {
      * @return		CompletableFuture<Void>
      */
 	@PutMapping("/update")
-    public CompletableFuture<Void> update( @RequestBody(required=true) ${classObject.getUpdateCommandAlias()} command ) {
+    public CompletableFuture<Void> update( @RequestBody ${classObject.getUpdateCommandAlias()} command ) {
 		CompletableFuture<Void> completableFuture = null;
 		try {                        	        
 			// -----------------------------------------------
@@ -79,8 +79,10 @@ public class ${className}RestController extends $parentController {
      * @return		CompletableFuture<Void>
      */
     @DeleteMapping("/delete")    
-    public CompletableFuture<Void> delete( @RequestBody(required=true) ${classObject.getDeleteCommandAlias()} command ) {                
+    public CompletableFuture<Void> delete( @RequestParam UUID id ) {                
     	CompletableFuture<Void> completableFuture = null;
+    	${classObject.getDeleteCommandAlias()} command = new ${classObject.getDeleteCommandAlias()}( id );
+    	
     	try {
         	${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
 
@@ -100,7 +102,7 @@ public class ${className}RestController extends $parentController {
      * @return		${className}
      */    
     @GetMapping("/load")
-    public ${className} load( @RequestParam(required=true) UUID uuid ) {    	
+    public ${className} load( @RequestParam UUID uuid ) {    	
     	${className} entity = null;
 
     	try {  
@@ -160,11 +162,12 @@ public class ${className}RestController extends $parentController {
 #set( $alias = ${singleAssociation.getUnAssignFromCommandAlias()} )	
     /**
      * unassign ${roleName} on ${className}
-     * @param		 command ${alias}
+     * @param		 UUID id
      */     
 	@PutMapping("/unAssign${roleName}")
-	public void unAssign${roleName}( @RequestBody(required=true)  ${alias} command ) {
+	public void unAssign${roleName}( @RequestParam UUID id ) {
 		try {
+			 ${alias} command = new ${alias}( id );
 			${className}BusinessDelegate.get${className}Instance().unAssign${roleName}( command );   
 		}
 		catch( Exception exc ) {
@@ -198,7 +201,7 @@ public class ${className}RestController extends $parentController {
      * @param		command ${alias}
      */     	
 	@PutMapping("/removeFrom${roleName}")
-	public void removeFrom${roleName}( 	@RequestBody(required=true) ${alias} command )
+	public void removeFrom${roleName}( 	@RequestBody ${alias} command )
 	{		
 		try {
 			${className}BusinessDelegate.get${className}Instance().removeFrom${roleName}( command );
@@ -224,7 +227,7 @@ public class ${className}RestController extends $parentController {
      * @return		$returnType
      */     
 	@PostMapping("/${method.getName()}")
-	public ${returnType} ${method.getName()}( @RequestBody(required=true) ${queryName}Query query ) {
+	public ${returnType} ${method.getName()}( @RequestBody ${queryName}Query query ) {
 		${returnType} result = null;
         try {  
             // call the delegate directly

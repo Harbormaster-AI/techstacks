@@ -8,7 +8,6 @@ import javax.persistence.*
 #importStatements( $imports )
 
 #set( $includeId = true )
-#set( $forAggregate = true )
 #set( $forEntity = false )
 //-----------------------------------------------------------
 // Command definitions
@@ -21,15 +20,17 @@ import javax.persistence.*
 // $className Commands
 data class ${class.getCreateCommandAlias()}(
 #set( $includeAssociations = false )
+#set( $forAggregate = true )
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
 data class ${class.getUpdateCommandAlias()}(
 #set( $includeAssociations = true)
+#set( $forAggregate = true )
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
-data class ${class.getDeleteCommandAlias()}(@TargetAggregateIdentifier var ${pk}: UUID? = null)
+data class ${class.getDeleteCommandAlias()}(@TargetAggregateIdentifier val ${pk}: UUID)
 
 // single association commands
 #set( $includeComposites = false )
