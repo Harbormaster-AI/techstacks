@@ -1,0 +1,36 @@
+##----------------------------------------------
+## CircleCI Docker Image Output - overridden from common.stack.templates
+##----------------------------------------------
+#macro( CircleCI_OutputDockerImageDecl )        
+    # CircleCI Java11 image, installs Apache Maven
+    # H2 image
+    docker:
+      - image: circleci/openjdk:11.0
+      - image: buildo/h2database
+#end##macro( CircleCI_OutputDockerImageDecl )
+
+##----------------------------------------------
+## CircleCI EnvVarAssignments - overridden from common.stack.templates
+##----------------------------------------------
+#macro( CircleCI_EnvVarAssignments )
+#end##macro( CircleCI_EnvVarAssignments )
+
+## ------------------------------------------------
+## Database image - should be overridden
+## ------------------------------------------------
+#macro( DockerComposeDBImage )
+buildo/h2database
+#end 
+
+## ------------------------------------------------
+## Ports for DB service declaration - should be overriden
+## ------------------------------------------------
+#macro( DockerComposeDBPorts )
+8082:8082#end
+
+## ------------------------------------------------
+## Ports for platform service declaration
+## ------------------------------------------------
+#macro( DockerComposePlatformPorts )
+#set( $port = $aib.getParam("axon-framework.server-port" ) )
+${port}:${port}#end
