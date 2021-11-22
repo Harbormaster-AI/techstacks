@@ -13,10 +13,6 @@ import javax.persistence.NamedQuery
 // --------------------------------------------
 // Entity Definitions
 // --------------------------------------------
-#set( $includeAssociations = true )
-#set( $includeId = true )
-#set( $forAggregate = false )
-#set( $forEntity = true )
 #foreach ( $class in $aib.getClassesToGenerate() )
 #set( $className = $class.getName() )
 @Entity
@@ -46,6 +42,10 @@ import javax.persistence.NamedQuery
 #end##foreach( $query in $queriesToGenerate )
 )
 #end##if ( $queriesToGenerate.size() > 0 )
+#set( $includeAssociations = true )
+#set( $includeId = true )
+#set( $forAggregate = false )
+#set( $forEntity = true )
 data class ${class.getName()}(
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )

@@ -7,6 +7,7 @@ import java.util.*
 #set( $includeId = false )
 #set( $forAggregate = false )
 #set( $forEntity = false )
+#set( $forValueObject = true );
 
 // --------------------------------------------
 // Valueobject Definitions
@@ -14,7 +15,7 @@ import java.util.*
 
 #foreach ( $valueObject in $aib.getValueObjectsToGenerate() )
 data class ${valueObject.getName()}(
-#outputKotlinArgDeclarations( $valueObject $includeAssociations $includeId $forAggregate $forEntity )
+#outputKotlinArgDeclarations( $valueObject $includeAssociations $includeId $forAggregate $forEntity $forValueObject )
 )
 
 #end##foreach ( $valueObject in $aib.getValueObjectsToGenerate() )
