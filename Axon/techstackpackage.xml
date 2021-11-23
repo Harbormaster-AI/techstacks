@@ -1,7 +1,7 @@
 <tech-stack-package 
 	name="Axon" 
 	shortName="Axon"
-	description="Axon Framework and Axon Server, using CQRS and default event store and sourcing" 
+	description="Axon Framework and optionally Axon Server, using CQRS, message handlers with default event store and sourcing" 
 	icon-url="./img/axoniq.png" 	
 	info-page-url="http://www.harbormaster.com/infopages/axon-info-page.html"
     version="0.1"
@@ -10,13 +10,15 @@
     derivedFrom=".java.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true">
-	<target-languages>
+	<target-languages><!-- target language(s) supported by the template structure -->
 		<target-language name="java"/>
-	</target-languages><!-- target language(s) supported by the template structure -->
-	<tech-stack>
+		<target-language name="kotlin"/>
+	</target-languages>
+	<tech-stack><!-- components of the stack -->
 		<tech-stack-component name="spring boot" description="RESTful API web services backend" app-layer="presentation"></tech-stack-component>
 		<tech-stack-component name="hibernate" description="Hibernate ORM" app-layer="data"></tech-stack-component>
 		<tech-stack-component name="junit" description="JUnit to test core functionality" app-layer="test"/>	
+		<tech-stack-component name="cqrs" description="axon enabled" app-layer="integration"/>
 		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
 	</tech-stack>
 </tech-stack-package>
