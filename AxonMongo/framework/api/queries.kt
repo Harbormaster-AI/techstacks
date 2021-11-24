@@ -5,9 +5,12 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier
 
 import java.util.*;
 
+#if( $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
+import org.springframework.data.annotation.Id
+#else
 import javax.persistence.Entity
 import javax.persistence.Id
-
+#end##if( $usingMongoDBAsEntityStore == true )
 
 //-----------------------------------------------------------
 // Query definitions

@@ -3,8 +3,10 @@
 #set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
 package ${aib.getRootPackageName(true)}.repository;
 
+import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
 #if( $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
 #set( $parentRepo = "MongoRepository")
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -14,8 +16,8 @@ import org.springframework.data.jpa.repository.JpaRepository;;
 #end##if( $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
 import org.springframework.stereotype.Repository;
 
+import ${aib.getRootPackageName(true)}.api.*;
 import ${aib.getRootPackageName(true)}.entity.*;
-
 
 @Repository
 public interface ${className}Repository extends ${parentRepo}<${className}, UUID> {
@@ -32,7 +34,7 @@ public interface ${className}Repository extends ${parentRepo}<${className}, UUID
 #if ( $handler.getSingleValueReturnValue() == false)
 #set( $pageable = ", Pageable page" )
 #end##if ( $handler.getSingleValueReturnValue() == false)
-    public $returnType ${method.getName()}( $argType $argName $pageable );
+    public $returnType ${method.getName()}( $argType $argName$pageable );
     
 #end##if ( ${method.hasArguments()} )## should only be one argument
 #end##foreach( $handler in $query.getHandlers() )

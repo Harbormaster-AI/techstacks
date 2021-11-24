@@ -1,0 +1,1 @@
+harbormaster project_generate -x true C:\harbormaster\playground\axonmongo\axon.mongo.project.as.code.yaml

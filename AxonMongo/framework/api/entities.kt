@@ -2,10 +2,14 @@
 package ${aib.getRootPackageName(true)}.entity;
 
 import java.util.*
-import javax.persistence.*
 
+#if( $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
+import org.springframework.data.annotation.Id
+#else
+import javax.persistence.*
 import javax.persistence.NamedQueries
 import javax.persistence.NamedQuery
+#end##if( $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
 
 #set( $imports = [ "api" ] )
 #importStatements( $imports )
@@ -19,10 +23,12 @@ import javax.persistence.NamedQuery
 #set( $forEntity = true )
 #foreach ( $class in $aib.getClassesToGenerate() )
 #set( $className = $class.getName() )
+#if( $usingMongoDBAsEntityStore == false )
 @Entity
+#end##if( $usingMongoDBAsEntityStore == false )
 #set( $queriesToGenerate = $aib.getQueriesToGenerate(  $className ) )
 #set( $queriesSize = $queriesToGenerate.size() )
-#if ( $queriesSize > 0 )
+#if ( $queriesSize > 0 && $usingMongoDBAsEntityStore == false )
 @NamedQueries(
 #foreach( $query in $queriesToGenerate )
 #set( $queryHandlers = $query.getHandlers() )
@@ -45,7 +51,7 @@ import javax.persistence.NamedQuery
 #end##foreach( $handler in $query.getHandlers() )
 #end##foreach( $query in $queriesToGenerate )
 )
-#end##if ( $queriesToGenerate.size() > 0 )
+#end##if ( $queriesToGenerate.size() > 0 && $usingMongoDBAsEntityStore == false )
 data class ${class.getName()}(
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )

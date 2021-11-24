@@ -122,10 +122,18 @@
 		    <artifactId>spring-messaging</artifactId>
 		    <version>5.3.12</version>
 		</dependency>
+#set( $usingMongoDBAsEntityStore = $aib.getParam( "axon-framework.using-mongodb-as-entity-store") )
+#if ( $usingMongoDBAsEntityStore == $null || $usingMongoDBAsEntityStore == "false" || $usingMongoDBAsEntityStore == "" )
+#set( $usingMongoDBAsEntityStore = false )
+#else
+#set( $usingMongoDBAsEntityStore = true )
+#end##if ( $usingMongoDBAsEntityStore == null || $usingMongoDBAsEntityStore == "false")
+#if( $usingMongoDBAsEntityStore == false )
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+#end##if( $usingMongoDBAsEntityStore == false )
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -152,17 +160,20 @@
             <artifactId>axon-micrometer</artifactId>
             <version>${axon.version}</version>
         </dependency>
-#if( $aib.getParam( "axon-framework.using-mongodb-as-event-store") == "true" || $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
+#if( $usingMongoDBAsEntityStore == true )        
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+		    <version>2.6.0</version>
+		</dependency>
+#end##if( $usingMongoDBAsEntityStore == true )        
+#if( $aib.getParam( "axon-framework.using-mongodb-as-event-store") == "true" )
         <dependency>
             <groupId>org.axonframework.extensions.mongo</groupId>
             <artifactId>axon-mongo</artifactId>
-            <version>4.2</version>
-        </dependency>    
-       <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
-#end##if( $aib.getParam( "axon-framework.using-mongodb-as-event-store") == "true" || $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
+            <version>4.5</version>
+        </dependency>  
+#end##if( $aib.getParam( "axon-framework.using-mongodb-as-event-store") == "true" )
 
 #set( $hibernate_dialect = $aib.getParam("axon-framework.jpa-hibernate-dialect") )
 #if ( $hibernate_dialect != $null && $hibernate_dialect != "" ) 
@@ -231,7 +242,14 @@
  			<artifactId>springfox-boot-starter</artifactId>
  			<version>3.0.0</version>
 		</dependency>
-        
+		
+		<!--  thought works -->
+        <dependency>
+    		<groupId>com.thoughtworks.xstream</groupId>
+    		<artifactId>xstream</artifactId>
+    		<version>1.4.18</version>
+		</dependency>
+		 
 #junitDependencies()
 
     </dependencies>

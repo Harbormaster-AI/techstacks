@@ -1,0 +1,6 @@
+version:            1.0
+saveParams:
+    name:           Axon with Mongo
+    description:    Axon Tech Stack
+stackPath:          C:\harbormaster\techstacks\AxonMongo\
+stackFile:          AxonMongo.zip

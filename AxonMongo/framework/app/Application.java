@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @SpringBootApplication
 @ComponentScan(basePackages = "${packageName}.*")
 #if ( $mongoEntityStoreInUse == true )
-@EnableMongoRepositories(basePackages = "{$packageName}.repository")
+@EnableMongoRepositories(basePackages = "${packageName}.repository")
 #end##if ( $mongoEntityStoreInUse == true )
 public class Application {
 

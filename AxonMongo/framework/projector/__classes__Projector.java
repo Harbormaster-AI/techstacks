@@ -21,7 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 
-#set( $imports = [ "api", "entity", "exception", repository ] )
+#set( $imports = [ "api", "entity", "exception", "repository" ] )
 #importStatements( $imports )
 
 /**
@@ -98,7 +98,7 @@ public class ${className}Projector {
     public void handle( ${classObject.getDeleteEventAlias()} event) {
     	LOGGER.info("handling ${classObject.getCreateEventAlias()} - " + event );
     	
-    	$className entity = entityManager.find(${className}.class, event.get${className}Id());
+    	$className entity = repository.findById( event.get${className}Id()).get();
     	
     	// ------------------------------------------
     	// delete what is discovered via find on the embedded identifier
@@ -123,11 +123,9 @@ public class ${className}Projector {
     @EventHandler( payloadType=${singleAssociation.getAssignToEventAlias()}.class)
     public void handle( ${singleAssociation.getAssignToEventAlias()} event) {
 	    LOGGER.info("handling ${singleAssociation.getAssignToEventAlias()} - " + event );
-	    
-	    @Autowired
-	    ${childType}Repository chidRepo;
-	    $className entity = repository.findById( event.get${className}Id());
-	    $childType assignment = chidRepo.find(event.getAssignment().get${childType}Id());
+
+	    $className entity = repository.findById( event.get${className}Id()).get();
+	    $childType assignment = ${childType}Repo.findById(event.getAssignment().get${childType}Id()).get();
 	    
 	    // ------------------------------------------
 		// assign the $roleName
@@ -137,7 +135,7 @@ public class ${className}Projector {
 	    // ------------------------------------------
     	// save 
     	// ------------------------------------------ 
-	    entityManager.save(entity);
+	    repository.save(entity);
         
     	// ------------------------------------------
     	// emit to subscribers that find one
@@ -158,7 +156,7 @@ public class ${className}Projector {
 public void handle( ${singleAssociation.getUnAssignFromEventAlias()} event) {
     LOGGER.info("handling ${singleAssociation.getUnAssignFromEventAlias()} - " + event );
     
-    $className entity = repository.findById(event.get${className}Id());
+    $className entity = repository.findById(event.get${className}Id()).get();
 
     // ------------------------------------------
 	// null out the ${roleName}
@@ -195,10 +193,8 @@ public void handle( ${singleAssociation.getUnAssignFromEventAlias()} event) {
     public void handle( ${multiAssociation.getAddToEventAlias()} event) {
 	    LOGGER.info("handling ${multiAssociation.getAddToEventAlias()} - " + event );
 	    
-	    @Autowired
-	    ${childType}Repository chidRepo;
-	    $className entity = repository.findById(event.get${className}Id());
-	    $childType child = childRepo.findById(event.getAddTo().get${childType}Id());
+	    $className entity = repository.findById(event.get${className}Id()).get();
+	    $childType child = ${childType}Repo.findById(event.getAddTo().get${childType}Id()).get();
 	    
 	    entity.get${roleName}().add( child );
 
@@ -226,10 +222,8 @@ public void handle( ${singleAssociation.getUnAssignFromEventAlias()} event) {
 public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
     LOGGER.info("handling ${multiAssociation.getRemoveFromEventAlias()} - " + event );
 
-    @Autowired
-    ${childType}Repository chidRepo;
-    $className entity = repository.findById(event.get${className}Id());
-    $childType child = childRepo.find(${childType}.class, event.getRemoveFrom().get${childType}Id() );
+    $className entity = repository.findById(event.get${className}Id()).get();
+    $childType child = ${childType}Repo.findById(event.getRemoveFrom().get${childType}Id()).get();
     
     entity.get${roleName}().remove( child );
 
@@ -264,8 +258,9 @@ public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
     public ${className} handle( Find${className}Query query ) 
     throws ProcessingException, IllegalArgumentException {
     	LOGGER.info("handling Find${className}Query" );
+
     	UUID id = query.getFilter().get${pk}();
-    	return repository.findById(id);
+    	return repository.findById(id).get();
     }
     
     /**
@@ -299,13 +294,17 @@ public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
 	@SuppressWarnings("unused")
 	@QueryHandler
 	public $returnType ${method.getName()}( ${queryName}Query query ) {
-#if ( $handler.getSingleValueReturnValue() == false)
-		return repository.${method.getName()}( query.getFilter().get${Utils.capitalizeFirstLetter(${argName})}() );
-#else##pageable
-        Pageable pageable = new PageRequest(query.getOffset(), query.getLimit());
-        return repository.${method.getName()}( query.getFilter().get${Utils.capitalizeFirstLetter(${argName})}(), pageable ).toList();
-#end##if ( $handler.getSingleValueReturnValue() == false)
+		LOGGER.info("handling ${method.getName()}" );
 		$returnType result = null;
+		
+		try {
+#if ( $handler.getSingleValueReturnValue() == true )
+		    result = repository.${method.getName()}( query.getFilter().get${Utils.capitalizeFirstLetter(${argName})}() );
+#else##pageable
+            Pageable pageable = PageRequest.of(query.getOffset(), query.getLimit());
+            result = repository.${method.getName()}( query.getFilter().get${Utils.capitalizeFirstLetter(${argName})}(), pageable );
+#end##if ( $handler.getSingleValueReturnValue() == false)
+
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to ${method.getName()} using " + query.getFilter(), exc );
@@ -324,6 +323,8 @@ public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
 	 * @param		entity	${className}
 	 */
 	protected void emitFind${className}( ${className} entity ) {
+		LOGGER.info("handling emitFind${className}" );
+		
 	    queryUpdateEmitter.emit(Find${className}.class,
 	                            query -> query.get${className}Id().equals(entity.get${className}Id()),
 	                            entity);
@@ -335,6 +336,8 @@ public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
 	 * @param		entity	${className}
 	 */
 	protected void emitFindAll${className}( ${className} entity ) {
+		LOGGER.info("handling emitFindAll${className}" );
+		
 	    queryUpdateEmitter.emit(FindAll${className}.class,
 	                            query -> true,
 	                            entity);
@@ -348,6 +351,11 @@ public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
     private final ${className}Repository repository;
 	@Autowired
 	private final QueryUpdateEmitter queryUpdateEmitter;
+#foreach( $associationType in $classObject.getAssociationTypes() )
+    @Autowired
+    ${associationType}Repository ${associationType}Repo;
+#end##for ( $associationType in $classObject.getAssociationTypes() )
+
     private static final Logger LOGGER 	= Logger.getLogger(${className}Projector.class.getName());
 
 }
