@@ -16,7 +16,7 @@
 	</target-languages>
 	<tech-stack><!-- components of the stack -->
 		<tech-stack-component name="spring boot" description="RESTful API web services backend" app-layer="presentation"></tech-stack-component>
-		<tech-stack-component name="hibernate" description="Hibernate ORM" app-layer="data"></tech-stack-component>
+		<tech-stack-component name="jpa" description="JPA via Hibernate ORM" app-layer="data"></tech-stack-component>
 		<tech-stack-component name="junit" description="JUnit to test core functionality" app-layer="test"/>	
 		<tech-stack-component name="cqrs" description="axon enabled" app-layer="integration"/>
 		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
