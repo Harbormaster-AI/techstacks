@@ -62,7 +62,7 @@ $args#end##macro( $determineDefaultArgs )
 ######################################################################
 #if ( $attribute.isFromSingleValueAssociation() == true )
 #if ( $aib.isValueObject( ${attribute.getAssociation().getType()} ) == true )
-#set( $defaultValue = "null" )
+#set( $defaultValue = "new ${attribute.getAssociation().getType()}()" )
 #else
 #set( $defaultValue = "null" )
 #end##if ( $aib.isValueObject( ${attribute.getAssociation().getType()} == true )
