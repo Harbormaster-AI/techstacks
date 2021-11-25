@@ -1,15 +1,19 @@
 #header()
+#set( $usingMongoDBAsEntityStore = false )
+#if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
+#set( $usingMongoDBAsEntityStore = true )
+#end##if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
 package ${aib.getRootPackageName(true)}.entity;
 
 import java.util.*
 
-#if( $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
+#if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
 import org.springframework.data.annotation.Id
 #else
 import javax.persistence.*
 import javax.persistence.NamedQueries
 import javax.persistence.NamedQuery
-#end##if( $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
+#end##if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
 
 #set( $imports = [ "api" ] )
 #importStatements( $imports )
