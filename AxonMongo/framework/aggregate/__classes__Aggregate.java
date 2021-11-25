@@ -43,10 +43,11 @@ public class ${className}Aggregate {
 	// ----------------------------------------------
 #set( $includeAssociations = false )
 #set( $varName = "command" )
-#set( $args = "#determineArgsAsInput( $classObject $varName $includeAssociations )" )
+#set( $includeId = true )
+#set( $args = "#determineArgsAsInput( $classObject $varName $includeAssociations $includeId )" )
     @CommandHandler
     public ${className}Aggregate(${classObject.getCreateCommandAlias()} command) throws Exception {
-    	LOGGER.info( "Handlingn command ${classObject.getCreateCommandAlias()}" );
+    	LOGGER.info( "Handling command ${classObject.getCreateCommandAlias()}" );
     	${classObject.getCreateEventAlias()} event = new ${classObject.getCreateEventAlias()}(${args});
     	
         apply(event);
@@ -54,7 +55,8 @@ public class ${className}Aggregate {
 
 #set( $includeAssociations = true )
 #set( $varName = "command" )
-#set( $args = "#determineArgsAsInput( $classObject $varName $includeAssociations )" )
+#set( $includeId = true )
+#set( $args = "#determineArgsAsInput( $classObject $varName $includeAssociations $includeId )" )
     @CommandHandler
     public void handle(${classObject.getUpdateCommandAlias()} command) throws Exception {
     	LOGGER.info( "handling command ${classObject.getUpdateCommandAlias()}" );
