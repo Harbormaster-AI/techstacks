@@ -1,4 +1,6 @@
 #header()
+#set( $entity-store-type = $aib.getParam( "axon-framework.entity-store-type") )
+#set( $event-store-type = $aib.getParam( "axon-framework.event-store-type") )
 package ${aib.getRootPackageName()}.config;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -6,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
+#if( event-store-type == "mongodb" )
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
@@ -13,7 +16,8 @@ import org.axonframework.extensions.mongo.MongoTemplate;
 import org.axonframework.extensions.mongo.DefaultMongoTemplate;
 import org.axonframework.extensions.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
 import org.axonframework.spring.config.AxonConfiguration;
-
+#end##if( event-store-type == "mongodb" )
+	
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -40,7 +44,7 @@ public class MongoDBConfig extends AbstractMongoClientConfiguration {
     	
     }    
 		
-	
+#if( event-store-type == "mongodb" )	
 	// The Event store `EmbeddedEventStore` delegates actual storage and retrieval of events to an `EventStorageEngine`.
 	@Bean
 	public EmbeddedEventStore eventStore(EventStorageEngine storageEngine, AxonConfiguration configuration) {
@@ -63,15 +67,19 @@ public class MongoDBConfig extends AbstractMongoClientConfiguration {
 				.mongoTemplate(DefaultMongoTemplate.builder()
 						.mongoDatabase(client)
 						.build())
+				.domainEventsCollectionName(domainEventsCollectionName)
+				.sagasCollectionName(sagasCollectionName)
+				.snapshotEventsCollectionName()
 				.build();
 	}
 	
 	// secured XStream required of updated XStream implementation
 	protected XStream securedXStream() {
 	    XStream xStream = new XStream();
-	    xStream.allowTypesByWildcard(new String[]{"com.harbormaster.**"});
+	    xStream.allowTypesByWildcard(new String[]{"${aib.getRootPackageName()}.**"});
 	    return xStream;
 	}
+#end##if( event-store-type == "mongodb" )
 	
 	// ------------------------------------------
     // attributes
@@ -81,6 +89,13 @@ public class MongoDBConfig extends AbstractMongoClientConfiguration {
 	public String connectionUrl	= null;
 	@Value("${spring.application.name}")
 	public String appName			= null;
-	@Value("${mongodb.database.name}")
+	@Value("${database.name}")
 	public String databaseName		= null;
+	@Value("${mongodb.sagas.collection.name}")
+	public String sagasCollectionName;
+	@Value("${mongodb.snapshot.events.collection.nam}")
+	public String snapshotEventsCollectionName;
+	@Value("${domain-events-collection-name}")
+	public String domainEventsCollectionName;
+
 }
