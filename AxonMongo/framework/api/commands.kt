@@ -1,20 +1,19 @@
 #header()
-package ${aib.getRootPackageName(true)}.api;
+package ${aib.getRootPackageName(true)}.api
 
 import org.axonframework.modelling.command.TargetAggregateIdentifier
 
 import java.util.*
 
-#if( $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
+#if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
 import org.springframework.data.annotation.Id
 #else
 import javax.persistence.*
-#end##if( $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
+#end##if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
 
 #set( $imports = [ "entity" ] )
 #importStatements( $imports )
 
-#set( $includeId = true )
 #set( $forEntity = false )
 //-----------------------------------------------------------
 // Command definitions
@@ -28,12 +27,14 @@ import javax.persistence.*
 data class ${class.getCreateCommandAlias()}(
 #set( $includeAssociations = false )
 #set( $forAggregate = false )
+#set( $includeId = true )
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
 data class ${class.getUpdateCommandAlias()}(
 #set( $includeAssociations = true)
 #set( $forAggregate = true )
+#set( $includeId = true )
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
 
