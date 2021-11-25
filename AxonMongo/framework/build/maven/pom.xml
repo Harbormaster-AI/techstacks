@@ -1,5 +1,7 @@
 #xmlHeader()
 #set( $appName = $aib.getApplicationNameFormatted() )
+#set( $entity-store-type = $aib.getParam( "axon-framework.entity-store-type") )
+#set( $event-store-type = $aib.getParam( "axon-framework.event-store-type") )
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -122,18 +124,12 @@
 		    <artifactId>spring-messaging</artifactId>
 		    <version>5.3.12</version>
 		</dependency>
-#set( $usingMongoDBAsEntityStore = $aib.getParam( "axon-framework.using-mongodb-as-entity-store") )
-#if ( $usingMongoDBAsEntityStore == $null || $usingMongoDBAsEntityStore == "false" || $usingMongoDBAsEntityStore == "" )
-#set( $usingMongoDBAsEntityStore = false )
-#else
-#set( $usingMongoDBAsEntityStore = true )
-#end##if ( $usingMongoDBAsEntityStore == null || $usingMongoDBAsEntityStore == "false")
-#if( $usingMongoDBAsEntityStore == false )
+#if( $entity-store-type != "mongodb" )
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-#end##if( $usingMongoDBAsEntityStore == false )
+#end##if( $entity-store-type != "mongodb" )
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -160,31 +156,29 @@
             <artifactId>axon-micrometer</artifactId>
             <version>${axon.version}</version>
         </dependency>
-#if( $usingMongoDBAsEntityStore == true )        
+#if( $entity-store-type == "mongodb" || $event-store-type == "mongodb" )        
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-data-mongodb</artifactId>
 		    <version>2.6.0</version>
 		</dependency>
-#end##if( $usingMongoDBAsEntityStore == true )        
-#if( $aib.getParam( "axon-framework.using-mongodb-as-event-store") == "true" )
+#end##if( $entity-store-type == "mongodb" || $event-store-type == "mongodb" )
+#if( $event-store-type == "mongodb" )
         <dependency>
             <groupId>org.axonframework.extensions.mongo</groupId>
             <artifactId>axon-mongo</artifactId>
             <version>4.5</version>
         </dependency>  
-#end##if( $aib.getParam( "axon-framework.using-mongodb-as-event-store") == "true" )
+#end##if( $event-store-type == "mongodb" )
 
-#set( $hibernate_dialect = $aib.getParam("axon-framework.jpa-hibernate-dialect") )
-#if ( $hibernate_dialect != $null && $hibernate_dialect != "" ) 
-#if ( $hibernate_dialect.contains("mysql") )
+#if ( $entity-store-type.contains("mysql") )
         <!-- MySQL -->
 		<dependency>
           <groupId>mysql</groupId>
 	      <artifactId>mysql-connector-java</artifactId>
 	      <version>8.0.13</version>
 		</dependency>
-#elseif ( $hibernate_dialect.contains("postgres") )
+#elseif ( $entity-store-type.contains("postgres") )
         <!-- Postgres -->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -197,8 +191,7 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-#end##if ( $hibernate_dialect.contains("mysql") )
-#end##if ( $hibernate_dialect != $null && $hibernate_dialect != "" ) 
+#end##if ( $entity-store-type.contains("mysql") )
 
         <!-- kotlin -->
         <dependency>
