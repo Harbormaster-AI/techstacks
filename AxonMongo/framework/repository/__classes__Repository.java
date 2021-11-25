@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
-#if( $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
+#if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
 #set( $parentRepo = "MongoRepository")
 import org.springframework.data.mongodb.repository.MongoRepository;
 #else
 #set( $parentRepo = "JpaRepository")
 import org.springframework.data.jpa.repository.JpaRepository;;
-#end##if( $aib.getParam( "axon-framework.using-mongodb-as-entity-store") == "true" )
+#end##if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
 import org.springframework.stereotype.Repository;
 
 import ${aib.getRootPackageName(true)}.api.*;
