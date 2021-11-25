@@ -51,7 +51,8 @@ public class ${className}Projector {
 	    LOGGER.info("handling ${classObject.getCreateEventAlias()} - " + event );
 	    $className entity = new ${className}();
 #set( $includeAssociations = false )
-#determineArgsAsAssignment( ${classObject} "entity" "event" ${includeAssociations} )  
+#set( $includeId = true )
+#determineArgsAsAssignment( ${classObject} "entity" "event" ${includeAssociations} ${includeId} )  
 	    
     	// ------------------------------------------
     	// persist a new one
@@ -73,7 +74,8 @@ public class ${className}Projector {
     	
 	    $className entity = new ${className}();
 #set( $includeAssociations = true )
-#determineArgsAsAssignment( ${classObject} "entity" "event" ${includeAssociations} )  
+#set( $includeId = true )
+#determineArgsAsAssignment( ${classObject} "entity" "event" ${includeAssociations} ${includeId} )  
  
     	// ------------------------------------------
     	// save with an existing instance
