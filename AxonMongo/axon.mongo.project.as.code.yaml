@@ -117,15 +117,25 @@ project:
            server-port:              8011
            version:                  4.5.4
            axonserver-token:         
-           axonserver-context:       context1
-           using-mongodb-as-event-store: true
-           using-mongodb-as-entity-store: true
+           axonserver-context:       context1      
+           entity-store-type:        h2 #options - h2, mysql, postgres, mongodb
+           entity-store-url:         jdbc:h2:~/axonjpatest #mongodb://localhost:27017/axondemo #jdbc:h2:~/axondemo
+           event-store-type:         jpa:h2 #options - axon, jpa:h2, jpa:mysql, jpa:postgres, mongodb
+           event-store-url:          jdbc:h2:~/axonjpatest #mongodb://localhost:27017 
+           database-name:            axonjpadtest
+           database-username:
+           database-password:
            use-axon-server:          true
            axonserver-servers:       localhost
            enable-monitoring:        true
            enable-tracing:           true
            use-snapshot:             true
            default-snapshot-threshold: 50
+           sagas-collection-name:    sagas
+           snapshot-events-collection-name: snapshot-events
+           domain-events-collection-name: domain-events
+           saga-store-type:          jpa
+           token-store-type:         jpa
 
 #            
 # Axon Server properties
@@ -142,13 +152,7 @@ project:
            enable-tracing:           true
            jaeger-endpoint:          localhost:14268/api/traces
 
-#            
-# MongoDB properties
-#
-        mongodb: 
-            host:                    localhost
-            port:                    27017
-            database-name:           axonmongodemo
+
 
             
     
