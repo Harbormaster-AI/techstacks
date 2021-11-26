@@ -12,7 +12,18 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 #else
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;	
 #end##if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
-	
+#if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+#end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
 @SpringBootApplication
 @ComponentScan(basePackages = "${packageName}.*")
 #if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
@@ -20,6 +31,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 #else
 @EnableJpaRepositories(basePackages = "${packageName}.repository")
 #end##if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
+#if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
+@EnableDiscoveryClient 
+#end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
 public class Application {
 
     public static void main(String[] args) {
@@ -34,4 +48,19 @@ public class Application {
 #end##foreach( $class in $aib.getClassesToGenerate() )
         System.out.println( "=================================" );
     }
+    
+#if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )  
+	@RestController
+	class ServiceInstanceRestController {
+
+		@Autowired
+		private DiscoveryClient discoveryClient;	
+		
+		@RequestMapping("/service-instances/{applicationName}")
+		public List<ServiceInstance> serviceInstancesByApplicationName(
+			@PathVariable String applicationName) {
+			return this.discoveryClient.getInstances(applicationName);
+		}
+	}
+#end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
 }

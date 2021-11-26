@@ -136,6 +136,9 @@ project:
            domain-events-collection-name: domain-events
            saga-store-type:          jpa
            token-store-type:         jpa
+           
+           enableDiscoveryClient:   true
+           generateEurekaDiscoveryServer: true
 
 #            
 # Axon Server properties

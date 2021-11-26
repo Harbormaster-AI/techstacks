@@ -113,7 +113,25 @@
     </build>
 
      <dependencies>
-     
+if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
+		<!--  spring cloud -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<version>3.0.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>31.0.1-jre</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+#end#if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )		     
+
 	    <!--  spring boot -->
 	    <dependency>
 	      <groupId>org.springframework.boot</groupId>
