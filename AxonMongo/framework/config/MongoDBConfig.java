@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
-#if( event-store-type == "mongodb" )
+#if( $event-store-type == "mongodb" )
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
@@ -16,7 +16,7 @@ import org.axonframework.extensions.mongo.MongoTemplate;
 import org.axonframework.extensions.mongo.DefaultMongoTemplate;
 import org.axonframework.extensions.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
 import org.axonframework.spring.config.AxonConfiguration;
-#end##if( event-store-type == "mongodb" )
+#end##if( $event-store-type == "mongodb" )
 	
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -44,7 +44,7 @@ public class MongoDBConfig extends AbstractMongoClientConfiguration {
     	
     }    
 		
-#if( event-store-type == "mongodb" )	
+#if( $event-store-type == "mongodb" )	
 	// The Event store `EmbeddedEventStore` delegates actual storage and retrieval of events to an `EventStorageEngine`.
 	@Bean
 	public EmbeddedEventStore eventStore(EventStorageEngine storageEngine, AxonConfiguration configuration) {
@@ -79,7 +79,7 @@ public class MongoDBConfig extends AbstractMongoClientConfiguration {
 	    xStream.allowTypesByWildcard(new String[]{"${aib.getRootPackageName()}.**"});
 	    return xStream;
 	}
-#end##if( event-store-type == "mongodb" )
+#end##if( $event-store-type == "mongodb" )
 	
 	// ------------------------------------------
     // attributes
