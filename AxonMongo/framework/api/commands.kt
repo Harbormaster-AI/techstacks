@@ -26,7 +26,7 @@ import javax.persistence.*
 // $className Commands
 data class ${class.getCreateCommandAlias()}(
 #set( $includeAssociations = false )
-#set( $forAggregate = false )
+#set( $forAggregate = true )
 #set( $includeId = true )
 #outputKotlinArgDeclarations( $class $includeAssociations $includeId $forAggregate $forEntity )
 )
