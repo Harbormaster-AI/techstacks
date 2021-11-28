@@ -27,6 +27,12 @@
         <axon.version>${aib.getParam("axon-framework.version")}</axon.version>
         <versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+#if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
+		<thoughtworks.xstream.version>1.4.15</thoughtworks.xstream.version>
+#else
+		<thoughtworks.xstream.version>1.4.18</thoughtworks.xstream.version>
+#end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
+		
     </properties>
 
     <build>
@@ -111,9 +117,21 @@
             </plugin>
         </plugins>
     </build>
-
+ #if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )   
+    <dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>2020.0.4</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+#end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
      <dependencies>
-if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
+#if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
 		<!--  spring cloud -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -130,7 +148,7 @@ if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-#end#if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )		     
+#end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )		     
 
 	    <!--  spring boot -->
 	    <dependency>
@@ -154,6 +172,13 @@ if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
         </dependency>
 	    
         <!-- Axon -->
+#if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
+		<dependency>
+		    <groupId>org.axonframework.extensions.springcloud</groupId>
+		    <artifactId>axon-springcloud</artifactId>
+		    <version>${axon.version}</version>
+		</dependency>
+#end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )        
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-spring-boot-starter</artifactId>
@@ -203,7 +228,7 @@ if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
             <artifactId>postgresql</artifactId>
             <version>42.3.1</version>
         </dependency>
-#else## default to h2
+#else##default to h2
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -258,7 +283,7 @@ if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
         <dependency>
     		<groupId>com.thoughtworks.xstream</groupId>
     		<artifactId>xstream</artifactId>
-    		<version>1.4.18</version>
+    		<version>${thoughtworks.xstream.version}</version>
 		</dependency>
 		 
 #junitDependencies()
