@@ -20,7 +20,7 @@ project:
                            #     harbormaster_cli stack_list --output pretty
 
     model:
-        name:             company-model-alias-v4
+        name:             company-model-with-events
                            # options:     Unique name of an existing model, a URL to a model file or Git repo, 
                            #                or full/relative path to a model file.
                            #
@@ -115,7 +115,7 @@ project:
 #
         axon-framework:
            server-port:              8011
-           version:                  4.5.4
+           version:                  4.4
            axonserver-token:         
            axonserver-context:       context1      
            entity-store-type:        h2 #options - h2, mysql, postgres, mongodb
@@ -135,8 +135,7 @@ project:
            snapshot-events-collection-name: snapshot-events
            domain-events-collection-name: domain-events
            saga-store-type:          jpa
-           token-store-type:         jpa
-           
+           token-store-type:         jpa       
            enableDiscoveryClient:   true
            generateEurekaDiscoveryServer: true
 
