@@ -147,8 +147,9 @@ messages:
                   - type: "Company"
                     singleValue: "false"
       events:
-          - componentName: "CompanyHandling"
-            handlers: 
-              - name: "NonCrudEventForACompany"
-              - name: "NonCrudEventForBCompany"
-              - name: "NonCrudEventForCCompany"
+          - componentName: "CompanyWideNotification"
+            affiliate: "Company" #must exist in entity declaration
+            data: "INTRINSICS_ONLY" #ALL, INTRINSICS_ONLY, ASSOCIATIONS_ONLY or comma delim list of attributes and/or role names as defined within Entity
+            emitterType: CompanyNotification #if provided, will create a data class by the same name, a subscriber class and emit the current instance of the affiliate
+            persistent: true #true/false forces the affilate to be saved (one of the attributes must be the Id...if null will cause an insert, otherwise an update
+            
