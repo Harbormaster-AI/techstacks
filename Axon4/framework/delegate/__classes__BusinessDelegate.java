@@ -468,7 +468,7 @@ extends BaseBusinessDelegate {
 	}
 #end##if ( ${method.hasArguments()} )
 #end##foreach( $handler in $query.getHandlers() )
-#end##foreach( $query in $aib.getQueriesToGenerate() )
+#end##foreach( $query in $aib.getQueriesToGenerate($className) )
 
 	/**
 	 * Internal helper method to load the root 
