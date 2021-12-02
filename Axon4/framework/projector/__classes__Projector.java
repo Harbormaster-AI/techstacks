@@ -98,7 +98,7 @@ public class ${className}Projector {
      */
     @EventHandler( payloadType=${classObject.getDeleteEventAlias()}.class )
     public void handle( ${classObject.getDeleteEventAlias()} event) {
-    	LOGGER.info("handling ${classObject.getCreateEventAlias()} - " + event );
+    	LOGGER.info("handling ${classObject.getDeleteEventAlias()} - " + event );
     	
     	$className entity = repository.findById( event.get${className}Id()).get();
     	
@@ -327,8 +327,8 @@ public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
 	protected void emitFind${className}( ${className} entity ) {
 		LOGGER.info("handling emitFind${className}" );
 		
-	    queryUpdateEmitter.emit(Find${className}.class,
-	                            query -> query.get${className}Id().equals(entity.get${className}Id()),
+	    queryUpdateEmitter.emit(Find${className}Query.class,
+	                            query -> query.getFilter().get${className}Id().equals(entity.get${className}Id()),
 	                            entity);
 	}
 	
@@ -340,7 +340,7 @@ public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
 	protected void emitFindAll${className}( ${className} entity ) {
 		LOGGER.info("handling emitFindAll${className}" );
 		
-	    queryUpdateEmitter.emit(FindAll${className}.class,
+	    queryUpdateEmitter.emit(FindAll${className}Query.class,
 	                            query -> true,
 	                            entity);
 	}
