@@ -77,7 +77,7 @@ public class ${classObject.getName()}Test{
 		LOGGER.info( "\n======== Setting Up Query Subscriptions ======== ");
 			
 		try {            
-			subscriber.${lowercaseClassName}Subscribe().subscribe(
+			subscriber.${lowercaseClassName}Subscribe().updates().subscribe(
 					  successValue -> { 
 						  LOGGER.info(successValue.toString());
 						  try {
@@ -91,7 +91,7 @@ public class ${classObject.getName()}Test{
 					  error -> LOGGER.warning(error.getMessage()),
 					  () -> LOGGER.info("Subscription on ${lowercaseClassName} consumed")
 					);
-			subscriber.${lowercaseClassName}Subscribe( ${lowercaseClassName}Id ).subscribe(
+			subscriber.${lowercaseClassName}Subscribe( ${lowercaseClassName}Id ).updates().subscribe(
 					  successValue -> { 
 						  LOGGER.info(successValue.toString());
 						  try {
@@ -106,11 +106,15 @@ public class ${classObject.getName()}Test{
 					  	},
 					  error -> LOGGER.warning(error.getMessage()),
 					  () -> LOGGER.info("Subscription on ${lowercaseClassName} for ${lowercaseClassName}Id consumed")
-						);
+
+					);
+			
+#* WE DO NOT HAVE QUERY HANDLERS FOR THESE
+
 #set( $includeComposites = false )
 #foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
 #set( $roleName = $singleAssociation.getRoleName() )
-				subscriber.${roleName}Subscribe(${lowercaseClassName}Id).subscribe(
+				subscriber.${roleName}Subscribe(${lowercaseClassName}Id).updates().subscribe(
 						  successValue -> LOGGER.info(successValue.toString()),
 						  error -> LOGGER.warning(error.getMessage()),
 						  () -> LOGGER.info("Subscription on ${className}.${roleName} for consumed")
@@ -118,12 +122,14 @@ public class ${classObject.getName()}Test{
 #end##foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
 #foreach( $multiAssociation in $class.getMultipleAssociations() )
 #set( $roleName = $multiAssociation.getRoleName() )
-				subscriber.${roleName}Subscribe(${lowercaseClassName}Id).subscribe(
+				subscriber.${roleName}Subscribe(${lowercaseClassName}Id).updates().subscribe(
 						  successValue -> LOGGER.info(successValue.toString()),
 						  error -> LOGGER.warning(error.getMessage()),
 						  () -> LOGGER.info("Subscription on ${className}.${roleName} for ${lowercaseClassName}Id consumed")
 						);
-#end##foreach( $multiAssociation in $class.getMultipleAssociations() )				
+#end##foreach( $multiAssociation in $class.getMultipleAssociations() )		
+
+*#
 			}
 			catch (Exception e) {
 				LOGGER.warning( e.getMessage() );
@@ -173,7 +179,7 @@ public class ${classObject.getName()}Test{
 #set( $includeAssociations = true )
 #set( $varName = "entity" )
 #set( $args = "#determineArgsAsInput( $classObject, $varName, $includeAssociations )" ) 		
-		${classObject.getUpdateCommandAlias()} command = new ${classObject.getUpdateCommandAlias()}(${args});
+		${classObject.getUpdateCommandAlias()} command = generateUpdateCommand();
 
 		try {            
 			assertNotNull( entity, msg.toString() );
@@ -288,18 +294,31 @@ public class ${classObject.getName()}Test{
 	 * 
 	 * @return ${classObject.getCreateCommandAlias()} alias
 	 */
-		protected ${classObject.getCreateCommandAlias()} generateNewCommand() {
+	protected ${classObject.getCreateCommandAlias()} generateNewCommand() {
+#set( $includeAssociations = false )
 #set( $args = "#determineDefaultArgs()" )	
         ${classObject.getCreateCommandAlias()} command = new ${classObject.getCreateCommandAlias()}( $args );
 		
 		return( command );
 	}
 
+		/**
+		 * Returns a new populated ${className}
+		 * 
+		 * @return ${classObject.getUpdateCommandAlias()} alias
+		 */
+	protected ${classObject.getUpdateCommandAlias()} generateUpdateCommand() {
+#set( $includeAssociations = true )
+#set( $args = "#determineDefaultArgs()" )	
+	        ${classObject.getUpdateCommandAlias()} command = new ${classObject.getUpdateCommandAlias()}( $args );
+			
+			return( command );
+		}
 	//-----------------------------------------------------
 	// attributes 
 	//-----------------------------------------------------
-	protected UUID ${lowercaseClassName}Id 				= null;
-	protected ${className}Subscriber subscriber		= null;
-	private String unexpectedErrorMsg 					= ":::::::::::::: Unexpected Error :::::::::::::::::";
-	private final Logger LOGGER 						= Logger.getLogger(${className}Test.class.getName());
+	protected UUID ${lowercaseClassName}Id = null;
+	protected ${className}Subscriber subscriber = null;
+	private final String unexpectedErrorMsg = ":::::::::::::: Unexpected Error :::::::::::::::::";
+	private final Logger LOGGER = Logger.getLogger(${className}Test.class.getName());
 }
