@@ -1,6 +1,9 @@
-#macro( determineDefaultArgs )
+#macro( determineDefaultArgs $includeAssociations )
 #set( $includePKs = false )
-#set( $attributes = ${classObject.getDirectAttributes( $includePKs )} )
+#set( $attributes  = $classObject.getDirectAttributes( $includePKs ) )
+#if ( $includeAssociations == true )
+#set( $attributes = ${classObject.getAttributesOrderedInHierarchy( $includePKs )} )
+#end##if ( $includeAssociations == true )
 #set( $args = "null" )
 #if ( $attributes.size() > 0 )
 #set( $args = "null, " )
@@ -56,9 +59,9 @@ $args#end##macro( $determineDefaultArgs )
 #end##if ( $isTimeType.length() > 0 )
 #end### testing for date/time
 #end##if ( $attribute.isFromEnumerator() == true )
-#else## attribute is from an association
+#else##if ( $attribute.isFromAssociation() == false )
 ######################################################################
-## handle attribute as a single association
+## handle associations
 ######################################################################
 #if ( $attribute.isFromSingleValueAssociation() == true )
 #if ( $aib.isValueObject( ${attribute.getAssociation().getType()} ) == true )
@@ -66,11 +69,11 @@ $args#end##macro( $determineDefaultArgs )
 #else
 #set( $defaultValue = "null" )
 #end##if ( $aib.isValueObject( ${attribute.getAssociation().getType()} == true )
+#else
+#set( $defaultValue = "new HashSet<>()" )
+#end##if ( $attribute.isFromSingleValueAssociation() == true )
 ######################################################################
 ## handle attribute as a multiple association
 ######################################################################
-#else ## attribute is from a multiple assoication
-#set( $defaultValue = "new HashSet<>()" )
-#end##if ( $attribution.isFromSingleValueAssociation() == true )
 #end##if ( $attribute.isFromAssociation() == false )
 ${defaultValue}#end##macro( determineKotlinType inputType )
