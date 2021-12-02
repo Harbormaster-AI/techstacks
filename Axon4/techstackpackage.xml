@@ -1,6 +1,6 @@
 <tech-stack-package 
-	name="AxonMongo" 
-	shortName="AxonMongo"
+	name="Axon4" 
+	shortName="Axon4"
 	description="Axon Framework and Axon Server, using CQRS with MongoDO for event store and sourcing" 
 	icon-url="./img/axoniq.png" 	
 	info-page-url="http://www.harbormaster.com/infopages/axon-mominfo-page.html"
