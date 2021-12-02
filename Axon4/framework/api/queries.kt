@@ -37,8 +37,13 @@ class FindAll${className}Query() {
 data class ${className}FetchOneSummary(@Id var ${pk} : UUID? = null) {
 }
 
+#* 
+
+THIS IS INTENTIONALLY BLOCKED OUT BECAUSE WE DO NOT CREATE QUERY HANDLERS FOR EACH ROLE
+
 class FindAll${className}
 data class Find${className}(val ${lowercaseClassName}Id: UUID)
+
 #set( $includeComposites = false )
 #foreach( $singleAssociation in $class.getSingleAssociations( ${includeComposites} ) )
 #set( $roleName = $singleAssociation.getRoleName() )
@@ -48,6 +53,8 @@ class Find${roleName}For${className}(val ${pk} :  UUID)
 #set( $roleName = $multiAssociation.getRoleName() )
 class Find${roleName}For${className}(val ${pk} :  UUID)
 #end##foreach( $multiAssociation in $class.getMultipleAssociations() )
+
+*#
 
 #set( $queriesToGenerate = $aib.getQueriesToGenerate( $className ) )
 #foreach( $query in $queriesToGenerate )
