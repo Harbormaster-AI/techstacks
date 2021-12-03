@@ -93,7 +93,7 @@ public class MongoDBConfig extends AbstractMongoClientConfiguration {
 	public String databaseName		= null;
 	@Value("${mongodb.sagas.collection.name}")
 	public String sagasCollectionName;
-	@Value("${mongodb.snapshot.events.collection.nam}")
+	@Value("${mongodb.snapshot.events.collection.name}")
 	public String snapshotEventsCollectionName;
 	@Value("${mongodb.domain-events-collection-name}")
 	public String domainEventsCollectionName;
