@@ -66,10 +66,10 @@ public class MongoDBConfig extends AbstractMongoClientConfiguration {
 						.build() )
 				.mongoTemplate(DefaultMongoTemplate.builder()
 						.mongoDatabase(client)
+						.domainEventsCollectionName(domainEventsCollectionName)
+						.sagasCollectionName(sagasCollectionName)
+						.snapshotEventsCollectionName(snapshotEventsCollectionName)
 						.build())
-				.domainEventsCollectionName(domainEventsCollectionName)
-				.sagasCollectionName(sagasCollectionName)
-				.snapshotEventsCollectionName()
 				.build();
 	}
 	
@@ -95,7 +95,7 @@ public class MongoDBConfig extends AbstractMongoClientConfiguration {
 	public String sagasCollectionName;
 	@Value("${mongodb.snapshot.events.collection.nam}")
 	public String snapshotEventsCollectionName;
-	@Value("${domain-events-collection-name}")
+	@Value("${mongodb.domain-events-collection-name}")
 	public String domainEventsCollectionName;
 
 }
