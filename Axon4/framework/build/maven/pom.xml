@@ -24,11 +24,7 @@
         <start-class>${aib.getRootPackageName()}.Application</start-class>
         <java.version>11</java.version>
         <kotlin.version>1.5.10</kotlin.version>
-#set( $axon-version = ${aib.getParam("axon-framework.version")} )
-#if ( $entity-store-type == "mongodb")
-#set( $axon-version = "4.4")##force axon version to 4.4 and thought works to 1.4.15 to overcome XStream security issue
-#end##if ( $entity-store-type == "mongodb")
-        <axon.version>${axon-version}</axon.version>
+        <axon.version>4.4</axon.version>
         <versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
 #if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true || $entity-store-type == "mongodb" )
