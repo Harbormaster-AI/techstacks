@@ -1,6 +1,6 @@
 <tech-stack-package 
-    name="Base Go Tech Stack"
-    shortName=".go.tech.stack"
+    name="Go Tech Stack"
+    shortName="Golang"
     description="The base for all Go related tech stacks" 
     icon-url="img/go.lang.svg"
  	info-page-url="http://www.harbormaster.ai/.go.tech.stack"
