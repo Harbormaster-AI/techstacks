@@ -68,6 +68,7 @@
                             </sourceDirs>
                         </configuration>
                     </execution>
+                    
                 </executions>
             </plugin>
 
@@ -105,6 +106,10 @@
                     </execution>
                 </executions>
             </plugin>
+
+#if( $aib.getParam("git.inUse") == "true" )        
+#apacheMavenAntRunPluginGitOnlyDecl()
+#endif##if( $aib.getParam("gitParam.inUse") == "true" )        
 
             <plugin>
                 <groupId>org.springframework.boot</groupId>
