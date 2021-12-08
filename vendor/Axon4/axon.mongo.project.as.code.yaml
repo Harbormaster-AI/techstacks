@@ -71,7 +71,8 @@ project:
 #
 # Git repository parameters
 #
-        git:            
+        git:    
+            inUse:       false        
             name:        git_test_go 
             username:    complexmathguy
             password:    00Corvette!!
