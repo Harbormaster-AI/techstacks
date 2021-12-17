@@ -4,9 +4,9 @@
 	description="Axon Framework and Axon Server, using CQRS with MongoDO for event store and sourcing" 
 	icon-url="./img/axoniq.png" 	
 	info-page-url="https://harbormaster.ai/axon-tech-stack/"
-    version="0.1"
+    version="0.8"
     app-type="restfulapi"
-    release-status="alpha"
+    release-status="beta"
     derivedFrom=".java.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true">
