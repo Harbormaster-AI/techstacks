@@ -21,7 +21,7 @@ public class BaseTest
 #if( ${containerObject} )
 #set( $classesToUse = $containerObject.getChildrenClassObjects() )
 #else
-#set( $classesToUse = $aib.getClassesToGenerate() )
+#set( $classesToUse = $aib.getClassesWithIdentity() )
 #end ##if( ${containerObject} )
         try {
 #foreach( $class in $classesToUse )
