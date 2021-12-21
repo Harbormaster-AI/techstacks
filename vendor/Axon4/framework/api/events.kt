@@ -4,11 +4,11 @@ package ${aib.getRootPackageName(true)}.api;
 import java.time.Instant
 import java.util.*
 
-#if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
+#if( $aib.getParam( "spring.entity-store-type") == "mongodb" )
 import org.springframework.data.annotation.Id
 #else
 import javax.persistence.*
-#end##if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
+#end##if( $aib.getParam( "spring.entity-store-type") == "mongodb" )
 
 #set( $imports = [ "entity" ] )
 #importStatements( $imports )
