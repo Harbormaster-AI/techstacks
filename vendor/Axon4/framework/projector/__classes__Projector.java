@@ -14,12 +14,8 @@ import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.axonframework.queryhandling.QueryUpdateEmitter;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-
 
 #set( $imports = [ "api", "entity", "exception", "repository" ] )
 #importStatements( $imports )
@@ -35,11 +31,11 @@ import org.springframework.stereotype.Component;
  */
 @ProcessingGroup("${lowercaseClassName}")
 @Component("${lowercaseClassName}-handler")
-public class ${className}Projector {
+public class ${className}Projector extends ${className}EntityProjector {
 		
 	// core constructor
 	public ${className}Projector(${className}Repository repository, QueryUpdateEmitter queryUpdateEmitter ) {
-        this.repository = repository;
+        super(repository);
         this.queryUpdateEmitter = queryUpdateEmitter;
     }	
 
@@ -57,7 +53,7 @@ public class ${className}Projector {
     	// ------------------------------------------
     	// persist a new one
     	// ------------------------------------------ 
-	    repository.save(entity);
+	    create(entity);
         
         // ------------------------------------------
     	// emit to subscribers that find all
@@ -80,7 +76,7 @@ public class ${className}Projector {
     	// ------------------------------------------
     	// save with an existing instance
     	// ------------------------------------------ 
-		repository.save(entity);
+		update(entity);
 
     	// ------------------------------------------
     	// emit to subscribers that find one
@@ -100,12 +96,10 @@ public class ${className}Projector {
     public void handle( ${classObject.getDeleteEventAlias()} event) {
     	LOGGER.info("handling ${classObject.getDeleteEventAlias()} - " + event );
     	
-    	$className entity = repository.findById( event.get${className}Id()).get();
-    	
     	// ------------------------------------------
-    	// delete what is discovered via find on the embedded identifier
+    	// delete delegation
     	// ------------------------------------------
-    	repository.delete( entity );
+    	$className entity = delete( event.get${className}Id() );
 
     	// ------------------------------------------
     	// emit to subscribers that find all
@@ -126,20 +120,12 @@ public class ${className}Projector {
     public void handle( ${singleAssociation.getAssignToEventAlias()} event) {
 	    LOGGER.info("handling ${singleAssociation.getAssignToEventAlias()} - " + event );
 
-	    $className entity = repository.findById( event.get${className}Id()).get();
-	    $childType assignment = ${childType}Repo.findById(event.getAssignment().get${childType}Id()).get();
-	    
 	    // ------------------------------------------
-		// assign the $roleName
-		// ------------------------------------------ 
-	    entity.set${roleName}( assignment );
+	    // delegate to assignTo
+	    // ------------------------------------------
+	    $className entity = assign${roleName}( event.get${className}Id(), event.getAssignment() );
 
 	    // ------------------------------------------
-    	// save 
-    	// ------------------------------------------ 
-	    repository.save(entity);
-        
-    	// ------------------------------------------
     	// emit to subscribers that find one
     	// ------------------------------------------    	
         emitFind${className}( entity );
@@ -151,35 +137,28 @@ public class ${className}Projector {
     }
     
 
-/*
- * @param	event ${singleAssociation.getUnAssignFromEventAlias()}
- */
-@EventHandler( payloadType=${singleAssociation.getUnAssignFromEventAlias()}.class)
-public void handle( ${singleAssociation.getUnAssignFromEventAlias()} event) {
-    LOGGER.info("handling ${singleAssociation.getUnAssignFromEventAlias()} - " + event );
-    
-    $className entity = repository.findById(event.get${className}Id()).get();
+	/*
+	 * @param	event ${singleAssociation.getUnAssignFromEventAlias()}
+	 */
+	@EventHandler( payloadType=${singleAssociation.getUnAssignFromEventAlias()}.class)
+	public void handle( ${singleAssociation.getUnAssignFromEventAlias()} event) {
+	    LOGGER.info("handling ${singleAssociation.getUnAssignFromEventAlias()} - " + event );
 
-    // ------------------------------------------
-	// null out the ${roleName}
-	// ------------------------------------------     
-    entity.set${roleName}(null);
+	    // ------------------------------------------
+	    // delegate to unAssignFrom
+	    // ------------------------------------------
+	    $className entity = unAssign${roleName}( event.get${className}Id() );
 
-    // ------------------------------------------
-	// save 
-	// ------------------------------------------ 
-    repository.save(entity);
-    
-	// ------------------------------------------
-	// emit to subscribers that find one
-	// ------------------------------------------    	
-    emitFind${className}( entity );
-
-	// ------------------------------------------
-	// emit to subscribers that find all
-	// ------------------------------------------    	
-    emitFindAll${className}( entity );
-}
+		// ------------------------------------------
+		// emit to subscribers that find one
+		// ------------------------------------------    	
+	    emitFind${className}( entity );
+	
+		// ------------------------------------------
+		// emit to subscribers that find all
+		// ------------------------------------------    	
+	    emitFindAll${className}( entity );
+	}
 
 #end##foreach( $singleAssociation in $classObject.getSingleAssociations( ${includeComposites} ) )
 
@@ -195,15 +174,10 @@ public void handle( ${singleAssociation.getUnAssignFromEventAlias()} event) {
     public void handle( ${multiAssociation.getAddToEventAlias()} event) {
 	    LOGGER.info("handling ${multiAssociation.getAddToEventAlias()} - " + event );
 	    
-	    $className entity = repository.findById(event.get${className}Id()).get();
-	    $childType child = ${childType}Repo.findById(event.getAddTo().get${childType}Id()).get();
-	    
-	    entity.get${roleName}().add( child );
-
 	    // ------------------------------------------
-    	// save 
+    	// delegate to addTo 
     	// ------------------------------------------ 
-	    repository.save(entity);
+	    $className entity = addTo${roleName}(event.get${className}Id(), event.getAddTo() );
         
     	// ------------------------------------------
     	// emit to subscribers that find one
@@ -224,15 +198,7 @@ public void handle( ${singleAssociation.getUnAssignFromEventAlias()} event) {
 public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
     LOGGER.info("handling ${multiAssociation.getRemoveFromEventAlias()} - " + event );
 
-    $className entity = repository.findById(event.get${className}Id()).get();
-    $childType child = ${childType}Repo.findById(event.getRemoveFrom().get${childType}Id()).get();
-    
-    entity.get${roleName}().remove( child );
-
-    // ------------------------------------------
-	// save
-	// ------------------------------------------ 
-    repository.save(entity);
+    $className entity = removeFrom${roleName}(event.get${className}Id(), event.getRemoveFrom() );
     
 	// ------------------------------------------
 	// emit to subscribers that find one
@@ -259,64 +225,22 @@ public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
     @QueryHandler
     public ${className} handle( Find${className}Query query ) 
     throws ProcessingException, IllegalArgumentException {
-    	LOGGER.info("handling Find${className}Query" );
-
-    	UUID id = query.getFilter().get${pk}();
-    	return repository.findById(id).get();
+    	return find( query.getFilter().get${className}Id() );
     }
     
     /**
      * Method to retrieve a collection of all ${className}s
      *
-     * @param	inputQuery	FindAll${className}Query 
+     * @param	query	FindAll${className}Query 
      * @return 	List<${className}> 
      * @exception ProcessingException Thrown if any problems
      */
     @SuppressWarnings("unused")
     @QueryHandler
-    public List<${className}> handle( FindAll${className}Query inputQuery ) throws ProcessingException {
-    	LOGGER.info("handling FindAll${className}Query" );
-    	
-    	return repository.findAll();
+    public List<${className}> handle( FindAll${className}Query query ) throws ProcessingException {
+    	return findAll( query );
     }
 
-#foreach( $query in $aib.getQueriesToGenerate(${className}) )
-#foreach( $handler in $query.getHandlers() )
-#set( $method = $handler.getMethodObject() )
-#set( $queryName = $Utils.capitalizeFirstLetter( $handler.getName() ) )
-#if ( ${method.hasArguments()} )##should only be one argument
-#set( $argType = ${method.getArguments().getArgs().get(0).getType()} )
-#set( $argName = ${method.getArguments().getArgs().get(0).getName()} )
-#set( $returnType = ${method.getArguments().getReturnType()} )
-    /**
-     * query method to ${method.getName()}
-     * @param 		$argType $argName
-     * @return		$returnType
-     */     
-	@SuppressWarnings("unused")
-	@QueryHandler
-	public $returnType ${method.getName()}( ${queryName}Query query ) {
-		LOGGER.info("handling ${method.getName()}" );
-		$returnType result = null;
-		
-		try {
-#if ( $handler.getSingleValueReturnValue() == true )
-		    result = repository.${method.getName()}( query.getFilter().get${Utils.capitalizeFirstLetter(${argName})}() );
-#else##pageable
-            Pageable pageable = PageRequest.of(query.getOffset(), query.getLimit());
-            result = repository.${method.getName()}( query.getFilter().get${Utils.capitalizeFirstLetter(${argName})}(), pageable );
-#end##if ( $handler.getSingleValueReturnValue() == false)
-
-        }
-        catch( Throwable exc ) {
-        	LOGGER.log( Level.WARNING, "Failed to ${method.getName()} using " + query.getFilter(), exc );
-        }
-        
-        return result;
-	}
-#end##if ( ${method.hasArguments()} )## should only be one argument
-#end##foreach( $handler in $query.getHandlers() )
-#end##foreach( $query in $aib.getQueriesToGenerate() )
 
 	/**
 	 * emit to subscription queries of type Find${className}, 
@@ -350,14 +274,7 @@ public void handle( ${multiAssociation.getRemoveFromEventAlias()} event) {
     // attributes
     // --------------------------------------------------
 	@Autowired
-    private final ${className}Repository repository;
-	@Autowired
 	private final QueryUpdateEmitter queryUpdateEmitter;
-#foreach( $associationType in $classObject.getAssociationTypes() )
-    @Autowired
-    ${associationType}Repository ${associationType}Repo;
-#end##for ( $associationType in $classObject.getAssociationTypes() )
-
     private static final Logger LOGGER 	= Logger.getLogger(${className}Projector.class.getName());
 
 }
