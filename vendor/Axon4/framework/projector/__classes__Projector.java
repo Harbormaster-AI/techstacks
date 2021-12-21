@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @ProcessingGroup("${lowercaseClassName}")
-@Component("${lowercaseClassName}-handler")
+@Component("${lowercaseClassName}-projector")
 public class ${className}Projector extends ${className}EntityProjector {
 		
 	// core constructor
