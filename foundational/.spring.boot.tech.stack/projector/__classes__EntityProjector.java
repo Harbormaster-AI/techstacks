@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -278,6 +279,7 @@ public class ${className}EntityProjector {
     protected final ${className}Repository repository;
 #foreach( $associationType in $classObject.getAssociationTypes() )
     @Autowired
+    @Qualifier(value="${Utils.lowercaseFirstLetter( ${associationType} )}-entity-project")
     ${associationType}EntityProjector ${associationType}Projector;
 #end##for ( $associationType in $classObject.getAssociationTypes() )
 
