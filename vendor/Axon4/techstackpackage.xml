@@ -7,7 +7,7 @@
     version="0.8"
     app-type="restfulapi"
     release-status="beta"
-    derivedFrom=".java.tech.stack"
+    derivedFrom=".spring.boot.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true">
 	<target-languages>
