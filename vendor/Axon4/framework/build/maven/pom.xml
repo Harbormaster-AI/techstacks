@@ -159,12 +159,10 @@
 		    <artifactId>spring-messaging</artifactId>
 		    <version>5.3.12</version>
 		</dependency>
-#if( $entity-store-type != "mongodb" )
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-#end##if( $entity-store-type != "mongodb" )
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
