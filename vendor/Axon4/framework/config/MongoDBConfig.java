@@ -1,5 +1,5 @@
 #header()
-#set( $entity-store-type = $aib.getParam( "axon-framework.entity-store-type") )
+#set( $entity-store-type = $aib.getParam( "spring.entity-store-type") )
 #set( $event-store-type = $aib.getParam( "axon-framework.event-store-type") )
 package ${aib.getRootPackageName()}.config;
 
