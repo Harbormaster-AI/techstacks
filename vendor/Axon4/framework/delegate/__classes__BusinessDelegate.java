@@ -221,7 +221,7 @@ extends BaseBusinessDelegate {
     /**
      * Method to retrieve a collection of all ${className}s
      *
-     * @return 	List<${className}FetchOneSummary> 
+     * @return 	List<${className}> 
      * @exception ProcessingException Thrown if any problems
      */
     public List<${className}> getAll${className}() 
@@ -268,20 +268,6 @@ extends BaseBusinessDelegate {
 		${childType} child = null;
 		
 		try {
-	        // --------------------------------------------------------------
-			// if there is a childId it means the child exists, so get it
-			// to ensure we have the "most up to date" version
-	        // --------------------------------------------------------------
-/*			if ( childId != null )
-				child = childDelegate.get${childType}( new ${childType}FetchOneSummary( childId ) );
-			else // otherwise create it
-				child = childDelegate.create${childType}( child );
-
-			// --------------------------------------
-	    	// update the command
-	    	// --------------------------------------    
-			commandAssignment( child );
-*/
 			// --------------------------------------
 	    	// best to validate the command now
 	    	// --------------------------------------    
@@ -350,26 +336,7 @@ extends BaseBusinessDelegate {
 		${className}BusinessDelegate parentDelegate = ${className}BusinessDelegate.get${className}Instance();		
 		UUID childId = command.getAddTo().get${childType}Id();
 		
-		// -------------------------------------------
-		// if no child id or the child is not found, 
-		// then create the child first, 
-		// otherwise add what was found
-		// -------------------------------------------
 		try {		
-	/*		${childType} childToAdd = childId == null ? null : childDelegate.get${childType}( new ${childType}FetchOneSummary(childId) );
-				
-			// -------------------------------------------
-			// if not found, create it
-			// -------------------------------------------
-			if ( childToAdd == null ) {
-				childToAdd = childDelegate.create${childType}( command );
-			}
-
-			// --------------------------------------
-	    	// assign the most recent version
-	    	// --------------------------------------    
-			command.setAddTo( childToAdd );
-	*/		
 			// --------------------------------------
 	    	// validate the command
 	    	// --------------------------------------    
@@ -401,13 +368,6 @@ extends BaseBusinessDelegate {
 
 		try {
 			
-//			$childType childToRemove = childDelegate.get${childType}(new ${childType}FetchOneSummary( childId ));
-			
-			// --------------------------------------
-	    	// assign most recent version to the command
-	    	// --------------------------------------    
-//			command.setRemoveFrom( childToRemove );
-
 			// --------------------------------------
 	    	// validate the command
 	    	// --------------------------------------    
