@@ -7,11 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.ApplicationContext;
-#if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
+#if( $aib.getParam( "spring.entity-store-type") == "mongodb" )
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 #else
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;	
-#end##if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
+#end##if( $aib.getParam( "spring.entity-store-type") == "mongodb" )
 #if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
 
 import java.util.List;
@@ -26,11 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 #end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
 @SpringBootApplication
 @ComponentScan(basePackages = "${packageName}.*")
-#if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
+#if( $aib.getParam( "spring.entity-store-type") == "mongodb" )
 @EnableMongoRepositories(basePackages = "${packageName}.repository")
 #else
 @EnableJpaRepositories(basePackages = "${packageName}.repository")
-#end##if( $aib.getParam( "axon-framework.entity-store-type") == "mongodb" )
+#end##if( $aib.getParam( "spring.entity-store-type") == "mongodb" )
 #if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
 @EnableDiscoveryClient 
 #end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
