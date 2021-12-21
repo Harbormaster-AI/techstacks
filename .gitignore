@@ -1,4 +1,5 @@
 .project
 copyzips.bat
 *.zip
+**/*data/
 

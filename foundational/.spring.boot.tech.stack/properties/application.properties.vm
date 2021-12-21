@@ -1,0 +1,45 @@
+#macro( outputCommonApplicationProperties )
+#set( $appName = $aib.getApplicationNameFormatted() )
+#set( $entity-store-type = $aib.getParam( "spring.entity-store-type") )
+#set( $event-store-type = $aib.getParam( "axon-framework.event-store-type") )
+# The name of this app:
+spring.application.name=${appName}
+server.port=${aib.getParam("spring.server-port")}
+
+# Debugging on
+logging.level.${aib.getRootPackageName()}=debug
+logging.level.io.axoniq.demo=debug
+
+# The default profiles are "all of them"
+spring.profiles.active=${aib.getParam("spring.spring-profiles-active")}
+
+# Database specifics
+#if ( $entity-store-type != "mongodb" )
+#if ( $entity-store-type == "h2" )
+#set( $hibernate-dialect = "org.hibernate.dialect.H2Dialect" )
+#set( $driver-class-name = "org.h2.Driver" )
+#elseif ( $entity-store-type == "mysql" )
+#set( $hibernate-dialect = "org.hibernate.dialect.MySQL8Dialect" )
+#set( $driver-class-name = "com.mysql.jdbc.Driver")
+#elseif ( $entity-store-type == "postgres" )
+#set( $hibernate-dialect = "org.hibernate.dialect.ProgressDialect" )
+#set( $driver-class-name = "org.postgresql.Driver")
+#end##if ( $entity-store-type != "h2" )
+# spring jpa/hibernate params
+spring.jpa.hibernate.dialect=${hibernate-dialect}
+spring.datasource.url=${aib.getParam("spring.entity-store-url")}
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.driver-class-name=${driver-class-name}
+spring.datasource.username=${aib.getParam("spring.database-username")}
+spring.datasource.password=${aib.getParam("spring.database-password")}
+spring.jpq.show-sql=true
+spring.jpa.properties.hibernate.id.new_generator_mappings=false
+#else
+# mongodb parameters
+mongodb.connection.url=${aib.getParam("axon-framework.entity-store-url")}
+spring.data.mongodb.uuid-representation=standard
+#end##if ( $entity-store-type != "mongodb" )
+
+database.name=${aib.getParam("spring.database-name")}
+
+#end##macro( outputCommonApplicationProperties )

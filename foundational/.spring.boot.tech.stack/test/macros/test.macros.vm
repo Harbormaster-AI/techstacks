@@ -1,0 +1,75 @@
+#macro( determineDefaultArgs $includeAssociations )
+#set( $includePKs = false )
+#set( $attributes  = $classObject.getDirectAttributes( $includePKs ) )
+#if ( $includeAssociations == true )
+#set( $attributes = ${classObject.getAttributesOrderedInHierarchy( $includePKs )} )
+#end##if ( $includeAssociations == true )
+#set( $args = "null" )
+#if ( $attributes.size() > 0 )
+#set( $args = "null, " )
+#end##if ( $velocityCount == $attributes.size() )
+#foreach( $attribute in $attributes )
+#set( $args = "$args #determineDefaultArg( $attribute )" )
+#if ( $velocityCount < $attributes.size() )
+#set( $args = "${args}, " )
+#end##if ( $velocityCount < $attributes.size() )
+#end##foreach( $attribute in $attributes )
+$args#end##macro( $determineDefaultArgs )
+
+
+#macro( determineDefaultArg $attribute )
+#set( $name = $attribute.getName() )
+#set( $type = $attribute.getType() )
+#set( $defaultValue = "${esc.quote}${esc.quote}" )
+######################################################################
+## handle associations and non-associations differently
+######################################################################
+#if ( $attribute.isFromAssociation() == false )
+######################################################################
+## handle enums and non-enums differently
+######################################################################
+#if ( $attribute.isFromEnumerator() == true )
+#set( $defaultValue = "${type}.values()[0]" )
+#else
+#if( $type.contains("tring") )
+#set( $defaultValue = "org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric(16)" )
+#elseif( $type.contains("loat") )
+#set( $type = "Float" )
+#set( $defaultValue = "0.0F" )
+#elseif( $type.contains("oolean") )
+#set( $defaultValue = "new Boolean(true") )
+#elseif( $type.equalsIgnoreCase("char") )
+#set( $defaultValue = "a" )
+#elseif( $type.equalsIgnoreCase("long") )
+#set( $defaultValue = "1000L" )
+#elseif( $type.equalsIgnoreCase("int") || $type.contains("nteger") )
+#set( $defaultValue = 0 )
+#elseif( $type.contains("ouble") )
+#set( $defaultValue = "0.0D" )
+#elseif( $type.contains("hort") )
+#set( $defaultValue = 0 )
+#elseif( $type.contains("yte") )
+#set( $defaultValue = 0 )
+#else ## testing for date/time
+#set( $isTimeType = "#isTypeTime( $type )" )
+#if ( $isTimeType.length() > 0 )
+#set( $defaultValue = "new Date()" )
+#else
+#set( $defaultValue = "${esc.quote}${esc.quote}" )
+#end##if ( $isTimeType.length() > 0 )
+#end### testing for date/time
+#end##if ( $attribute.isFromEnumerator() == true )
+#else##if ( $attribute.isFromAssociation() == false )
+######################################################################
+## handle associations
+######################################################################
+#if ( $attribute.isFromSingleValueAssociation() == true )
+#set( $defaultValue = "new ${attribute.getAssociation().getType()}()" )
+#else
+#set( $defaultValue = "new HashSet<>()" )
+#end##if ( $attribute.isFromSingleValueAssociation() == true )
+######################################################################
+## handle attribute as a multiple association
+######################################################################
+#end##if ( $attribute.isFromAssociation() == false )
+${defaultValue}#end##macro( determineKotlinType inputType )
