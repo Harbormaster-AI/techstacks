@@ -15,12 +15,12 @@ project:
     name: Axon Mongo CRUD Demo
     description: Sample Axon Mongo project
     techstack:
-        name:             AxonMongo                     
+        name:             Axon4                   
                            # To see the list of available tech stacks on a Harbormaster instance use command:
                            #     harbormaster_cli stack_list --output pretty
 
     model:
-        name:             company-model-with-events
+        name:             company-event-model
                            # options:     Unique name of an existing model, a URL to a model file or Git repo, 
                            #                or full/relative path to a model file.
                            #
@@ -71,8 +71,8 @@ project:
 #
 # Git repository parameters
 #
-        git:    
-            inUse:       false        
+        git:            
+            inUse:       false
             name:        git_test_go 
             username:    complexmathguy
             password:    00Corvette!!
@@ -89,8 +89,8 @@ project:
 #
 #            To see the list of available resources on a Harbormaster instance using command:
 #                harbormaster_cli resource_list --output pretty            
-        resources:        
-            available:          myK8AccountCredentials
+#        resources:        
+#            available:          myK8AccountCredentials
              
 #            
 # CI/CD parameters
@@ -112,20 +112,26 @@ project:
             repoUrl:            http://xxx.xxx.xxx.xxx:8081/repository/npm-public
            
 #            
+# Spring properties
+#
+
+        spring:
+           server-port:              8011
+           entity-store-type:        h2 #options - h2, mysql, postgres, mongodb
+           entity-store-url:         jdbc:h2:~/axondemotester #mongodb://localhost:27017/axondemo #jdbc:h2:~/axondemo
+           database-name:            axondemotester
+           database-username:
+           database-password:
+           spring-profiles-active:
+#            
 # Axon Framework properties
 #
         axon-framework:
-           server-port:              8011
-           version:                  4.4
            axonserver-token:         
            axonserver-context:       context1      
-           entity-store-type:        h2 #options - h2, mysql, postgres, mongodb
-           entity-store-url:         jdbc:h2:~/axonjpatest #mongodb://localhost:27017/axondemo #jdbc:h2:~/axondemo
-           event-store-type:         jpa:h2 #options - axon, jpa:h2, jpa:mysql, jpa:postgres, mongodb
-           event-store-url:          jdbc:h2:~/axonjpatest #mongodb://localhost:27017 
-           database-name:            axonjpadtest
-           database-username:
-           database-password:
+           event-store-type:         mongodb #options - axon, jpa:h2, jpa:mysql, jpa:postgres, mongodb
+           event-store-url:          mongodb://localhost:27017# jdbc:h2:~/axonjpatest #mongodb://localhost:27017 
+
            use-axon-server:          true
            axonserver-servers:       localhost
            enable-monitoring:        true
@@ -135,10 +141,10 @@ project:
            sagas-collection-name:    sagas
            snapshot-events-collection-name: snapshot-events
            domain-events-collection-name: domain-events
-           saga-store-type:          jpa
-           token-store-type:         jpa       
-           enableDiscoveryClient:   true
-           generateEurekaDiscoveryServer: true
+ #          saga-store-type:          jpa
+ #          token-store-type:         jpa       
+           enableDiscoveryClient:   false
+           generateEurekaDiscoveryServer: false
 
 #            
 # Axon Server properties
