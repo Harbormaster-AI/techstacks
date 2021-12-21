@@ -1,0 +1,21 @@
+<tech-stack-package 
+	name="Spring-Boot" 
+	shortName="Spring-Boot"
+	description="Spring Boot tech stack" 
+	icon-url="./img/spring.boot.png" 	
+	info-page-url="https://harbormaster.ai/spring-boot-tech-stack/"
+    version="0.8"
+    app-type="restfulapi"
+    release-status="beta"
+    derivedFrom=".spring.boot.tech.stack"
+	supportsDocker="true"
+	supportsKubernetes="true">
+	<target-languages>
+		<target-language name="java"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+		<tech-stack-component name="spring boot" description="RESTful API web services backend" app-layer="presentation"></tech-stack-component>
+		<tech-stack-component name="junit" description="JUnit to test core functionality" app-layer="test"/>	
+		<tech-stack-component name="maven" description="build, commit, package, deploy, run module" app-layer="build"/>
+	</tech-stack>
+</tech-stack-package>
