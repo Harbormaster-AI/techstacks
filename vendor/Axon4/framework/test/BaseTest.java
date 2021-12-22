@@ -26,10 +26,14 @@ public class BaseTest
         try {
 #foreach( $class in $classesToUse )
 		    new ${class.getName()}Test().setHandler(logHandler).startTest();
+			Thread.sleep(timeToWait);
 #end
         } catch( Throwable exc ) {
         	exc.printStackTrace();
         }
     }
-	
+	//-----------------------------------------------------
+	// attributes
+	//-----------------------------------------------------
+	private static final Integer timeToWait = 5000; //milliseconds
 }
