@@ -64,7 +64,11 @@ $args#end##macro( $determineDefaultArgs )
 ## handle associations
 ######################################################################
 #if ( $attribute.isFromSingleValueAssociation() == true )
+#if ( $aib.isValueObject( ${attribute.getAssociation().getType()} ) == true )
 #set( $defaultValue = "new ${attribute.getAssociation().getType()}()" )
+#else
+#set( $defaultValue = "null" )
+#end##if ( $aib.isValueObject( ${attribute.getAssociation().getType()} == true )
 #else
 #set( $defaultValue = "new HashSet<>()" )
 #end##if ( $attribute.isFromSingleValueAssociation() == true )
