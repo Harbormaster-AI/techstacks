@@ -279,8 +279,8 @@ public class ${className}EntityProjector {
     protected final ${className}Repository repository;
 #foreach( $associationType in $classObject.getAssociationTypes() )
     @Autowired
-    @Qualifier(value="${Utils.lowercaseFirstLetter( ${associationType} )}-entity-project")
-    ${associationType}EntityProjector ${associationType}Projector;
+	@Qualifier(value = "${Utils.lowercaseFirstLetter( ${associationType} )}-entity-projector")
+	com.harbormaster.handler.${associationType}EntityProjector ${associationType}Projector;
 #end##for ( $associationType in $classObject.getAssociationTypes() )
 
     private static final Logger LOGGER 	= Logger.getLogger(${className}EntityProjector.class.getName());
