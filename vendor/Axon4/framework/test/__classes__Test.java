@@ -37,7 +37,7 @@ public class ${classObject.getName()}Test{
 		try {
 			LOGGER.info("**********************************************************");
 			LOGGER.info("Beginning test on ${className}...");
-			LOGGER.info("**********************************************************");
+			LOGGER.info("**********************************************************\n");
 			
 			// ---------------------------------------------
 			// jumpstart process
@@ -63,10 +63,12 @@ public class ${classObject.getName()}Test{
 		// ---------------------------------------------
 		// set up query subscriptions after the 1st create
 		// ---------------------------------------------
+		testingStep = "create";
 		setUpQuerySubscriptions();
 
 		${className}BusinessDelegate.get${className}Instance()
-					.create${className}( generateNewCommand() );
+				.create${className}( generateNewCommand() )
+				.get();
 
 	}
 
@@ -78,32 +80,41 @@ public class ${classObject.getName()}Test{
 			
 		try {            
 			subscriber.${lowercaseClassName}Subscribe().updates().subscribe(
-					  successValue -> { 
+					  successValue -> {
 						  LOGGER.info(successValue.toString());
 						  try {
-							  ${lowercaseClassName}Id = successValue.get${className}Id();
-							  ${className} entity = read();
-							  state( entity.get${className}Id() == successValue.get${className}Id(), "Subscribed value and associated read value are not equal");
+							  LOGGER.info("GetAll update received for ${className} : " + successValue.get${className}Id());
+							  if (successValue.get${className}Id().equals(${lowercaseClassName}Id)) {
+								  if (testingStep.equals("create")) {
+									  testingStep = "update";
+									  update();
+								  } else if (testingStep.equals("delete")) {
+									  testingStep = "complete";
+									  state( getAll().size() == sizeOf${className}List - 1 , "value not deleted from list");
+									  LOGGER.info("**********************************************************");
+									  LOGGER.info("${className} test completed successfully...");
+									  LOGGER.info("**********************************************************\n");
+								  }
+							  }
 						  } catch( Throwable exc ) {
 							  LOGGER.warning( exc.getMessage() );
 						  }
-					  	},
+					  },
 					  error -> LOGGER.warning(error.getMessage()),
 					  () -> LOGGER.info("Subscription on ${lowercaseClassName} consumed")
 					);
 			subscriber.${lowercaseClassName}Subscribe( ${lowercaseClassName}Id ).updates().subscribe(
-					  successValue -> { 
+					  successValue -> {
 						  LOGGER.info(successValue.toString());
 						  try {
-							  List<${className}> all = getAll();
-							  int size = all.size();
-							  ${lowercaseClassName}Id = all.get(size-1).get${className}Id();
+							  LOGGER.info("GetOne update received for ${className} : " + successValue.get${className}Id() + " in step " + testingStep);
+							  testingStep = "delete";
+							  sizeOf${className}List = getAll().size();
 							  delete();
-							  state( getAll().size() == size - 1 , "value not deleted from list");
 						  } catch( Throwable exc ) {
 							  LOGGER.warning( exc.getMessage() );
 						  }
-					  	},
+					  },
 					  error -> LOGGER.warning(error.getMessage()),
 					  () -> LOGGER.info("Subscription on ${lowercaseClassName} for ${lowercaseClassName}Id consumed")
 
@@ -180,6 +191,7 @@ public class ${classObject.getName()}Test{
 #set( $varName = "entity" )
 #set( $args = "#determineArgsAsInput( $classObject, $varName, $includeAssociations )" ) 		
 		${classObject.getUpdateCommandAlias()} command = generateUpdateCommand();
+		command.set${className}Id(entity.get${className}Id());
 
 		try {            
 			assertNotNull( entity, msg.toString() );
@@ -191,7 +203,7 @@ public class ${classObject.getName()}Test{
 
 			${className}BusinessDelegate proxy = ${className}BusinessDelegate.get${className}Instance();  
 
-			proxy.update${className}( command );   
+			proxy.update${className}( command ).get();
 
 			LOGGER.info( "-- Successfully saved ${className} - " + entity.toString() );
 		}
@@ -224,7 +236,7 @@ public class ${classObject.getName()}Test{
 		}
 
 		try{
-			${className}BusinessDelegate.get${className}Instance().delete( new ${classObject.getDeleteCommandAlias()}( entity.get${className}Id() ) );
+			${className}BusinessDelegate.get${className}Instance().delete( new ${classObject.getDeleteCommandAlias()}( entity.get${className}Id() ) ).get();
 			LOGGER.info( "-- Successfully deleted ${className} with id " + ${lowercaseClassName}Id );            
 		}
 		catch ( Throwable e ) {
@@ -321,4 +333,6 @@ public class ${classObject.getName()}Test{
 	protected ${className}Subscriber subscriber = null;
 	private final String unexpectedErrorMsg = ":::::::::::::: Unexpected Error :::::::::::::::::";
 	private final Logger LOGGER = Logger.getLogger(${className}Test.class.getName());
+	private String testingStep = "";
+	private Integer sizeOf${className}List = 0;
 }
