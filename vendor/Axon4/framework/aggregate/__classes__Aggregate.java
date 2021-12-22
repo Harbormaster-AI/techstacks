@@ -86,7 +86,7 @@ public class ${className}Aggregate {
     public void handle(${alias} command) throws Exception {
     	LOGGER.info( "Handling command ${alias}" );
     	
-    	if (  ${lowercaseRoleName}.get${childType}Id() == command.getAssignment().get${childType}Id() )
+    	if (  $lowercaseRoleName != null && ${lowercaseRoleName}.get${childType}Id() == command.getAssignment().get${childType}Id() )
     		throw new ProcessingException( "${roleName} already assigned with id " + command.getAssignment().get${childType}Id() );  
     		
         apply(new ${singleAssociation.getAssignToEventAlias()}(command.get${className}Id(), command.getAssignment()));
