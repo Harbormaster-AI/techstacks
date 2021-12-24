@@ -13,4 +13,5 @@ docker-compose.yml
 entrypoint.sh
 build.xml=
 jalopy-conventions=
+README.md=
 #end
