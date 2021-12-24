@@ -1,0 +1,14 @@
+<!-- Spring Boot options -->
+<options name="spring" maxPerRow="1">
+	<option name="server-port"  value="8011" required="true" description="port for Spring-boot to listen on" type="input"/>   
+    <option name="entity-store-type" value="h2" 
+		selections="h2,mysql,postgres,mongodb"
+		required="true"
+		description="supported database types" 
+		type="select"/>	
+	<option name="entity-store-url"  value="" required="true" description="url for database" type="input"/>
+	<option name="database-name"  value="" required="true" description="database name" type="input"/>
+	<option name="database-username"  value="" required="false" description="database user name" type="input"/>
+	<option name="database-password"  value="" required="false" description="database password" type="input"/>
+	<option name="spring-profiles-active"  value="" required="false" description="acive Spring profiles" type="input"/>
+</options>
