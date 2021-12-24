@@ -1,7 +1,6 @@
 <!-- axon framework options -->
 <options name="axon-framework">
-	<option name="server-port" value="8085" required="true" description="app display name" type="input"/>
-	<option name="version" value="4.5.1" required="true" description="Axon framework version" type="input"/>	
+	<option name="version" value="4.4" required="true" description="Axon framework version" type="input"/>	
 	<option name="axonserver-token" value="" required="true" description="Token used to securely communicate with an Axon Server" type="input"/>
 	<option name="axonserver-context" value="context1" required="true" description="Default Context" type="input"/>
 	<option name="axonserver-servers" value="localhost" required="false" description="location of Axon Server" type="input"/>
