@@ -1,0 +1,291 @@
+#xmlHeader()
+#set( $appName = $aib.getApplicationNameFormatted() )
+#set( $entity-store-type = $aib.getParam( "axon-framework.entity-store-type") )
+#set( $event-store-type = $aib.getParam( "axon-framework.event-store-type") )
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <packaging>jar</packaging>
+    <artifactId>${aib.getApplicationName().replaceAll(" ",".")}</artifactId> 
+    <name>${aib.getApplicationName()}</name>    
+    <description>${aib.getParam("application.description")}</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.1</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <start-class>${aib.getRootPackageName()}.Application</start-class>
+        <java.version>11</java.version>
+        <kotlin.version>1.5.10</kotlin.version>
+        <axon.version>4.4</axon.version>
+        <versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+		<thoughtworks.xstream.version>1.4.15</thoughtworks.xstream.version>		
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${versions-maven-plugin.version}</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <release>${java.version}</release>
+                </configuration>
+                <executions>
+                    <!-- Replacing default-compile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <!-- Replacing default-testCompile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>java-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>java-test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+#if( $aib.getParam("git.inUse") == "true" )        
+#apacheMavenAntRunPluginGitOnlyDecl()
+#end##if( $aib.getParam("gitParam.inUse") == "true" )        
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+ #if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )   
+    <dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>2020.0.4</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+#end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
+     <dependencies>
+#if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
+		<!--  spring cloud -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<version>3.0.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>31.0.1-jre</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+#end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )		     
+
+	    <!--  spring boot -->
+	    <dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-web</artifactId>
+	    </dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-messaging</artifactId>
+		    <version>5.3.12</version>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+	    
+        <!-- Axon -->
+#if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )
+		<dependency>
+		    <groupId>org.axonframework.extensions.springcloud</groupId>
+		    <artifactId>axon-springcloud</artifactId>
+		    <version>${axon.version}</version>
+		</dependency>
+#end##if ( $aib.getParam("axon-framework.enableDiscoveryClient") == true )        
+        <dependency>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-spring-boot-starter</artifactId>
+            <version>${axon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.axonframework.extensions.reactor</groupId>
+            <artifactId>axon-reactor-spring-boot-starter</artifactId>
+             <version>4.5</version>
+        </dependency>
+		<dependency>
+		    <groupId>org.axonframework.extensions.reactor</groupId>
+		    <artifactId>axon-reactor-spring-boot-autoconfigure</artifactId>
+		    <version>4.5</version>
+		</dependency>
+        <dependency>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-micrometer</artifactId>
+            <version>${axon.version}</version>
+        </dependency>
+#if( $entity-store-type == "mongodb" || $event-store-type == "mongodb" )        
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+		    <version>2.6.0</version>
+		</dependency>
+#end##if( $entity-store-type == "mongodb" || $event-store-type == "mongodb" )
+#if( $event-store-type == "mongodb" )
+        <dependency>
+            <groupId>org.axonframework.extensions.mongo</groupId>
+            <artifactId>axon-mongo</artifactId>
+            <version>4.5</version>
+        </dependency>  
+#end##if( $event-store-type == "mongodb" )
+
+#if ( $entity-store-type.contains("mysql") )
+        <!-- MySQL -->
+		<dependency>
+          <groupId>mysql</groupId>
+	      <artifactId>mysql-connector-java</artifactId>
+	      <version>8.0.13</version>
+		</dependency>
+#elseif ( $entity-store-type.contains("postgres") )
+        <!-- Postgres -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.3.1</version>
+        </dependency>
+#else##default to h2
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+#end##if ( $entity-store-type.contains("mysql") )
+
+        <!-- kotlin -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+        </dependency>
+
+        <dependency>
+            <!-- reactor-core is needed for subscription queries -->
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
+        <!-- Monitoring and Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-ext</artifactId>
+        </dependency>
+
+		<!-- Apache  -->
+		<dependency>
+    		<groupId>org.apache.commons</groupId>
+    		<artifactId>commons-lang3</artifactId>
+    		<version>3.12.0</version>
+		</dependency>
+		
+		<!--  Swagger integration -->
+		<dependency>
+ 			<groupId>io.springfox</groupId>
+ 			<artifactId>springfox-boot-starter</artifactId>
+ 			<version>3.0.0</version>
+		</dependency>
+		
+		<!--  thought works -->
+        <dependency>
+    		<groupId>com.thoughtworks.xstream</groupId>
+    		<artifactId>xstream</artifactId>
+    		<version>${thoughtworks.xstream.version}</version>
+		</dependency>
+		 
+#junitDependencies()
+
+    </dependencies>
+
+
+</project>
