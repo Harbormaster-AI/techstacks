@@ -280,7 +280,7 @@ public class ${className}EntityProjector {
 #foreach( $associationType in $classObject.getAssociationTypes() )
     @Autowired
 	@Qualifier(value = "${Utils.lowercaseFirstLetter( ${associationType} )}-entity-projector")
-	com.harbormaster.handler.${associationType}EntityProjector ${associationType}Projector;
+	${associationType}EntityProjector ${associationType}Projector;
 #end##for ( $associationType in $classObject.getAssociationTypes() )
 
     private static final Logger LOGGER 	= Logger.getLogger(${className}EntityProjector.class.getName());
