@@ -13,7 +13,7 @@ import net.corda.client.rpc.CordaRPCConnection;
 import net.corda.client.rpc.GracefulReconnect;
 import net.corda.core.utilities.NetworkHostAndPort;
 
-import ${aib.getRootPackageName(true)}.helper.corda.api.HolderEnum;
+import ${aib.getRootPackageName(true)}.helper.corda.api.PartyEnum;
 
 #set( $imports = [ "api", "exception", "helper.corda.api" ] )
 #importStatements( $imports )
@@ -128,13 +128,13 @@ public class CordaHelper {
 		public String location;
 		public String country;
 		public String ipAddress;
-		public String notary;
 		public String adminIpAddress;
 		public String userId;
 		public String password;
+		public Boolean isNotary = new Boolean(false);
 		
 		public CordaNodeInfo( String name, String location, String country, 
-						String ipAddress, String adminIpAddress, String notary, String userId, String password ) {
+						String ipAddress, String adminIpAddress, String userId, String password, String isNotary ) {
 			this.name = name;
 			this.location = location;
 			this.country = country;
@@ -142,12 +142,14 @@ public class CordaHelper {
 			this.adminIpAddress = adminIpAddress;
 			this.userId = userId;
 			this.password = password;
+			if ( isNotary != null )
+				this.isNotary = new Boolean( isNotary );
 		}	
 		
 		public String toString() {
 			return( "Org: " + name + ", Locality: " + location + ", Country: " + country +
 						"IP Address: " + ipAddress + ", Admin IP Address: " + adminIpAddress +
-						", User Id: " + userId + ", Password: xxxxxxxx" );
+						", User Id: " + userId + ", Password: xxxxxxxx" + ", isNotary: " + isNotary );
 		}
 	}
 	
