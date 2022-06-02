@@ -118,7 +118,7 @@ ${type}#end##macro( determineKotlinType inputType )
 #else
 #set( $varDecl = "@Enumerated(EnumType.STRING) ${valOrVar}")
 #end##if( $aib.getParam( "spring.entity-store-type") == "mongodb" )
-#elseif ( $isValueObject == true )
+#elseif ( $isValueObject == true  ) ##attribute nodes are not for value objects
 #set( $attributeNodes = "#declareAttributeNodes( $attribute )" )
 #if( $forEntity == true )
 #set( $jpa-annotation = "@Embedded " )
@@ -166,7 +166,7 @@ ${type}#end##macro( determineKotlinType inputType )
     ${targetIdentifier} ${valOrVar} ${pk}: UUID? = null
 #end##if ( $includeId == true )
 #end##if ( $attributes.size() > 0 )
-#end##macro( outputKotlinArgDeclarations $class $includeAssociations $includeId $forAggregate )
+#end##macro(  $class $includeAssociations $includeId $forAggregate )
 
 #macro ( isTypeTime $type )
 #if ( $type.contains("time") || $type.contains("Time") || $type.contains("Date") || $type.contains("date") )
