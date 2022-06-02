@@ -3,6 +3,10 @@ target/
 .git/
 gitpush.*
 ssh.key
+gradlefiles/
+.gradle
+deploy/
+
 #set( $cicd = ${aib.getParam( "application.cicd_platform" )} )							      
 #if ( $cicd.indexOf("codeship") >= 0 )
 codeship.aes
