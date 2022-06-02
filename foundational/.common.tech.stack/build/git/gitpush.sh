@@ -26,21 +26,18 @@ echo 'add a remote pseudo for the ${repoName} repository'
 #if ( $credential == $null || $credential == "" ) 
 #set( $credential = ${aib.getParam("git.password")} )
 #end##if ( $credential == $null || $credential == "" )
-git remote add ${repoName} https://${aib.getParam("git.username")}:${credential}@${aib.getParam("git.host")}/${aib.getParam("git.username")}/${aib.getParam("git.repository")}
+git remote add origin https://${aib.getParam("git.username")}:${credential}@${aib.getParam("git.host")}/${aib.getParam("git.username")}/${aib.getParam("git.repository")}
 
 echo 'push the commits to the repository master'
-git push ${repoName} master
+git push origin master
 
 #if ( $gitTag == $null || $gitTab == "" ) 
 #else
-echo 'delete tag ${gitTag}'
-git tag -d ${gitTag}
-git push --delete ${repoName} ${gitTag}
 
 echo 'add tag ${gitTag}'
 git tag ${gitTag}
 
 echo 'push tag ${gitTag}'
-git push ${repoName} ${gitTag}
+git push origin ${gitTag}
 #end
 
