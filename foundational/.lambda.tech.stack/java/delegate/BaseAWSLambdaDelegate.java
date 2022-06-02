@@ -96,7 +96,7 @@ public class BaseAWSLambdaDelegate
     static String call(String packageName, String actionName, Object arg)
         throws IOException {
     	String urlStr = DELEGATE_DAO_URL 
-    						+ "/" spackageName + "/" + actionName;
+    						+ "/" + packageName + "/" + actionName;
     	
     	if ( arg != null )
     		urlStr = urlStr + "?" + toJson( arg ); 
@@ -136,7 +136,7 @@ public class BaseAWSLambdaDelegate
     		this.parentKey = parentKey.keys().toString();
     		this.action = action;
     		this.target = target;
-    		this.= msg;
+    		this.msg= msg;
     	}
     	
     	public String toString() {
