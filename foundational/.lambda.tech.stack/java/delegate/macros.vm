@@ -332,6 +332,7 @@
 				
 				// now it is safe to delete the ${roleName} 
 				${childName}AWSLambdaDelegate.delete${childName}( pk, context );
+			}
         }
         catch (Exception exc) {
         	String processingMsg = "Unable to save${roleName} using parentKey = "  + parentKey + ". " + getContextDetails(context) + exc;
@@ -340,7 +341,6 @@
         }
         finally {
 			putRecordToKinesis( context, new RecordData( parentKey, "Delete${roleName}", "${className}", processingMsg ) );   
-		}
 		}
 
 		return( $lowercaseClassName );
@@ -551,15 +551,15 @@
 #set( $className = $classArg.getName() )
 
                 case ( "create" ):
-                    return( ${className}.create${className}(new Gson().fromJson(jsonObjectData, ${className}.class));
+                    return( ${className}.create${className}(new Gson().fromJson(jsonObjectData, ${className}.class)));
                 case ( "find" ):
-                    return( ${className}.get${className}( parentKey, context );
+                    return( ${className}.get${className}( parentKey, context ) );
                 case ( "save" ):
-                    return( ${className}.save${className}(new Gson().fromJson(jsonObjectData, ${className}.class));
+                    return( ${className}.save${className}(new Gson().fromJson(jsonObjectData, ${className}.class)) );
                 case ( "delete" ):
-                    return( ${className}.delete${className}( parentKey );
+                    return( ${className}.delete${className}( parentKey ) );
                 case ( "getAll" ):
-                    return( ${className}.getAll${className}(context);
+                    return( ${className}.getAll${className}(context) );
 #end##macro( outputStdCRUDCalls )
 
 #macro( outputSingleAssociationCRUDCalls $classArg )
@@ -568,11 +568,11 @@
 #set( $roleName = $singleAssociation.getRoleName() )
 #set( $childName = $singleAssociation.getType() )
                 case ( "get${roleName}" ):
-                    return( ${className}.get${roleName}(parentKey, context);
+                    return( ${className}.get${roleName}(parentKey, context) );
                 case ( "save${roleName}" ):
-                    return( ${className}.save${roleName}(parentKey, childKey, context);
+                    return( ${className}.save${roleName}(parentKey, childKey, context) );
                 case ( "delete${roleName}" ):
-                    return( ${className}.delete${roleName}(parentKey, Context context );
+                    return( ${className}.delete${roleName}(parentKey, Context context ) );
 #end##foreach( $singleAssociation in $classArg.getSingleAssociations( ${includeComposites} ) )
 #end##macro( outputSingleAssociationCRUDCalls $classArg )
 
@@ -582,13 +582,13 @@
 #set( $roleName = $multiAssociation.getRoleName() )
 #set( $childName = $multiAssociation.getType() )
                 case ( "get${roleName}" ):
-                    return( ${className}.get${roleName}(parentKey, context);
+                    return( ${className}.get${roleName}(parentKey, context) );
                 case ( "add${roleName}" ):
-                    return( ${className}.add${roleName}(parentKey, childKey, context);
+                    return( ${className}.add${roleName}(parentKey, childKey, context) );
                 case ( "assign${roleName}" ):
-                    return( ${className}.assign${roleName}(parentKey, childKeys, context);
+                    return( ${className}.assign${roleName}(parentKey, childKeys, context) );
                 case ( "delete${roleName}" ):
-                    return( ${className}.delete${roleName}(parentKey, childKeys, context);
+                    return( ${className}.delete${roleName}(parentKey, childKeys, context) );
 #end##foreach( $singleAssociation in $classArg.getSingleAssociations( ${includeComposites} ) )
 #end##macro( outputMultipleAssociationCRUDCalls $classArg )
 
