@@ -184,7 +184,7 @@
 	<dependencies>  
 #awsLambdaDependencies()
 #googleGsonDependencies()
-#jalopyDependencies()
+##jalopyDependencies()
 #log4jDependencies()
 #w3cDOMDependencies()
 #swaggerDependencies()
