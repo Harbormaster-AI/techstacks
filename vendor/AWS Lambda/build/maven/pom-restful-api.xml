@@ -50,7 +50,7 @@
 ##mongoDBMorpiaDependencies()
 ##mongoDBDependencies()
 ##memcachedDBDependencies()
-#jalopyDependencies()
+##jalopyDependencies()
 #velocityDependencies()
 #w3cDOMDependencies()
 #jbossJavaxTransactionDependencies()
