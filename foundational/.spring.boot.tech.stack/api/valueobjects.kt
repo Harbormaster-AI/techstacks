@@ -7,7 +7,7 @@ import java.util.*
 #set( $includeId = false )
 #set( $forAggregate = false )
 #set( $forEntity = false )
-#set( $forValueObject = true );
+#set( $forValueObject = true )
 
 // --------------------------------------------
 // Valueobject Definitions
