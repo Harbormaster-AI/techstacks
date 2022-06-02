@@ -138,13 +138,15 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
 #set( $p2pPort = ${p2pPort} + 1 )
     node {
         name "O=${node[0]},L=${node[1]},C=${node[2]}"
-        notary = [validating : ${node[5]}]
+#if ( $node[7] == "true" )
+        notary = [validating : false]
+#end##if ( $node[7] == "true" )
         p2pPort ${p2pPort}
         rpcSettings {
             address("${node[3]}")
             adminAddress("${node[4]}")
         }
-        rpcUsers = [[ user: "${node[6]}", "password": "${node[7]}", "permissions": ["ALL"]]]
+        rpcUsers = [[ user: "${node[5]}", "password": "${node[6]}", "permissions": ["ALL"]]]
     }
 #end##foreach( $node in $nodes )        
   
