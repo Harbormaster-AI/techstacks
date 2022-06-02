@@ -26,7 +26,7 @@ resource "kubernetes_service" "app-master" {
 ################################################################
 ## Load balancing will automatically expose the ports publicly
 ################################################################
-#set( $serviceType = ${aib.getParam("kubernetes.serviceType"} )
+#set( $serviceType = ${aib.getParam("kubernetes.serviceType")} )
     type = "${serviceType}"
   }
   
