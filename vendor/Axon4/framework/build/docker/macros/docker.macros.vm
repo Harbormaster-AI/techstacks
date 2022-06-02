@@ -1,0 +1,4 @@
+## overload when jar file is elsewhere
+#macro( jarFileRelativeLocation )
+cqrs/build/libs
+#end

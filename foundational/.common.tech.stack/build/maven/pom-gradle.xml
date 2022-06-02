@@ -1,0 +1,75 @@
+#xmlHeader()
+#set( $appName = $aib.getApplicationNameFormatted() )
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>  
+	<groupId>${aib.getRootPackageName()}</groupId>  
+	<artifactId>maven-to-gradle</artifactId>  
+	<version>0.0.1RC</version>  
+
+    <packaging>pom</packaging>
+
+#repositories()
+
+	<build>
+		<plugins>
+	  		<plugin>
+		        <artifactId>maven-antrun-plugin</artifactId>
+		        <version>1.7</version>
+#antContribDecl()
+     			<executions>
+                     <execution>
+			       		<id>gradle-run</id>
+			     		<phase>compile</phase>
+			           	<inherited>false</inherited>
+			           	<configuration>
+							<target name = "gradle-run">
+           	                	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+							  	<if>
+						      		<os family="unix"/>
+									<then>
+						      			<exec executable="${project.basedir}/gradlew" logError="false" failonerror="false" failifexecutionfails="false">
+#gradleTasksAsArguments()
+						      			</exec>
+										<if>
+									  		<equals arg1="${git}" arg2="true" />
+									  		<then>
+								      			<exec executable="${project.basedir}/gradlew" logError="false" failonerror="false" failifexecutionfails="false">
+								      				<arg value="gitPush"/>
+								      			</exec>
+								      		</then>	
+									      </if>
+							  		</then>
+								</if>								
+							  	<if>
+						      		<os family="windows"/>
+									<then>
+						      			<exec executable="${project.basedir}/gradlew.bat" logError="false" failonerror="false" failifexecutionfails="false">
+#gradleTasksAsArguments()
+						      			</exec>
+										<if>
+									  		<equals arg1="${git}" arg2="true" />
+									  		<then>
+								      			<exec executable="${project.basedir}/gradlew.bat" logError="false" failonerror="false" failifexecutionfails="false">
+								      				<arg value="gitPush"/>
+								      			</exec>
+								      		</then>	
+									      </if>
+							  		</then>
+								</if>						  	
+							</target>
+						</configuration>
+		                <goals>
+			            	<goal>run</goal>
+			            </goals>
+				  	</execution>          
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>
+
+

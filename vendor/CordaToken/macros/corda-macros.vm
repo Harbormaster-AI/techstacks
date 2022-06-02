@@ -1,0 +1,19 @@
+#macro( establishCordaNodes )
+#set( $cordaNodes = [] )
+#set( $void = $convert.setStringsDelimiter( "|" ) )
+#set( $nodes = $convert.toStrings( $aib.getParam( "corda.node-infos" ) ) )
+#foreach( $node in $nodes )
+#set( $node = $node.replace("|", "," ) )
+#set( $node = $display.list( $node ) )
+#set( $void = $cordaNodes.add( $node ) )
+#end##foreach( $node in $nodes )
+#set( $void = $convert.setStringsDelimiter( "," ) )## put delimiter back to default
+#end
+
+#macro( identifersAsArgs $delim )
+#set( $names = [] )
+#foreach( $class in $aib.getClassesToGenerate() )
+#set( $name = $display.uncapitalize( $class.getName() ) )
+#set( $void = $names.add( $name ) )
+#end##foreach( $class in $aib.getClassesToGenerate() )
+$display.list( $names, $delim )#end

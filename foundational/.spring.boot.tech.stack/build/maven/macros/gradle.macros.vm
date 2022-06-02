@@ -1,0 +1,4 @@
+#macro( gradleTasksAsArguments )
+							      			<arg value="compileJava"/>
+							      			<arg value="compileKotlin"/>
+#end
