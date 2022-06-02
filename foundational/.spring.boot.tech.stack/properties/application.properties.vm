@@ -36,7 +36,7 @@ spring.jpq.show-sql=true
 spring.jpa.properties.hibernate.id.new_generator_mappings=false
 #else
 # mongodb parameters
-mongodb.connection.url=${aib.getParam("axon-framework.entity-store-url")}
+mongodb.connection.url=${aib.getParam("spring.entity-store-url")}
 spring.data.mongodb.uuid-representation=standard
 #end##if ( $entity-store-type != "mongodb" )
 
