@@ -108,7 +108,7 @@ This will transfer the ${numClasses} tokens together to represent a single ${low
 Now we can see we did receive the tokens at targeted node shell by either running the following within that shell: 
 
 ```
-run vaultQuery contractStateType: run vaultQuery contractStateType: com.r3.corda.lib.tokens.contracts.states.EvolvableTokenType
+run vaultQuery contractStateType: com.r3.corda.lib.tokens.contracts.states.EvolvableTokenType
 ```
 
 OR from the browser:
