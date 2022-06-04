@@ -2,7 +2,7 @@
 #set( $className = ${classObject.getName()} )
 #set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
 #set( $pk = "${className}Id" )		
-package ${aib.getRootPackageName(true)}.handler;
+package ${aib.getRootPackageName(true)}.projector;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 
@@ -232,45 +230,6 @@ public class ${className}EntityProjector {
     	}
     	return null;
     }
-
-#foreach( $query in $aib.getQueriesToGenerate(${className}) )
-#foreach( $handler in $query.getHandlers() )
-#set( $method = $handler.getMethodObject() )
-#set( $queryName = $Utils.capitalizeFirstLetter( $handler.getName() ) )
-#if ( ${method.hasArguments()} )##should only be one argument
-#set( $argType = ${method.getArguments().getArgs().get(0).getType()} )
-#set( $argName = ${method.getArguments().getArgs().get(0).getName()} )
-#set( $returnType = ${method.getArguments().getReturnType()} )
-    /**
-     * query method to ${method.getName()}
-     * @param 		$argType $argName
-     * @return		$returnType
-     */     
-	@SuppressWarnings("unused")
-	public $returnType ${method.getName()}( ${queryName}Query query ) {
-		LOGGER.info("handling ${method.getName()}" );
-		$returnType result = null;
-		
-		try {
-#if ( $handler.getSingleValueReturnValue() == true )
-		    result = repository.${method.getName()}( query.getFilter().get${Utils.capitalizeFirstLetter(${argName})}() );
-#else##pageable
-            Pageable pageable = PageRequest.of(query.getOffset(), query.getLimit());
-            result = repository.${method.getName()}( query.getFilter().get${Utils.capitalizeFirstLetter(${argName})}(), pageable );
-#end##if ( $handler.getSingleValueReturnValue() == false)
-
-        }
-        catch( Throwable exc ) {
-        	LOGGER.log( Level.WARNING, "Failed to ${method.getName()} using " + query.getFilter(), exc );
-        }
-        
-        return result;
-	}
-#end##if ( ${method.hasArguments()} )## should only be one argument
-#end##foreach( $handler in $query.getHandlers() )
-#end##foreach( $query in $aib.getQueriesToGenerate() )
-
-
 
     //--------------------------------------------------
     // attributes

@@ -1,4 +1,3 @@
-#set( $systemName = $display.capitalize( $aib.getParam( "corda.token-system-name" ) ) )
 plugins {
     id 'java'
     id 'maven-publish'
