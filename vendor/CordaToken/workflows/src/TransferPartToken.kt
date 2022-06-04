@@ -1,5 +1,5 @@
 #set( $tokenSystemName = ${aib.getParam( "corda.token-system-name" ).toLowerCase()} )
-#set( $identifierFieldName = $display.uncapitalize( $aib.getParam( "corda.identifier-field-name" ) ) )
+#set( $identifierFieldName = "Id" )
 package ${aib.getRootPackageName()}.${tokenSystemName}market.flows
 
 import co.paralleluniverse.fibers.Suspendable
@@ -13,6 +13,8 @@ import net.corda.core.identity.Party
 import net.corda.core.node.services.queryBy
 import net.corda.core.utilities.ProgressTracker
 
+import java.util.UUID
+
 #foreach( $class in $classesToGenerate )
 #set( $className = ${class.getName()} )
 #set( $lowercaseClassName = ${display.uncapitalize( $className )} )
@@ -25,7 +27,7 @@ import ${aib.getRootPackageName()}.${tokenSystemName}market.states.${className}T
 @InitiatingFlow
 @StartableByRPC
 class TransferPartToken(val part: String,
-                   val ${identifierFieldName}: String,
+                   val ${identifierFieldName}: UUID,
                    val holder: Party) : FlowLogic<String>() {
     override val progressTracker = ProgressTracker()
 
@@ -40,11 +42,10 @@ class TransferPartToken(val part: String,
 #set( $lowercaseClassName = ${display.uncapitalize( $className )} )
 #set( $returnHolder = $classNames.add( $lowercaseClassName ) )
         ${else}if (part.equals("${lowercaseClassName}")){
-
             val ${lowercaseClassName}Identifier = ${identifierFieldName}
             //transfer ${lowercaseClassName} token
             val ${lowercaseClassName}StateAndRef = serviceHub.vaultService.queryBy<${className}TokenState>().states
-                    .filter { it.state.data.${identifierFieldName}.equals(${lowercaseClassName}Identifier) }[0]
+                    .filter { it.state.data.linearId.id.equals(${lowercaseClassName}Identifier) }[0]
 
             //get the TokenType object
             val ${lowercaseClassName}tokentype = ${lowercaseClassName}StateAndRef.state.data

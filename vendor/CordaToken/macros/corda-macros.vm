@@ -10,10 +10,55 @@
 #set( $void = $convert.setStringsDelimiter( "," ) )## put delimiter back to default
 #end
 
-#macro( identifersAsArgs $delim )
+
+#macro( partiesAsArgs $delim )
 #set( $names = [] )
 #foreach( $class in $aib.getClassesToGenerate() )
 #set( $name = $display.uncapitalize( $class.getName() ) )
 #set( $void = $names.add( $name ) )
 #end##foreach( $class in $aib.getClassesToGenerate() )
 $display.list( $names, $delim )#end
+
+
+#macro( classArgsAsFunctionCall $class )
+#set( $args = [] )
+#set( $includePKs = true )
+#set( $attributes = ${class.getAttributesOrderedInHierarchy( $includePKs )} )
+#foreach( $attribute in $attributes )
+#set( $nameOfClass = "$display.uncapitalize( $class.getName() )" )
+#set( $name = "${nameOfClass}.get${display.capitalize( $attribute.getName() )}()" )
+#set( $void = $args.add( $name ) )
+#end##foreach( $attribute in $attributes )
+$display.list( $args, ", " )#end
+
+
+#macro( argsAsFunctionCall $attributes )
+#set( $args = [] )
+#foreach( $attribute in $attributes )
+#set( $name = $display.uncapitalize( $attribute.getName() ) )
+#set( $void = $args.add( $name ) )
+#end##foreach( $attribute in $attributes )
+$display.list( $args, ", " )#end
+
+
+#macro( attributesAsKotlinArgs $class $includePKs )
+#set( $names = [] )
+#set( $attributes = ${class.getDirectAttributes( $includePKs )} )
+#foreach( $attribute in $attributes )
+## need to ignore valueobjects for now
+#set( $name = "val ${display.uncapitalize( $attribute.getName() )}" )
+#set( $name = "${name}: ${attribute.getType()}? = null" )
+#set( $void = $names.add( $name ) )
+#end##foreach( $class in $aib.getClassesToGenerate() )
+$display.list( $names, ", " )#end
+
+
+#macro( attributesAsJavaArgs $class $includePKs )
+#set( $names = [] )
+#set( $attributes = ${class.getAttributesOrderedInHierarchy( $includePKs )} )
+#foreach( $attribute in $attributes )
+#set( $name = "${attribute.getType()} " )
+#set( $name = "${name}${display.uncapitalize( $attribute.getName() )}" )
+#set( $void = $names.add( $name ) )
+#end##foreach( $class in $aib.getClassesToGenerate() )
+$display.list( $names, ", " )#end

@@ -1,7 +1,7 @@
 #set( $tokenSystemName = ${aib.getParam( "corda.token-system-name" ).toLowerCase()} )
 #set( $classesToGenerate = $aib.getClassesToGenerate() )
 #set( $numClassesToGenerate = $classesToGenerate.size() )
-#set( $identifierFieldName = $display.capitalize( $aib.getParam( "corda.identifier-field-name" ) ) )
+#set( $identifierFieldName = "Id")
 package ${aib.getRootPackageName()}.${tokenSystemName}market.flows
 
 import co.paralleluniverse.fibers.Suspendable
@@ -20,15 +20,13 @@ import net.corda.core.transactions.SignedTransaction
 import net.corda.core.transactions.TransactionBuilder
 import net.corda.core.utilities.ProgressTracker
 
+import java.util.UUID
+
 #foreach( $class in $aib.getClassesToGenerate() )
 #set( $className = ${class.getName()} )
 import ${aib.getRootPackageName()}.${tokenSystemName}market.states.${className}TokenState
 #end
 
-#set( $delim = "SerialNum: String, val " )
-#set( $declArgs = "#identifersAsArgs( $delim )" )
-#set( $delim = ", " )
-#set( $callArgs = "#identifersAsArgs( $delim )" )
 
 // *********
 // * Flows *
@@ -36,8 +34,11 @@ import ${aib.getRootPackageName()}.${tokenSystemName}market.states.${className}T
 @InitiatingFlow
 @StartableByRPC
 
-class Transfer${display.capitalize( $tokenSystemName )}Token(val ${declArgs}SerialNum: String,
-                   val holder: Party) : FlowLogic<String>() {
+class Transfer${display.capitalize( $tokenSystemName )}Token(
+#foreach( $class in $aib.getClassesToGenerate() )
+		val ${display.uncapitalize( $class.getName() )}Id: UUID,
+#end##for( $class in $aib.getClassesToGenerate() )
+        val holder: Party) : FlowLogic<String>() {
     override val progressTracker = ProgressTracker()
 
     @Suspendable
@@ -49,7 +50,7 @@ class Transfer${display.capitalize( $tokenSystemName )}Token(val ${declArgs}Seri
         //Step ${velocityCount} : $className Token
         //get $lowercaseClassName states on ledger
         val ${lowercaseClassName}StateAndRef = serviceHub.vaultService.queryBy<${className}TokenState>().states
-                .filter { it.state.data.${display.uncapitalize( $identifierFieldName )}.equals(${lowercaseClassName}${identifierFieldName}) }[0]
+                .filter { it.state.data.linearId.id.equals(${lowercaseClassName}${identifierFieldName}) }[0]
 
         //get the TokenType object
         val ${lowercaseClassName}TokenType = ${lowercaseClassName}StateAndRef.state.data

@@ -3,8 +3,7 @@
 #set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
 #set( $tokenSystemName = $display.capitalize( ${aib.getParam( "corda.token-system-name" )} ) )
 #set( $tokenSystemName_lc = $display.uncapitalize( ${aib.getParam( "corda.token-system-name" )} ) )
-#set( $identifierFieldName = $display.capitalize( $aib.getParam( "corda.identifier-field-name" ) ) )
-#set( $identifierFieldName_lc = $display.uncapitalize( $aib.getParam( "corda.identifier-field-name" ) ) )
+#set( $identifierFieldName = "Id" )
 package ${aib.getRootPackageName(true)}.#getRestControllerPackageName();
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +42,9 @@ import ${aib.getRootPackageName()}.${tokenSystemName_lc}market.flows.*;
 @RequestMapping("/${tokenSystemName}")
 public class CordaAdminRestController extends BaseCordaSpringRestController {
 #set( $delim = "${identifierFieldName}, @RequestParam(required = true) String " )
-#set( $declArgs = "String #identifersAsArgs( $delim )" )
+#set( $declArgs = "String #partiesAsArgs( $delim )" )
 #set( $delim = "${identifierFieldName}, app." )
-#set( $callArgs = "#identifersAsArgs( $delim )" )
+#set( $callArgs = "#partiesAsArgs( $delim )" )
 
 
 	/**
@@ -103,7 +102,7 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
 #foreach( $class in $aib.getClassesToGenerate() )
 #set( $className = $display.capitalize( $class.getName() ) )
 #set( $className_lc = $display.uncapitalize( $class.getName() ) )
-					// only start the flow if a ${identifierFieldName_lc} has been provided
+					// only start the flow if a ${className_lc}${identifierFieldName} has been provided
 				if ( app.${className_lc}${identifierFieldName} != null ) {
 					LOGGER.info( "Starting a flow for TotalPart on partyEnum.toString() for a ${className}" );
 					future = proxy.startFlowDynamic( TotalPart.class, app.${className_lc}${identifierFieldName}, party ).getReturnValue();
@@ -139,7 +138,7 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
 #foreach( $class in $aib.getClassesToGenerate() )
 #set( $className = $display.capitalize( $class.getName() ) )
 #set( $className_lc = $display.uncapitalize( $class.getName() ) )
-			// only start the flow if a ${identifierFieldName_lc} has been provided
+			// only start the flow if a ${className_lc}${identifierFieldName_lc} has been provided
 				if ( app.${className_lc}${identifierFieldName} != null ) {
 					LOGGER.info( "Starting a flow for TransferPartToken to partyEnum.toString() for a ${className}" );
 					future = proxy.startFlowDynamic( TransferPartToken.class, app.${className_lc}${identifierFieldName}, party ).getReturnValue();
@@ -233,6 +232,7 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      */
     @GetMapping("/flows")
     public java.util.List<java.lang.String> flows( PartyEnum partyEnum) {
+    	LOGGER.log( Level.INFO, "Calling registeredFlows for Party: {0}", partyEnum.toString() );
     	return proxy(partyEnum).registeredFlows();
     }
     
@@ -244,6 +244,7 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      */
     @GetMapping("/networkParameters")
     public String networkParameters( PartyEnum partyEnum) {
+    	LOGGER.log( Level.INFO, "Calling getNetworkParameters for Party: {0}", partyEnum.toString() );
     	return proxy(partyEnum).getNetworkParameters().toString();
     }
     
@@ -255,6 +256,8 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      */
     @GetMapping("/notaryIdentities")
     public java.util.List<java.lang.String> notaryIdentities( PartyEnum partyEnum) {
+    	LOGGER.log( Level.INFO, "Calling notaryIdentities for Party: {0}", partyEnum.toString() );
+    	
     	List<Party> parties 					= proxy(partyEnum).notaryIdentities();
     	java.util.List<java.lang.String> list 	= new ArrayList<>();
     	
@@ -263,6 +266,8 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
     				map( p -> p.getName().toString() ).
     				collect(Collectors.toList());
     	}
+    	
+    	LOGGER.log( Level.INFO, "NotaryIdentities for {0} is: {1}", new Object[] { partyEnum.toString(), list.toString() } );
     	
     	return list;
     }
@@ -275,7 +280,10 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      */
     @GetMapping("/nodeInfo")
     public String nodeInfo( PartyEnum partyEnum) {
-    	return proxy(partyEnum).nodeInfo().toString();
+    	LOGGER.log( Level.INFO, "Calling nodeInfo for Party: {0}", partyEnum.toString() );
+    	final String retVal =  proxy(partyEnum).nodeInfo().toString();
+    	LOGGER.log( Level.INFO, "NodeInfo for {0} is: {1}", new Object[] { partyEnum.toString(), retVal } );
+    	return( retVal );
     }
     
     /**
@@ -286,7 +294,10 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      */
     @GetMapping("/nodeDiagnosticInfo")
     public String nodeDiagnosticInfo( PartyEnum partyEnum ) {
-    	return proxy(partyEnum).nodeDiagnosticInfo().toString();
+    	LOGGER.log( Level.INFO, "Calling nodeDiagnosticInfo for Party: {0}", partyEnum.toString() );
+    	final String retVal = proxy(partyEnum).nodeDiagnosticInfo().toString();
+    	LOGGER.log( Level.INFO, "NodeDiagnosticInfo for {0} is: {1}", new Object[] {partyEnum.toString(), retVal} );
+    	return( retVal );
     }
     
     
@@ -296,7 +307,10 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      */
     @GetMapping("/vaultQuery")
     public String vaultQuery( PartyEnum partyEnum ) {
-    	return proxy(partyEnum).vaultQuery(com.r3.corda.lib.tokens.contracts.states.EvolvableTokenType.class).toString();
+    	LOGGER.log( Level.INFO, "Calling vaultQuery for Party: {0}", partyEnum.toString() );
+    	final String retVal =  proxy(partyEnum).vaultQuery(com.r3.corda.lib.tokens.contracts.states.EvolvableTokenType.class).toString();
+    	LOGGER.log( Level.INFO, "VaultQuery for {0} is: {1}", new Object[] {partyEnum.toString(), retVal} );
+    	return( retVal );
     }
     
     

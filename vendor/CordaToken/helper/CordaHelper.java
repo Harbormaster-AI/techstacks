@@ -112,7 +112,7 @@ public class CordaHelper {
 		LOGGER.log( Level.INFO, "Mapping IP address {0} to Corda NetworkHostAndPort type", ipAddress );
 		
 		try {
-			java.net.URL url = new java.net.URL( ipAddress );
+			java.net.URL url = new java.net.URL( "http://" + ipAddress );
 			hostAndPort = new NetworkHostAndPort( url.getHost(), url.getPort() );
 		} catch( java.net.MalformedURLException exc ) {
 			LOGGER.warning( exc.getMessage() );

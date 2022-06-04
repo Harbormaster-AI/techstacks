@@ -1,7 +1,9 @@
-#set( $identifierFieldName = $display.capitalize( $aib.getParam( "corda.identifier-field-name" ) ) )
+#set( $identifierFieldName = "Id" )
 #set( $tokenSystemName = $display.capitalize( ${aib.getParam( "corda.token-system-name" ).toLowerCase()} ) )
 #header()
 package ${aib.getRootPackageName(true)}.helper.corda.api;
+
+import java.util.UUID;
 
 /**
  * Helper to the different ${identifierFieldName}s for a ${tokenSystemName}
@@ -10,7 +12,7 @@ package ${aib.getRootPackageName(true)}.helper.corda.api;
 public class $tokenSystemName{
 #foreach( $class in $aib.getClassesToGenerate() )
 #set( $name = $display.uncapitalize( $class.getName() ) )
-	public String ${name}${identifierFieldName} = null;
+	public UUID ${name}${identifierFieldName} = null;
 #end##foreach( $class in $aib.getClassesToGenerate() )
 }
  
