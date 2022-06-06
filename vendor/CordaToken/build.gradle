@@ -45,6 +45,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
+}
+
 allprojects {
     apply from: "${rootProject.projectDir}/repositories.gradle"
     apply plugin: 'kotlin'

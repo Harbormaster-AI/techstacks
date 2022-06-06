@@ -30,13 +30,20 @@
 							  	<if>
 						      		<os family="unix"/>
 									<then>
-						      			<exec executable="${project.basedir}/gradlew" logError="false" failonerror="false" failifexecutionfails="false">
+										<exec executable="dos2unix" logError="false" failonerror="false" failifexecutionfails="false">
+											<arg value="${basedir}/gradlew"/>
+										</exec>
+										<exec executable="chmod" logError="false" failonerror="false" failifexecutionfails="false">
+											<arg value="+x"/>
+											<arg value="${basedir}/gradlew"/>
+										</exec>
+						      			<exec executable="${basedir.basedir}/gradlew" logError="false" failonerror="false" failifexecutionfails="false">
 #gradleTasksAsArguments()
 						      			</exec>
 										<if>
 									  		<equals arg1="${git}" arg2="true" />
 									  		<then>
-								      			<exec executable="${project.basedir}/gradlew" logError="false" failonerror="false" failifexecutionfails="false">
+								      			<exec executable="${basedir.basedir}/gradlew" logError="false" failonerror="false" failifexecutionfails="false">
 								      				<arg value="gitPush"/>
 								      			</exec>
 								      		</then>	
