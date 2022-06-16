@@ -1,0 +1,24 @@
+<tech-stack-package 
+	name="CordaCoreTechStack"
+	shortName=".corda.core.tech.stack"
+	description="Corda core capabilities"
+	icon-url="https://www.pngkey.com/png/full/74-746252_corda-developer-certification-exam-r3-corda.png" 	
+	info-page-url="https://harbormaster.ai/corda-coree-tech-stack/"
+    version="0.8"
+    app-type="restfulapi"
+    release-status="beta"
+    derivedFrom=""
+	supportsDocker="true"
+	supportsKubernetes="true">
+	<target-languages>
+		<target-language name="java"/>
+		<target-language name="kotlin"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+		<tech-stack-component name="spring boot" description="RESTful API web services backend" app-layer="presentation"></tech-stack-component>
+		<tech-stack-component name="noqsl" description="MongoDB" app-layer="data"></tech-stack-component>
+		<tech-stack-component name="jpa" description="JPA" app-layer="data"></tech-stack-component>
+		<tech-stack-component name="junit" description="JUnit to test core functionality" app-layer="test"/>	
+		<tech-stack-component name="gradle" description="build, commit, package, deploy, run module" app-layer="build"/>
+	</tech-stack>
+</tech-stack-package>
