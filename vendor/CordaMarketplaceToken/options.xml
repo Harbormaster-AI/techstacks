@@ -1,6 +1,0 @@
-<!-- corda-token options -->
-<options name="corda">
-	<option name="token_system_name" value="Autombile" required="true" description="The system name being tokenized" type="input"/>	
-	<option name="total-test-nodes" value="3" required="true" description="# of nodes to consider when testing" type="input"/>
-	<option name="test-party-type" value="Bank" required="true" description="Party type to consider" type="input"/>
-</options>

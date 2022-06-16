@@ -1,0 +1,9 @@
+<!-- corda-token options -->
+<options name="corda">
+	<option name="token_system_name" value="Automobile" required="true" description="The system name being captures" type="input"/>
+	<option name="total-test-nodes" value="3" required="true" description="# of nodes to consider when testing" type="input"/>
+	<option name="test-party-type" value="Bank" required="true" description="Party type to consider" type="input"/>
+	<option name="test-country-codes" value="GB,US,BR" required="true" description="Test country codes" type="input"/>
+	<option name="p2p-starting-port" value="8500" required="true" description="P2P port to start with and increment from" type="input"/>
+	<option name="node-infos" value="Notary|London|GB|localhost:8600|localhost:8650|user1|test|true,AutomobileCo|Detroit|US|localhost:8601|localhost:8651|user1|test|false,LicensedDealership|New York|US|localhost:8602|localhost:8652|user1|test|false,UsedPartsAgency|San Francisco|US|localhost:8603|localhost:8653|user1|test|false,Buyer|San Diego|US|localhost:8604|localhost:8654|user1|test|false" required="true" description="Node information to instantiate" type="input"/>
+</options>
