@@ -7,7 +7,7 @@
     version="0.8"
     app-type="restfulapi"
     release-status="beta"
-    derivedFrom="Axon4"
+    derivedFrom="Axon4,.corda.token.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true">
 	<target-languages>
