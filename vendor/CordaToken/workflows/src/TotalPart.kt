@@ -1,5 +1,5 @@
 #set( $tokenSystemName = ${aib.getParam( "corda.token-system-name" ).toLowerCase()} )
-#set( $identifierFieldName = $display.capitalize( $aib.getParam( "corda.identifier-field-name" ) ) )
+#set( $identifierFieldName = "Id" )
 package ${aib.getRootPackageName()}.${tokenSystemName}market.flows
 
 import co.paralleluniverse.fibers.Suspendable
@@ -12,6 +12,8 @@ import net.corda.core.identity.Party
 import net.corda.core.node.services.queryBy
 import net.corda.core.utilities.ProgressTracker
 
+import java.util.UUID
+
 #foreach( $class in $aib.getClassesToGenerate() )
 #set( $className = ${class.getName()} )
 import  ${aib.getRootPackageName()}.${tokenSystemName}market.states.${className}TokenState
@@ -23,7 +25,7 @@ import  ${aib.getRootPackageName()}.${tokenSystemName}market.states.${className}
 @InitiatingFlow
 @StartableByRPC
 class TotalPart(val part: String,
-                   val $display.uncapitalize( ${identifierFieldName} ): String) : FlowLogic<String>() {
+                   val ${identifierFieldName}: UUID) : FlowLogic<String>() {
     override val progressTracker = ProgressTracker()
 
     @Suspendable
@@ -37,10 +39,10 @@ class TotalPart(val part: String,
 #set( $lowercaseClassName = ${display.uncapitalize( $className )} )
 #set( $returnHolder = $classNames.add( $lowercaseClassName ) )
         ${else}if (part.equals("${lowercaseClassName}")){
-            val ${lowercaseClassName}${identifierFieldName} = $display.uncapitalize( $identifierFieldName )
+            val ${lowercaseClassName}${identifierFieldName} = $identifierFieldName
             //transfer ${lowercaseClassName} token
             val ${lowercaseClassName}StateAndRef = serviceHub.vaultService.queryBy<${className}TokenState>().states
-                    .filter { it.state.data.${display.uncapitalize( $identifierFieldName )}.equals(${lowercaseClassName}${identifierFieldName}) }[0]
+                    .filter { it.state.data.linearId.id.equals(${lowercaseClassName}${identifierFieldName}) }[0]
 
             //get the TokenType object
             val ${lowercaseClassName}TokenType = ${lowercaseClassName}StateAndRef.state.data

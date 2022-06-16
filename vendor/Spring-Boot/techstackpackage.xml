@@ -4,9 +4,9 @@
 	description="Spring Boot tech stack" 
 	icon-url="./img/spring.boot.png" 	
 	info-page-url="https://harbormaster.ai/spring-boot-tech-stack/"
-    version="0.8"
+    version="1.8"
     app-type="restfulapi"
-    release-status="beta"
+    release-status="production"
     derivedFrom=".spring.boot.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true">

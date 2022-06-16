@@ -11,7 +11,7 @@ import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-#set( $imports = [ "api", "delegate", "entity", "exception", "handler" ] )
+#set( $imports = [ "api", "delegate", "entity", "exception", "projector" ] )
 #importStatements( $imports )
 
 import ${aib.getRootPackageName(true)}.#getRestControllerPackageName().*;

@@ -12,14 +12,17 @@ import net.corda.core.identity.Party
 import net.corda.core.node.services.queryBy
 import net.corda.core.utilities.ProgressTracker
 
+import java.util.UUID
+
+#set( $lowercaseClassName = ${display.uncapitalize( $className )} )
+#set( $identifierFieldName = "Id" )
 #set( $constructorArgs = "" )
 #set( $classesToGenerate = $aib.getClassesToGenerate() )
-#set( $identifierFieldName = $display.capitalize( $aib.getParam( "corda.identifier-field-name" ) ) )
 #foreach( $class in $classesToGenerate )
 #set( $className = ${class.getName()} )
 #set( $lowercaseClassName = ${display.uncapitalize( $className )} )
 import ${aib.getRootPackageName()}.${tokenSystemName}market.states.${className}TokenState
-#set( $constructorArgs = "${constructorArgs}val ${lowercaseClassName}${identifierFieldName}: String, " )
+#set( $constructorArgs = "${constructorArgs}val ${lowercaseClassName}${identifierFieldName}: UUID, " )
 #end##foreach( $class in $classesToGenerate )
 // *********
 // * Flows *
@@ -38,7 +41,7 @@ class IssueNew${display.capitalize( $tokenSystemName )}(${constructorArgs}
         //Step ${velocityCount} : $className Token
         //get ${lowercaseClassName} states on ledger
         val ${lowercaseClassName}StateAndRef = serviceHub.vaultService.queryBy<${className}TokenState>().states
-                .filter { it.state.data.${display.uncapitalize( $identifierFieldName )}.equals(${lowercaseClassName}${identifierFieldName}) }[0]
+                .filter { it.state.data.linearId.id.equals(${lowercaseClassName}${identifierFieldName}) }[0]
 
         //get the TokenType object
         val ${lowercaseClassName}tokentype = ${lowercaseClassName}StateAndRef.state.data

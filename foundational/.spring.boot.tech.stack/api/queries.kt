@@ -66,7 +66,7 @@ class Find${roleName}For${className}(val ${pk} :  UUID)
 #set( $argType = ${methodArg.getType()} )
 data class ${queryName}Filter(val ${argName}: ${argType}? = null)
 #if ( $handler.getSingleValueReturnValue() == false)
-class ${queryName}Query(val offset: Int, val limit: Int, val filter: ${queryName}Filter = ${queryName}Filter() )
+class ${queryName}Query(val offset: Int? = 1, val limit: Int? = 100, val filter: ${queryName}Filter = ${queryName}Filter() )
 #else
 class ${queryName}Query(val filter: ${queryName}Filter = ${queryName}Filter())
 #end##if ( $handler.getSingleValueReturnValue() == false)

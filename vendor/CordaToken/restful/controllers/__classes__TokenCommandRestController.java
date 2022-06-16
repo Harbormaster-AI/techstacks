@@ -1,9 +1,10 @@
-#header()
+#set( $callArgs = "#classArgsAsFunctionCall( $classObject ) " )
+#set( $var = "${lowercaseClassName}${identifierFieldName}" )
 #set( $className = ${classObject.getName()} )
 #set( $lowercaseClassName = ${Utils.lowercaseFirstLetter( ${className} )} )
 #set( $tokenSystemName = ${aib.getParam( "corda.token-system-name" ).toLowerCase()} )
-#set( $identifierFieldName = $display.uncapitalize( $aib.getParam( "corda.identifier-field-name" ) ) )
-#set( $tokenSystemName = ${aib.getParam( "corda.token-system-name" ).toLowerCase()} )
+#set( $identifierFieldName = "Id" )
+#header()
 package ${aib.getRootPackageName(true)}.#getRestControllerPackageName().command;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-#set( $imports = [ "api", "exception", "handler" ] )
+#set( $imports = [ "api", "exception", "projector", "delegate", "entity" ] )
 #importStatements( $imports )
 
 import ${aib.getRootPackageName(true)}.${tokenSystemName}market.flows.Create${className}Token;
@@ -38,23 +39,35 @@ import net.corda.core.identity.Party;
 @RequestMapping("/${className}Token")
 public class ${className}TokenCommandRestController extends BaseCordaSpringRestController {
 	
-	
-#set( $var = "${lowercaseClassName}${identifierFieldName}" )
     /**
      * Handles create a ${className} token.  
-     * @param		${className}	${lowercaseClassName}
+     * @param		UUID	${lowercaseClassName}Id
      * @return		CordaFuture
      */
 	@PostMapping("/createToken")
-    public net.corda.core.concurrent.CordaFuture createToken( @RequestParam(required=true) String $var ) {
+    public net.corda.core.concurrent.CordaFuture createToken( @RequestParam(required=true) UUID ${lowercaseClassName}Id ) {
+
+		// ------------------------------------------------
+		//  the identifier must be associated with an existing $className
+		// ------------------------------------------------
+		$className $lowercaseClassName = get${className}( ${lowercaseClassName}Id );
+
+		if ( $lowercaseClassName == null ) {
+			LOGGER.log( Level.WARNING, "A ${className} with Id " + ${lowercaseClassName}Id + " does not exist in the persistent store" );
+			return null;
+		}
+		
+		LOGGER.log( Level.INFO, "Successfully found a ${className} in the entity store for UUID {0}", ${lowercaseClassName}Id );
 
 		net.corda.core.messaging.CordaRPCOps proxy = proxy(PartyEnum.Notary);
 		net.corda.core.concurrent.CordaFuture future = null;
 		
 		if ( proxy != null ) {
 			LOGGER.info( "Located a Corda Notary" );
-			LOGGER.info( "Starting a flow for Create${className}Token" );
-			future = proxy.startFlowDynamic(Create${className}Token.class, $var).getReturnValue();
+			LOGGER.log( Level.INFO, "Starting a flow for Create${className}Token for UUID {0}", ${lowercaseClassName} );
+			future = proxy.startFlowDynamic(Create${className}Token.class, 
+									${callArgs})
+									.getReturnValue();
 		}
 		else {
 			LOGGER.warning( "Failed to acquire an RPC proxy to a Corda Notary" );
@@ -66,13 +79,17 @@ public class ${className}TokenCommandRestController extends BaseCordaSpringRestC
  
     /**
      * Handles deleting a ${className} entity as a token
-     * @param		$identifierFieldName	String 
-     * @param		partyEnum					PartyEnum
+     * @param		${lowercaseClassName}Id	UUID 
      * @return		net.corda.core.concurrent.CordaFuture 
      */
     @DeleteMapping("/destroyToken")    
-    public net.corda.core.concurrent.CordaFuture destroyToken( @RequestBody(required=true) String ${var}, PartyEnum partyEnum) {                
+    public net.corda.core.concurrent.CordaFuture destroyToken( @RequestBody(required=true) UUID ${lowercaseClassName}Id, PartyEnum partyEnum) {                
 
+    	// -------------------------------------------------------
+    	// validate the existenence of ${var} in the entity store
+    	// -------------------------------------------------------
+    	// TO DO
+    	
 		net.corda.core.messaging.CordaRPCOps proxy = proxy( partyEnum );
 		net.corda.core.concurrent.CordaFuture future = null;
     	Party party = null;
@@ -85,7 +102,9 @@ public class ${className}TokenCommandRestController extends BaseCordaSpringRestC
 				LOGGER.log( Level.INFO, "Located a Corda Party for {0}", partyEnum.toString());
 				LOGGER.info( "Starting a flow for TotalPart" );
 
-				future = proxy.startFlowDynamic(TotalPart.class, ${var}, party).getReturnValue();
+				future = proxy.startFlowDynamic(TotalPart.class, 
+								"${className}",
+								${lowercaseClassName}Id).getReturnValue();
 			}
 			else {
 				LOGGER.log( Level.WARNING, "Failed to locate a Corda Party for node {0}", partyEnum.toString() );
@@ -101,13 +120,18 @@ public class ${className}TokenCommandRestController extends BaseCordaSpringRestC
     
     /**
      * Handles transfering a token to a given Party
-     * @param		$identifierFieldName	String 
+     * @param		${lowercaseClassName}Id	UUID 
      * @param		partyEnum					PartyEnum
      * @return		net.corda.core.concurrent.CordaFuture 
      */
     @PostMapping("/transferToken")    
-    public net.corda.core.concurrent.CordaFuture transferToken( @RequestBody(required=true) String ${var}, @RequestBody(required=true) PartyEnum partyEnum) {                
-    
+    public net.corda.core.concurrent.CordaFuture transferToken( @RequestBody(required=true) UUID ${lowercaseClassName}Id, @RequestBody(required=true) PartyEnum partyEnum) {                
+
+    	// -------------------------------------------------------
+    	// validate the existenence of ${var} in the entity store
+    	// -------------------------------------------------------
+    	// TO DO
+
 		net.corda.core.messaging.CordaRPCOps proxy = proxy( partyEnum );
 		net.corda.core.concurrent.CordaFuture future = null;
     	Party party = null;
@@ -121,7 +145,10 @@ public class ${className}TokenCommandRestController extends BaseCordaSpringRestC
 				LOGGER.log( Level.INFO, "Located a Corda Party for {0}", partyEnum.toString());
 				LOGGER.info( "Starting a flow for TransferPartToken" );
 
-				future = proxy.startFlowDynamic(TransferPartToken.class, "${className}", ${var}, party).getReturnValue();
+				future = proxy.startFlowDynamic(TransferPartToken.class, 
+								"${className}", 
+								${lowercaseClassName}Id, 
+								party).getReturnValue();
 			}
 			else {
 				LOGGER.log( Level.WARNING, "Failed to locate a Corda Party for node {0}", partyEnum.toString() );
@@ -134,6 +161,31 @@ public class ${className}TokenCommandRestController extends BaseCordaSpringRestC
 		return future;
     }
 	
+    
+    /**
+     * Helper method to return a $className entity from the entity store
+     * 
+     * @param	${lowercaseClassName} UUID
+     * @return	$className
+     */
+    protected $className get${className}( UUID ${lowercaseClassName}Id ) {
+
+		// ------------------------------------------------
+		//  the identifier must be associated with an existing $className
+		// ------------------------------------------------
+		$className $lowercaseClassName = null;
+
+    	try {  
+    		$lowercaseClassName = ${className}BusinessDelegate.get${className}Instance().get${className}( new ${className}FetchOneSummary( ${lowercaseClassName}Id ) );   
+        }
+        catch( Throwable exc ) {
+            LOGGER.log( Level.WARNING, "failed to load ${className} using Id " + ${lowercaseClassName}Id );
+            return null;
+        }
+    	
+    	return $lowercaseClassName;
+
+    }
   
 //************************************************************************    
 // Attributes
