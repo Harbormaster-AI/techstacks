@@ -1,13 +1,13 @@
 <tech-stack-package 
-	name="CordaMarketplaceToken"
-	shortName="CordaMarketplaceToken"
-	description="Corda Token reference for a market place scenario, using CQRS and persistent option of JPA or MongoDB"
+	name="CordaDueDiligence"
+	shortName="CordaDueDiligence"
+	description="Corda reference app shows how blockchain can work in the capital market industry."
 	icon-url="https://www.pngkey.com/png/full/74-746252_corda-developer-certification-exam-r3-corda.png" 	
-	info-page-url="https://harbormaster.ai/corda-token-tech-stack/"
+	info-page-url="https://harbormaster.ai/corda-duediligence-token-tech-stack/"
     version="0.8"
     app-type="restfulapi"
     release-status="beta"
-    derivedFrom="Axon4,.corda.token.tech.stack"
+    derivedFrom="Axon4,.corda.core.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true"
 	product-line="Blockchain">
