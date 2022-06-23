@@ -8,7 +8,8 @@
     app-type="webapp"
     release-status="production"
     visible="true"
-    derivedFrom=".common.tech.stack">
+    derivedFrom=".common.tech.stack"
+	product-line="WebApp">
 	<target-languages>
 		<target-language name="rails"/>
 		<target-language name="javascript"/>

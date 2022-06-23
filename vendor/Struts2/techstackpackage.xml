@@ -9,7 +9,8 @@
     release-status="production"
     derivedFrom=".hibernate.tech.stack,.java.tech.stack"
 	supportsDocker="true"
-	supportsKubernetes="true">
+	supportsKubernetes="true"
+	product-line="WebApp">
 	<target-languages>
 		<target-language name="java"/>
 		<target-language name="javascript"/>

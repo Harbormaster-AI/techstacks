@@ -10,6 +10,7 @@
 	supportsDocker="false"
 	supportsKubernetes="false"
 	visible="false"
+	product-line="Serverless"
 	derivedFrom=".nodejs.tech.stack,.google.tech.stack,.java.relational.db.tech.stack">
 	<target-languages>
 		<target-language name="nodejs8"/>

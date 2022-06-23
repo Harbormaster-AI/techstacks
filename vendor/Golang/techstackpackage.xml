@@ -8,7 +8,8 @@
     app-type="webapp"
     release-status="production"
     derivedFrom=".common.tech.stack"
-    visible="true">
+    visible="true"
+	product-line="Microservice">
 	<target-languages>
 		<target-language name="go"/>
 		<target-language name="javascript"/>

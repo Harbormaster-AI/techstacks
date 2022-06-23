@@ -9,7 +9,8 @@
     app-type="restfulapi"
     derivedFrom=".mongodb.tech.stack,SpringCore"
 	supportsDocker="true"
-	supportsKubernetes="true">
+	supportsKubernetes="true"
+	product-line="Microservice">
 	<target-languages>
 		<target-language name="java"/>
 	</target-languages><!-- target language(s) supported by the template structure -->

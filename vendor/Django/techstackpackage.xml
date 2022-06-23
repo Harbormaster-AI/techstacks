@@ -9,7 +9,8 @@
     release-status="production"
     derivedFrom=".python.tech.stack"
 	supportsDocker="true"
-	supportsKubernetes="true">
+	supportsKubernetes="true"
+	product-line="WebApp">
 	<target-languages>
 		<target-language name="python"/>
 		<target-language name="javascript"/>
