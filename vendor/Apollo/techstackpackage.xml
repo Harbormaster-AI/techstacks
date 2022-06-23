@@ -9,7 +9,8 @@
     release-status="production"
     derivedFrom=".nodejs.tech.stack"
 	supportsDocker="true"
-	supportsKubernetes="true">
+	supportsKubernetes="true"
+	product-line="WebApp">
 	<target-languages>
 		<target-language name="javascript"/>
 	</target-languages><!-- target language(s) supported by the template structure -->

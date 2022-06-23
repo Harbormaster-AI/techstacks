@@ -9,7 +9,8 @@
     release-status="beta"
     derivedFrom=".java.tech.stack,.azure.tech.stack"
 	supportsDocker="true"
-	supportsKubernetes="true">
+	supportsKubernetes="true"
+	product-line="Serverless">
 	<target-languages>
 		<target-language name="java"/>
 	</target-languages><!-- target language(s) supported by the template structure -->

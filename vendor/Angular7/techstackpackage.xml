@@ -10,7 +10,8 @@
     derivedFrom=".mongodb.tech.stack,.nodejs.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true"
-	visible="true">
+	visible="true"
+    product-line="WebApp">
 	<target-languages>
 		<target-language name="typescript"/>
 		<target-language name="javascript"/>

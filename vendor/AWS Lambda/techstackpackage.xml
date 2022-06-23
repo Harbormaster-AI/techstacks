@@ -9,7 +9,8 @@
     release-status="production"
     derivedFrom=".java.tech.stack,.lambda.tech.stack,.hibernate.tech.stack"
 	supportsDocker="false"
-	supportsKubernetes="false">
+	supportsKubernetes="false"
+	product-line="Serverless">
 	<target-languages>
 		<target-language name="java"/>
 		<target-language name="node.js"/>

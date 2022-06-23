@@ -9,7 +9,8 @@
     release-status="beta"
     derivedFrom=".spring.boot.tech.stack"
 	supportsDocker="true"
-	supportsKubernetes="true">
+	supportsKubernetes="true"
+	product-line="Microservice">
 	<target-languages>
 		<target-language name="java"/>
 	</target-languages><!-- target language(s) supported by the template structure -->

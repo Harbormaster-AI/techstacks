@@ -9,7 +9,8 @@
     release-status="production"
 	supportsDocker="false"
 	supportsKubernetes="false"
-	derivedFrom=".common.tech.stack,.hibernate.tech.stack">
+	derivedFrom=".common.tech.stack,.hibernate.tech.stack"
+	product-line="WebApp">
 	<target-languages>
 		<target-language name="C#"/>
 		<target-language name="javascript"/>

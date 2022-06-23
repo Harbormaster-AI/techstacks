@@ -10,7 +10,8 @@
     release-status="production"
     derivedFrom=".java.tech.stack,.lambda.tech.stack,.mongodb.tech.stack"
 	supportsDocker="false"
-	supportsKubernetes="false">
+	supportsKubernetes="false"
+	product-line="Serverless">
 	<target-languages>
 		<target-language name="java"/>
 	</target-languages>
