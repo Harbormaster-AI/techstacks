@@ -3,14 +3,15 @@
     shortName="Django"
     description="Django is a Python-based open-source web framework, which follows the model-view-template architectural pattern" 
     icon-url="./img/django.png"
-	info-page-url="http://www.harbormaster.ai/Angular11.tech.stack"
+    info-page-url="http://www.harbormaster.ai/Angular11.tech.stack"
     version="1.0"
     app-type="webapp"
     release-status="production"
     derivedFrom=".python.tech.stack"
-	supportsDocker="true"
-	supportsKubernetes="true"
-	product-line="WebApp">
+    supportsDocker="true"
+    supportsKubernetes="true"
+    product-line="WebApp"
+    level="basic">
 	<target-languages>
 		<target-language name="python"/>
 		<target-language name="javascript"/>
