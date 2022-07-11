@@ -10,7 +10,8 @@
     derivedFrom=".java.tech.stack,.hibernate.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true"
-	product-line="WebApp">
+	product-line="WebApp"
+	level="basic">
 	<target-languages>
 		<target-language name="java"/>
 		<target-language name="javascript"/>
