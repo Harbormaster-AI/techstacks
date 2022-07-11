@@ -3,14 +3,15 @@
     shortName="Struts2"
     description="Struts2 tech stack including js (JQuery) frontend, java (Struts2) backend, and an ORM (hibernate) persistence layer" 
     icon-url="./img/struts2.png"
- 	info-page-url="http://www.harbormaster.com/infopages/struts-info-page.html"
+    info-page-url="http://www.harbormaster.com/infopages/struts-info-page.html"
     version="1.4"
     app-type="webapp"
     release-status="production"
     derivedFrom=".hibernate.tech.stack,.java.tech.stack"
-	supportsDocker="true"
-	supportsKubernetes="true"
-	product-line="WebApp">
+    supportsDocker="true"
+    supportsKubernetes="true"
+    product-line="WebApp"
+    level="basic">
 	<target-languages>
 		<target-language name="java"/>
 		<target-language name="javascript"/>
