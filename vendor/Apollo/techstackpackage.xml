@@ -4,13 +4,13 @@
 	description="Apollo GraphQL Server" 
 	icon-url="./img/apollo-logo.png" 	
 	info-page-url="http://www.harbormaster.com/infopages/apollo-info-page.html"
-    version="1.0"
-    app-type="other"
-    release-status="production"
-    derivedFrom=".nodejs.tech.stack"
+        version="1.0"
+        app-type="other"
+        release-status="production"
+        derivedFrom=".nodejs.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true"
-	product-line="WebApp">
+	product-line="Microservice">
 	<target-languages>
 		<target-language name="javascript"/>
 	</target-languages><!-- target language(s) supported by the template structure -->

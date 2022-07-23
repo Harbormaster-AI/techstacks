@@ -4,13 +4,14 @@
 	description="Uses Angular11 with MongoDB and Mongoose" 
 	icon-url="./img/angular-plain.png" 	
 	info-page-url="http://www.harbormaster.ai/Angular11.tech.stack"
-    version="1.0"
-    app-type="mobile"
-    release-status="production"
+        version="1.0"
+        app-type="mobile"
+        release-status="production"
 	derivedFrom="Angular7"
 	supportsDocker="true"
 	supportsKubernetes="true"
-	product-line="WebApp">
+	product-line="WebApp"
+        level="basic">
 	<target-languages>
 		<target-language name="typescript"/>
 		<target-language name="javascript"/>

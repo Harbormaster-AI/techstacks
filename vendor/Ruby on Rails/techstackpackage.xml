@@ -3,13 +3,14 @@
     shortName="Rails"
     description="Ruby on Rails, or Rails, is a server-side web application framework written in. Rails is an MVC framework, providing default structures for a database, a web service, and web pages" 
     icon-url="img/ruby.on.rails.png"
- 	info-page-url="http://www.harbormaster.ai/.rails.tech.stack"
+    info-page-url="http://www.harbormaster.ai/.rails.tech.stack"
     version="1.0"
     app-type="webapp"
     release-status="production"
     visible="true"
     derivedFrom=".common.tech.stack"
-	product-line="WebApp">
+    product-line="WebApp"
+    level="basic">
 	<target-languages>
 		<target-language name="rails"/>
 		<target-language name="javascript"/>
