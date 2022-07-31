@@ -2,6 +2,7 @@
 ## override this macro if a different set of inclusions are required
 ##
 #macro( projectsForSettingsDotGradle )
+include 'restful'
 include 'workflows'
 include 'contracts'
 #end

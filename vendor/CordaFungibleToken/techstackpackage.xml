@@ -1,6 +1,6 @@
 <tech-stack-package 
-	name="CordaFungileToken"
-	shortName="CordaFungileToken"
+	name="CordaFungibleToken"
+	shortName="CordaFungibleToken"
 	description="Corda Token fungile token reference app using CQRS and persistent option of JPA or MongoDB"
 	icon-url="https://www.pngkey.com/png/full/74-746252_corda-developer-certification-exam-r3-corda.png" 	
 	info-page-url="https://harbormaster.ai/corda-fungile-token-tech-stack/"

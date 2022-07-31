@@ -1,9 +1,9 @@
 #macro( establishCordaNodes )
 #set( $cordaNodes = [] )
-#set( $void = $convert.setStringsDelimiter( "|" ) )
+#set( $void = $convert.setStringsDelimiter( "^" ) )
 #set( $nodes = $convert.toStrings( $aib.getParam( "corda.node-infos" ) ) )
 #foreach( $node in $nodes )
-#set( $node = $node.replace("|", "," ) )
+#set( $node = $node.replace("^", "," ) )
 #set( $node = $display.list( $node ) )
 #set( $void = $cordaNodes.add( $node ) )
 #end##foreach( $node in $nodes )
@@ -63,11 +63,3 @@ $display.list( $names, ", " )#end
 #end##foreach( $class in $aib.getClassesToGenerate() )
 $display.list( $names, ", " )#end
 
-##
-## override this macro if a different set of inclusions are required
-##
-#macro( projectsForSettingsDotGradle )
-include 'restful'
-include 'workflows'
-include 'contracts'
-#end

@@ -7,9 +7,9 @@
     version="0.8"
     app-type="restfulapi"
     release-status="beta"
-    derivedFrom=""
 	supportsDocker="true"
-	supportsKubernetes="true">
+	supportsKubernetes="true"
+	visible="false">
 	<target-languages>
 		<target-language name="java"/>
 		<target-language name="kotlin"/>
