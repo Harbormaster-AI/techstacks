@@ -10,7 +10,8 @@
 	derivedFrom="Angular7"
 	supportsDocker="true"
 	supportsKubernetes="true"
-	product-line="WebApp">
+	product-line="WebApp"
+    visible="false">
 	<target-languages>
 		<target-language name="typescript"/>
 		<target-language name="javascript"/>
