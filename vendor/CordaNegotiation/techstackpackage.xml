@@ -10,7 +10,8 @@
     derivedFrom="Axon4,.corda.core.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true"
-	product-line="Blockchain">
+	product-line="Blockchain"
+	visible="false">
 	<target-languages>
 		<target-language name="java"/>
 		<target-language name="kotlin"/>

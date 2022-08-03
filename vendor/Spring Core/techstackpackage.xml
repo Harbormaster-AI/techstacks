@@ -10,7 +10,8 @@
     derivedFrom=".hibernate.tech.stack,.java.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true"
-	product-line="Microservice">
+	product-line="Microservice"
+	visible="false">
 	<target-languages>
 		<target-language name="java"/>
 	</target-languages><!-- target language(s) supported by the template structure -->

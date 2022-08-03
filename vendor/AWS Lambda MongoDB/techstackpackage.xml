@@ -11,7 +11,8 @@
     derivedFrom=".java.tech.stack,.lambda.tech.stack,.mongodb.tech.stack"
 	supportsDocker="false"
 	supportsKubernetes="false"
-	product-line="Serverless">
+	product-line="Serverless"
+	visible="false">
 	<target-languages>
 		<target-language name="java"/>
 	</target-languages>
