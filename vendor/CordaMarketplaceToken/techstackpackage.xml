@@ -2,7 +2,7 @@
 	name="CordaMarketplaceToken"
 	shortName="CordaMarketplaceToken"
 	description="Corda Token reference for a market place scenario, using CQRS and persistent option of JPA or MongoDB"
-	icon-url="https://www.pngkey.com/png/full/74-746252_corda-developer-certification-exam-r3-corda.png" 	
+	icon-url="./img/angular.png"
 	info-page-url="https://harbormaster.ai/corda-token-tech-stack/"
     version="0.8"
     app-type="restfulapi"
@@ -11,7 +11,7 @@
 	supportsDocker="true"
 	supportsKubernetes="true"
 	product-line="Blockchain"
-	visible="false">
+	visible="true">
 	<target-languages>
 		<target-language name="java"/>
 		<target-language name="kotlin"/>
