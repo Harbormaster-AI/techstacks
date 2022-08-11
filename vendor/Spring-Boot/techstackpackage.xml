@@ -3,7 +3,7 @@
 	shortName="Spring-Boot"
 	description="Spring Boot tech stack" 
 	icon-url="./img/spring.boot.png" 	
-	info-page-url="https://harbormaster.ai/spring-boot-tech-stack/"
+	info-page-url="https://harbormaster.ai/springcore-tech-stack/"
     version="1.8"
     app-type="restfulapi"
     release-status="production"

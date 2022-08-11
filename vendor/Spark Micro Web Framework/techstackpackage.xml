@@ -3,7 +3,7 @@
 	shortName="SparkMicroWeb"
 	description="Uses Spark Java web micro framework with JQuery/Bootstrap and Hibernate" 
 	icon-url="./img/spark.png" 	
-	info-page-url="http://www.harbormaster.com/infopages/spark-web-framework-info-page.html"
+	info-page-url="https://harbormaster.ai/sparkmicroweb-tech-stack/"
     version="1.1"
     app-type="webapp"
     release-status="production"
