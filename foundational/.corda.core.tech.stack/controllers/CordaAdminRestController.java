@@ -51,14 +51,13 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
 	 * Will transfer the provided tokens as a new ${tokenSystemName} to the specified party
 	 * @param		 $tokenSystemName app
 	 * @param		PartyEnum	party
-	 * @return		net.corda.core.concurrent.CordaFuture
+	 * @return		Map<String, net.corda.core.concurrent.CordaFuture>
 	 */
 	@PutMapping("/bulkCreateTokens")
-	public net.corda.core.concurrent.CordaFuture bulkCreateTokens( @RequestBody(required=true) $tokenSystemName app, PartyEnum partyEnum ) {
-	
+	public Map<String, net.corda.core.concurrent.CordaFuture> bulkCreateTokens( @RequestBody(required=true) $tokenSystemName app, @RequestParam(required=true) PartyEnum partyEnum ) {
+
 		net.corda.core.messaging.CordaRPCOps proxy = proxy( partyEnum );
-		net.corda.core.concurrent.CordaFuture future = null;
-		boolean exactMatch = true;
+		Map<String, net.corda.core.concurrent.CordaFuture> futureMap = new HashMap<>();
 		
 		if ( proxy != null ) {
 			LOGGER.log( Level.INFO, "Located a Corda Party for {0}", partyEnum.toString());
@@ -67,15 +66,23 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
 #set( $className = $display.capitalize( $class.getName() ) )
 #set( $className_lc = $display.uncapitalize( $class.getName() ) )
             LOGGER.info( "Starting a flow for CreateNew${className}" );
-            future = proxy.startFlowDynamic( Create${className}Token.class, app.${className_lc}${identifierFieldName} ).getReturnValue();
+			futureMap.put( "${className} Token Flow", proxy.startFlowDynamic( Create${className}Token.class, app.${className_lc}${identifierFieldName} ).getReturnValue() );
 
 #end##foreach( $class in $aib.getClassesToGenerate() )
+			futureMap.values().forEach(future -> {
+				try {
+					future.get();
+				} catch( Exception exc ) {
+					LOGGER.log(Level.WARNING, exc.getMessage());
+				} finally {
+				}
+			});
 		}
 		else {
 			LOGGER.log( Level.WARNING, "Failed to acquire an RPC proxy to node {0}", partyEnum.toString() );
 		}
 	
-		return future;
+		return futureMap;
 		
 	}
 
@@ -84,15 +91,13 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
 	 * Handles bulk deleting to a target party
 	 * @param		$identifierFieldName	String 
 	 * @param		partyEnum					PartyEnum
-	 * @return		net.corda.core.concurrent.CordaFuture 
+	 * @return		Map<String, net.corda.core.concurrent.CordaFuture>
 	 */
-	@DeleteMapping("/bulkDestroyTokens")    
-	public net.corda.core.concurrent.CordaFuture bulkDestroyTokens( @RequestBody(required=true) $tokenSystemName app, PartyEnum partyEnum) {                
+	@PutMapping("/bulkDestroyTokens")
+	public Map<String, net.corda.core.concurrent.CordaFuture> bulkDestroyTokens( @RequestBody(required=true) $tokenSystemName app, @RequestParam(required=true) PartyEnum partyEnum) {
 
 		net.corda.core.messaging.CordaRPCOps proxy = proxy( partyEnum );
-		net.corda.core.concurrent.CordaFuture future = null;
-		boolean exactMatch = true;
-		
+		Map<String, net.corda.core.concurrent.CordaFuture> futureMap = new HashMap<>();
 		
 		if ( proxy != null ) {
 			Party party = party( partyEnum );
@@ -104,10 +109,18 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
 #set( $className_lc = $display.uncapitalize( $class.getName() ) )
 					// only start the flow if a ${className_lc}${identifierFieldName} has been provided
 				if ( app.${className_lc}${identifierFieldName} != null ) {
-					LOGGER.info( "Starting a flow for TotalPart on partyEnum.toString() for a ${className}" );
-					future = proxy.startFlowDynamic( TotalPart.class, app.${className_lc}${identifierFieldName}, party ).getReturnValue();
+					LOGGER.info( "Starting a flow for Total Part on partyEnum.toString() for a ${className}" );
+					futureMap.put( "Total Part Flow for ${className}", proxy.startFlowDynamic( TotalPart.class, app.${className_lc}${identifierFieldName}, party ).getReturnValue() );
 				}
 #end##foreach( $class in $aib.getClassesToGenerate() )
+				futureMap.values().forEach(future -> {
+					try {
+						future.get();
+					} catch( Exception exc ) {
+						LOGGER.log(Level.WARNING, exc.getMessage());
+					} finally {
+					}
+				});
 			}
 		}
 		else {
@@ -122,14 +135,14 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      * Handles bulk transfering tokens to a given Party
      * @param		$identifierFieldName	String 
      * @param		partyEnum					PartyEnum
-     * @return		net.corda.core.concurrent.CordaFuture 
+     * @return		Map<String, net.corda.core.concurrent.CordaFuture>
      */
-    @PostMapping("/bulkTransferTokens")    
-    public net.corda.core.concurrent.CordaFuture bulkTransferTokens( @RequestBody(required=true) $tokenSystemName app, @RequestBody(required=true) PartyEnum partyEnum) {                
+    @PutMapping("/bulkTransferTokens")
+    public Map<String, net.corda.core.concurrent.CordaFuture> bulkTransferTokens( @RequestBody(required=true) $tokenSystemName app, @RequestParam(required=true) PartyEnum partyEnum) {
+
 		net.corda.core.messaging.CordaRPCOps proxy = proxy( partyEnum );
-		net.corda.core.concurrent.CordaFuture future = null;
-		boolean exactMatch = true;
-		
+		Map<String, net.corda.core.concurrent.CordaFuture> futureMap = new HashMap<>();
+
 		if ( proxy != null ) {
 			LOGGER.log( Level.INFO, "Located a Corda Party for {0}", partyEnum.toString());
 			Party party = party( partyEnum );
@@ -141,9 +154,17 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
 			// only start the flow if a ${className_lc}${identifierFieldName_lc} has been provided
 				if ( app.${className_lc}${identifierFieldName} != null ) {
 					LOGGER.info( "Starting a flow for TransferPartToken to partyEnum.toString() for a ${className}" );
-					future = proxy.startFlowDynamic( TransferPartToken.class, app.${className_lc}${identifierFieldName}, party ).getReturnValue();
+					futureMap.put( "Transfer Part Token Flow for ${className}", proxy.startFlowDynamic( TransferPartToken.class, app.${className_lc}${identifierFieldName}, party ).getReturnValue() );
 				}
 #end##foreach( $class in $aib.getClassesToGenerate() )
+				futureMap.values().forEach(future -> {
+					try {
+						future.get();
+					} catch( Exception exc ) {
+						LOGGER.log(Level.WARNING, exc.getMessage());
+					} finally {
+					}
+				});
 			}
 		}
 		else {
@@ -158,16 +179,15 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      * Will transfer the provided tokens as a new ${tokenSystemName} to the specified party
      * @param		${className}Parts ${lowercaseClassName}Parts
      * @param		PartyEnum partyEnum
-     * @return		net.corda.core.concurrent.CordaFuture
+     * @return		Map<String, net.corda.core.concurrent.CordaFuture>
      */
 	@PutMapping("/issueNew")
-    public net.corda.core.concurrent.CordaFuture issueNew${tokenSystemName}( @RequestBody(required=true) $tokenSystemName app, @RequestBody(required=true) PartyEnum partyEnum ) {
+    public Map<String, net.corda.core.concurrent.CordaFuture> issueNew${tokenSystemName}( @RequestBody(required=true) $tokenSystemName app, @RequestParam(required=true) PartyEnum partyEnum ) {
 
 		net.corda.core.messaging.CordaRPCOps proxy = proxy( partyEnum );
-		net.corda.core.concurrent.CordaFuture future = null;
+		Map<String, net.corda.core.concurrent.CordaFuture> futureMap = new HashMap<>();
     	Party party = null;
-    	boolean exactMatch = true;
-		
+
 		if ( proxy != null ) {
 			party = party( partyEnum );
 
@@ -175,7 +195,17 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
 				LOGGER.log( Level.INFO, "Located a Corda Party for {0}", partyEnum.toString());
 				LOGGER.info( "Starting a flow for IssueNew${display.capitalize( $tokenSystemName )}" );
 
-				future = proxy.startFlowDynamic(IssueNew${tokenSystemName}.class, app.${callArgs}${identifierFieldName}, party).getReturnValue();
+				futureMap.put( "Issue New Token Flow for ${tokenSystemName}", proxy.startFlowDynamic(IssueNew${tokenSystemName}.class, app.${callArgs}${identifierFieldName}, party).getReturnValue() );
+
+				futureMap.values().forEach(future -> {
+					try {
+						future.get();
+					} catch( Exception exc ) {
+						LOGGER.log(Level.WARNING, exc.getMessage());
+					} finally {
+					}
+				});
+
 			}
 			else {
 				LOGGER.log( Level.WARNING, "Failed to locate a Corda Party for node {0}", partyEnum.toString() );
@@ -196,7 +226,7 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      * @return		net.corda.core.concurrent.CordaFuture
      */
 	@PutMapping("/transferToken")
-    public net.corda.core.concurrent.CordaFuture transfer${tokenSystemName}Token(@RequestBody(required=true) $tokenSystemName app, @RequestBody(required=true) PartyEnum partyEnum ) {
+    public net.corda.core.concurrent.CordaFuture transfer${tokenSystemName}Token(@RequestBody(required=true) $tokenSystemName app, @RequestParam(required=true) PartyEnum partyEnum ) {
 
 		net.corda.core.messaging.CordaRPCOps proxy = proxy( partyEnum );
 		net.corda.core.concurrent.CordaFuture future = null;
@@ -231,7 +261,7 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      * @return		List<String>
      */
     @GetMapping("/flows")
-    public java.util.List<java.lang.String> flows( PartyEnum partyEnum) {
+    public java.util.List<java.lang.String> flows( @RequestParam(required=true) PartyEnum partyEnum) {
     	LOGGER.log( Level.INFO, "Calling registeredFlows for Party: {0}", partyEnum.toString() );
     	return proxy(partyEnum).registeredFlows();
     }
@@ -243,7 +273,7 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      * @return		String
      */
     @GetMapping("/networkParameters")
-    public String networkParameters( PartyEnum partyEnum) {
+    public String networkParameters( @RequestParam(required=true) PartyEnum partyEnum) {
     	LOGGER.log( Level.INFO, "Calling getNetworkParameters for Party: {0}", partyEnum.toString() );
     	return proxy(partyEnum).getNetworkParameters().toString();
     }
@@ -255,7 +285,7 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      * @return		java.util.List<java.lang.String>
      */
     @GetMapping("/notaryIdentities")
-    public java.util.List<java.lang.String> notaryIdentities( PartyEnum partyEnum) {
+    public java.util.List<java.lang.String> notaryIdentities( @RequestParam(required=true) PartyEnum partyEnum) {
     	LOGGER.log( Level.INFO, "Calling notaryIdentities for Party: {0}", partyEnum.toString() );
     	
     	List<Party> parties 					= proxy(partyEnum).notaryIdentities();
@@ -279,7 +309,7 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      * @return		String
      */
     @GetMapping("/nodeInfo")
-    public String nodeInfo( PartyEnum partyEnum) {
+    public String nodeInfo( @RequestParam(required=true) PartyEnum partyEnum) {
     	LOGGER.log( Level.INFO, "Calling nodeInfo for Party: {0}", partyEnum.toString() );
     	final String retVal =  proxy(partyEnum).nodeInfo().toString();
     	LOGGER.log( Level.INFO, "NodeInfo for {0} is: {1}", new Object[] { partyEnum.toString(), retVal } );
@@ -293,7 +323,7 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
      * @return		String
      */
     @GetMapping("/nodeDiagnosticInfo")
-    public String nodeDiagnosticInfo( PartyEnum partyEnum ) {
+    public String nodeDiagnosticInfo( @RequestParam(required=true) PartyEnum partyEnum ) {
     	LOGGER.log( Level.INFO, "Calling nodeDiagnosticInfo for Party: {0}", partyEnum.toString() );
     	final String retVal = proxy(partyEnum).nodeDiagnosticInfo().toString();
     	LOGGER.log( Level.INFO, "NodeDiagnosticInfo for {0} is: {1}", new Object[] {partyEnum.toString(), retVal} );
@@ -302,11 +332,11 @@ public class CordaAdminRestController extends BaseCordaSpringRestController {
     
     
     /**
-     * Returns the notary identies for the associated node
+     * Returns the vault query results for the associated node
      * @return		String
      */
     @GetMapping("/vaultQuery")
-    public String vaultQuery( PartyEnum partyEnum ) {
+    public String vaultQuery( @RequestParam(required=true) PartyEnum partyEnum ) {
     	LOGGER.log( Level.INFO, "Calling vaultQuery for Party: {0}", partyEnum.toString() );
     	final String retVal =  proxy(partyEnum).vaultQuery(com.r3.corda.lib.tokens.contracts.states.EvolvableTokenType.class).toString();
     	LOGGER.log( Level.INFO, "VaultQuery for {0} is: {1}", new Object[] {partyEnum.toString(), retVal} );
