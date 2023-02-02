@@ -63,3 +63,18 @@ $display.list( $names, ", " )#end
 #end##foreach( $class in $aib.getClassesToGenerate() )
 $display.list( $names, ", " )#end
 
+
+#macro( outputExtraCordaMenuItems )
+                 <NavDropdown.Item href="/cordaadminactions">Admin</NavDropdown.Item>
+#end
+
+
+#macro( outputExtraCordaRoutePaths )
+                            <Route path = "/cordaadminactions" component = {CordaAdminComponent}></Route>
+#end
+
+
+#macro( outputExtraCordaInclusionComponents )
+import CordaAdminComponent from './components/CordaAdminComponent';
+#end
+
