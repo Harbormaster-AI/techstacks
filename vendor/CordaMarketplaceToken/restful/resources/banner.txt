@@ -3,7 +3,8 @@
 *
 * ${aib.getParam( "corda.token-system-name" ).toUpperCase()} MARKET CORDAPP 
 * -- Instantiated by Harbormaster
-* -- Powered By r3 
+* -- Event Sourced by AxonIQ
+* -- Blockchained By Corda
 *
 ******************************************************************
 ******************************************************************
