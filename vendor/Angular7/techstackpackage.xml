@@ -11,7 +11,8 @@
 	supportsDocker="true"
 	supportsKubernetes="true"
 	visible="false"
-    product-line="WebApp">
+    product-line="WebApp"
+	primary-vendor="Angular">
 	<target-languages>
 		<target-language name="typescript"/>
 		<target-language name="javascript"/>

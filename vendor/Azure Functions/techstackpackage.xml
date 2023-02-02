@@ -11,7 +11,8 @@
 	supportsDocker="true"
 	supportsKubernetes="true"
 	product-line="Serverless"
-	visible="false">
+	visible="false"
+	primary-vendor="Microsoft">
 	<target-languages>
 		<target-language name="java"/>
 	</target-languages><!-- target language(s) supported by the template structure -->

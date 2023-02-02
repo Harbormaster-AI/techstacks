@@ -10,7 +10,8 @@
 	supportsDocker="false"
 	supportsKubernetes="false"
 	derivedFrom=".common.tech.stack,.hibernate.tech.stack"
-	product-line="WebApp">
+	product-line="WebApp"
+	primary-vendor="Microsoft">
 	<target-languages>
 		<target-language name="C#"/>
 		<target-language name="javascript"/>

@@ -4,13 +4,14 @@
 	description="Apollo GraphQL Server" 
 	icon-url="./img/apollo-logo.png" 	
 	info-page-url="https://harbormaster.ai/Apollo-tech-stack/"
-        version="1.0"
-        app-type="other"
-        release-status="production"
-        derivedFrom=".nodejs.tech.stack"
+	version="1.0"
+	app-type="other"
+	release-status="production"
+	derivedFrom=".nodejs.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true"
-	product-line="Microservice">
+	product-line="Microservice"
+	primary-vendor="Apollo GraphQL">
 	<target-languages>
 		<target-language name="javascript"/>
 	</target-languages><!-- target language(s) supported by the template structure -->

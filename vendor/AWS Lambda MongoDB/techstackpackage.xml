@@ -12,7 +12,8 @@
 	supportsDocker="false"
 	supportsKubernetes="false"
 	product-line="Serverless"
-	visible="false">
+	visible="false"
+	primary-vendor="AWS">
 	<target-languages>
 		<target-language name="java"/>
 	</target-languages>
