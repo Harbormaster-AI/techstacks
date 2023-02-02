@@ -4,3 +4,4 @@ copyzips.bat
 *.zip
 **/*data/
 .idea/
+dirs
