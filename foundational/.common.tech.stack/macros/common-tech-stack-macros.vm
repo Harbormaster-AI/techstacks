@@ -1,0 +1,3 @@
+## does nothing, should be overloaded in a derived techstack
+#macro( gradleTasksAsArguments )
+#end
