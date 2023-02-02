@@ -78,8 +78,10 @@ public class ${className}CommandRestController extends $parentController {
      * @return		CompletableFuture<Void>
      */
     @DeleteMapping("/delete")    
-    public CompletableFuture<Void> delete( @RequestBody(required=true) ${classObject.getDeleteCommandAlias()} command ) {                
+    public CompletableFuture<Void> delete( @RequestParam(required=true) UUID ${lowercaseClassName}Id  ) {
     	CompletableFuture<Void> completableFuture = null;
+		${classObject.getDeleteCommandAlias()} command = new ${classObject.getDeleteCommandAlias()}( ${lowercaseClassName}Id );
+
     	try {
         	${className}BusinessDelegate delegate = ${className}BusinessDelegate.get${className}Instance();
 
