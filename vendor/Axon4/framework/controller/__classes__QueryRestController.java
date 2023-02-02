@@ -38,18 +38,18 @@ public class ${className}QueryRestController extends $parentController {
 	
     /**
      * Handles loading a ${className} using a UUID
-     * @param		UUID uuid 
+     * @param		UUID ${lowercaseClassName}Id
      * @return		${className}
      */    
     @GetMapping("/load")
-    public ${className} load( @RequestParam(required=true) UUID uuid ) {    	
+    public ${className} load( @RequestParam(required=true) UUID ${lowercaseClassName}Id ) {
     	${className} entity = null;
 
     	try {  
-    		entity = ${className}BusinessDelegate.get${className}Instance().get${className}( new ${className}FetchOneSummary( uuid ) );   
+    		entity = ${className}BusinessDelegate.get${className}Instance().get${className}( new ${className}FetchOneSummary( ${lowercaseClassName}Id ) );
         }
         catch( Throwable exc ) {
-            LOGGER.log( Level.WARNING, "failed to load ${className} using Id " + uuid );
+            LOGGER.log( Level.WARNING, "failed to load ${className} using Id " + ${lowercaseClassName}Id );
             return null;
         }
 
