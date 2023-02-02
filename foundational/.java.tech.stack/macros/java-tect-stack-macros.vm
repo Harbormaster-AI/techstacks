@@ -1,0 +1,4 @@
+#macro( gradleTasksAsArguments )
+								<arg value="build"/>
+#end
+
