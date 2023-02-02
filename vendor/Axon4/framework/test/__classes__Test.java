@@ -308,7 +308,7 @@ public class ${classObject.getName()}Test{
 	 */
 	protected ${classObject.getCreateCommandAlias()} generateNewCommand() {
 #set( $includeAssociations = false )
-#set( $args = "#determineDefaultArgs()" )	
+#set( $args = "#determineDefaultArgs( $includeAssociations )" )
         ${classObject.getCreateCommandAlias()} command = new ${classObject.getCreateCommandAlias()}( $args );
 		
 		return( command );
@@ -321,7 +321,7 @@ public class ${classObject.getName()}Test{
 		 */
 	protected ${classObject.getUpdateCommandAlias()} generateUpdateCommand() {
 #set( $includeAssociations = true )
-#set( $args = "#determineDefaultArgs()" )	
+#set( $args = "#determineDefaultArgs( $includeAssociations )" )
 	        ${classObject.getUpdateCommandAlias()} command = new ${classObject.getUpdateCommandAlias()}( $args );
 			
 			return( command );
