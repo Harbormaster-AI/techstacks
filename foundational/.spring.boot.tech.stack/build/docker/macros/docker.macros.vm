@@ -1,4 +1,0 @@
-## overload when jar file is elsewhere
-#macro( jarFileRelativeLocation )
-target
-#end
