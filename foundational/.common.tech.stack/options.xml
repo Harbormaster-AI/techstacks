@@ -53,12 +53,6 @@
 </options>
 
 <!-- resources -->
-<options name="resources" maxPerRow="1">
-	<option name="available" value=""></option>
+<options name="resources"  maxPerRow="1">
+	<option id="resourceSelectId" name="available-resources" value="" type="select" selections="" multiple="true"></option>
 </options>
-
-
-
-
-
-
