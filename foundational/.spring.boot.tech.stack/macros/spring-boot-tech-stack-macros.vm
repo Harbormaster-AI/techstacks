@@ -1,0 +1,8 @@
+#macro( gradleTasksAsArguments )
+								<arg value="build"/>
+#end
+
+## overload when jar file is elsewhere
+#macro( jarFileRelativeLocation )
+target
+#end

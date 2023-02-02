@@ -1,0 +1,22 @@
+<tech-stack-package 
+	name=".react.tech.stack"
+	shortName=".react.tech.stack"
+	description="Base React frontend tech stack"
+	icon-url="./img/react.svg"
+	info-page-url="https://harbormaster.ai/react-tech-stack/"
+    version="0.1"
+    app-type="restfulapi"
+    release-status="beta"
+	supportsDocker="false"
+	supportsKubernetes="false"
+	visible="false">
+	<target-languages>
+		<target-language name="javascript"/>
+		<target-language name="html"/>
+		<target-language name="css"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+		<tech-stack-component name="react" description="React front-end" app-layer="presentation"></tech-stack-component>
+		<tech-stack-component name="axios" description="Restful API invoker" app-layer="presentation"></tech-stack-component>
+	</tech-stack>
+</tech-stack-package>

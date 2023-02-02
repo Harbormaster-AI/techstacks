@@ -1,0 +1,152 @@
+## ----------------------------------------------
+## to be overloaded
+## ----------------------------------------------
+#macro( outputExtraMenuItems )
+#end
+
+## ----------------------------------------------
+## to be overloaded
+## ----------------------------------------------
+#macro( outputExtraRoutePaths )
+#end
+
+## ----------------------------------------------
+## to be overloaded
+## ----------------------------------------------
+#macro( outputExtraInclusionComponents )
+#end
+
+
+#macro( formFields $attribute $action )
+#set( $name = $attribute.getName() )
+#set( $lowercaseName = $display.uncapitalize( $name ) )
+#set( $displayName = $attribute.getDisplayName() )
+#set( $type = $attribute.getType() )
+#set( $isRequired = false )
+###################################################
+## if not from an association
+###################################################
+#if ( $attribute.isFromAssociation() == false )
+###################################################
+## handle enumerated types as select with options
+###################################################
+#if ( $attribute.isFromEnumerator() == true )
+    <select value={this.state.${lowercaseName}} onChange={this.change${name}Handler}>
+#set( $enum = $attribute.getEnumClassObject() )
+#foreach( $enumAttribute in $enum.getAttributes() )
+                      <option name="${attribute.getName()}" className="form-control" >
+                          ${enumAttribute.getName()}
+                      </option>
+#end##foreach()
+                    </select>
+#else##if ( $attribute.isFromEnumerator() == true )
+###################################################
+## handle primitive types...not associations yet
+###################################################
+###################################################
+## handle booleans as a checkbox
+###################################################
+#if ( $type.endsWith( "oolean") == true )
+    <input type="checkbox" placeholder="${displayName}" name="${lowercaseName}" className="form-control" value={this.state.${lowercaseName}} onChange={this.change${name}Handler}/>
+
+###################################################
+## handle date using the ngbDatePicker
+###################################################
+#else
+#set( $isRequired = $attribute.isRequired() )
+#set( $controlsRequired = false )
+#if ( $type.endsWith( "Date" ) )
+    <input type="date" placeholder="${displayName}" name="${lowercaseName}" className="form-control" value={this.state.${lowercaseName}} onChange={this.change${name}Handler}/>
+###################################################
+## handle time using the nbg-timepicker
+###################################################
+#elseif ( $type.endsWith( "Time" ) )
+    <input type="time" placeholder="${displayName}" name="${lowercaseName}" className="form-control" value={this.state.${lowercaseName}} onChange={this.change${name}Handler}/>
+###################################################
+## handle numerics as an input text
+###################################################
+#elseif ( $type.endsWith( "Short" ) || $type.endsWith( "Integer" ) || $type.endsWith( "Long" ) )
+    <input type="number" placeholder="${displayName}" name="${lowercaseName}" className="form-control" value={this.state.${lowercaseName}} onChange={this.change${name}Handler}/>
+###################################################
+## handle all by default as input text
+###################################################
+#else
+    <input placeholder="${displayName}" name="${lowercaseName}" className="form-control" value={this.state.${lowercaseName}} onChange={this.change${name}Handler}/>
+#end## of all none-boolean values
+#end##if ( $type.endsWith( "Date" )
+#end##if ( $attribute.isFromEnumerator() == false )
+
+###################################################
+## attribute is from an association
+###################################################
+#else
+#set( $roleName = ${attribute.getAssociation().getRoleName()} )
+#set( $assocClassName = ${attribute.getAssociation().getType()} )
+#set( $lowercaseAssocClassName = ${Utils.lowercaseFirstLetter(${assocClassName})} )
+#set( $bestFitForName =  ${aib.getClassObject(${assocClassName}).findAttributeAsBestFitName()} )
+###################################################
+## attribute is a singular association
+###################################################
+#if ( $attribute.isFromSingleValueAssociation() == true )
+#set( $multiple = "" )
+#else
+###################################################
+## attribute is a multiple association
+###################################################
+#set( $multiple = "multiple")
+#end##if ( $attribute.isFromSingleValueAssociation() == true )
+#if ( $action == "update" ) ## only apply comparison when in update mode
+#set( $multiple = "${multiple}  [compareWith]=${esc.q}compareFn${esc.q} " )
+#end
+#if ( $action == "update" ) ## append the class name for edits to access the contained domain model
+#set( $roleName = "${lowercaseClassName}.${roleName}" )
+#else
+#set( $roleName = "${lowercaseClassName}.${roleName}" )
+#end
+
+
+#end##if ( $attribute.isFromAssociation() == false )
+###################################################
+## handler at least one attribute is required
+###################################################
+#if( $isRequired == true )
+#set( $controlsRequired = true ) ## got one...used later on in declaring the button
+		<div *ngIf="${formName}.controls['${name}'].invalid && (${formName}.controls['${name}'].dirty || ${formName}.controls['${name}'].touched)" class="alert alert-danger">
+			<div *ngIf="${formName}.controls['${name}'].errors.required">
+    			${name} is required.
+			</div>
+		</div>
+#end##if( $attribute.isRequired() == true )
+#end##foreach ( $attribute = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )
+#set( $includePrimaryKeys = false )
+#set( $includeType = false )
+#set( $includeAssociations = false )
+#set( $delim = ", " )
+#set( $suffix = ".value" )
+#set( $argsAsString = ${classObject.getAttributesAsString( ${includePrimaryKeys}, ${includeType}, ${includeAssociations}, ${delim}, ${suffix} )} )
+###################################################
+## disable button for all invalidated controls
+###################################################
+#set( $includePrimaryKeys = false )
+#set( $attributes = $classObject.getAttributesOrderedInHierarchy( $includePrimaryKeys ) )
+#set( $size = $attributes.size() )
+#set( $args = "" )
+#foreach ( $attribute in $attributes )
+#set( $name = "${attribute.getName()}" )
+#if ( $attribute.isFromAssociation() )
+#set( $name = $attribute.getAssociation().getRoleName() )
+#end
+#if ( $action == "update" ) ## append the class name for edits to access the contained domain model
+#set( $name = "${lowercaseClassName}.${name}" )
+#else
+#set( $name = "${lowercaseClassName}.${name}" )
+#end
+#if( $attribute.getType().endsWith("oolean") == false ) ## checkbox handled differently
+#set( $args = "${args}${name}" )
+#else
+#set( $args = "${args}${name} == true ? true : false" )
+#end##if( $attribute.getType().endsWith("oolean") == true )
+#if ( $velocityCount < $size )
+#set( $args = "${args}, " )
+#end##if ( $velocityCount < size )
+#end##macro( formFields $action )

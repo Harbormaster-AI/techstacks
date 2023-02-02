@@ -1,0 +1,5 @@
+<!-- Spring Boot options -->
+<options name="react" maxPerRow="1">
+	<option name="inUse"  value="true" required="true" description="user React on front-end" type="boolean"/>
+	<option name="restapi-url"  value="http://localhost:8080" required="true" description="base location of the restful api handler(s)" type="input"/>
+</options>
