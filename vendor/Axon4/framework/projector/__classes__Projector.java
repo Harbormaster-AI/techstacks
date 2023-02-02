@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
  * @author ${aib.getAuthor()}
  *
  */
-@ProcessingGroup("${lowercaseClassName}")
+//@ProcessingGroup("${lowercaseClassName}")
 @Component("${lowercaseClassName}-projector")
 public class ${className}Projector extends ${className}EntityProjector {
 		
