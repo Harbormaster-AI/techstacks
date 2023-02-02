@@ -1,0 +1,17 @@
+<tech-stack-package 
+    name="common ui tech stack"
+    shortName=".common-ui.tech.stack"
+    description="Common files likely used by most to all tech stacks requiring a UI"
+    icon-url=""
+ 	info-page-url="http://www.harbormaster.ai/common-ui.tech.stack"
+    version="1.0"
+    app-type="webapp"
+    release-status="production"
+    visible="false">
+	<target-languages>
+		<target-language name="nodejs"/>
+	</target-languages><!-- target language(s) supported by the template structure -->
+	<tech-stack>
+	    <tech-stack-component name="presentation" description="jquery,html5,css" app-layer="presentation"/>
+	</tech-stack>
+</tech-stack-package>
