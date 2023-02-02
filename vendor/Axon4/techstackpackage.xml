@@ -7,10 +7,11 @@
     version="0.8"
     app-type="restfulapi"
     release-status="beta"
-    derivedFrom=".spring.boot.tech.stack"
+    derivedFrom=".spring.boot.tech.stack,.react.tech.stack"
 	supportsDocker="true"
 	supportsKubernetes="true"
-	product-line="Microservice">
+	product-line="Microservice"
+	primary-vendor="AxonIQ">
 	<target-languages>
 		<target-language name="java"/>
 	</target-languages><!-- target language(s) supported by the template structure -->
