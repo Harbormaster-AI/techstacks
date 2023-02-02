@@ -5,3 +5,51 @@
 include 'workflows'
 include 'contracts'
 #end
+
+#macro( outputExtraMenuItems )
+           <NavDropdown title="Corda Actions" id="basic-nav-dropdown">
+                 <NavDropdown.Item href="/bulktokenactions">Bulk Token Actions</NavDropdown.Item>
+#outputExtraCordaMenuItems()
+           </NavDropdown>
+
+#end
+
+
+#macro( outputExtraRoutePaths )
+                            <Route path = "/bulktokenactions" component = {BulkTokenActionsComponent}></Route>
+#outputExtraCordaRoutePaths()
+#end
+
+
+#macro( outputExtraInclusionComponents )
+import BulkTokenActionsComponent from './components/BulkTokenActionsComponent';
+
+#outputExtraCordaInclusionComponents()
+#end
+
+
+#macro( outputExtraCordaServices )
+#set( $tokenSystemName = ${aib.getParam( "corda.token-system-name" ).toLowerCase()} )
+#set( $tokenSystemName = $display.uncapitalize( $tokenSystemName ) )
+
+    bulkCreateTokens($tokenSystemName, party) {
+        return axios.put(${apiBaseUrl} + '/bulkCreateTokens?partyEnum=' + party, $tokenSystemName );
+    }
+
+    bulkDestroyTokens($tokenSystemName, party) {
+        return axios.put(${apiBaseUrl}  + '/bulkDestroyTokens?partyEnum=' + party, $tokenSystemName);
+    }
+
+    bulkTransferTokens($tokenSystemName, party) {
+        return axios.put(${apiBaseUrl}  + '/bulkTransferTokens?partyEnum=' + party, $tokenSystemName );
+    }
+
+    issueNew($tokenSystemName, party) {
+        return axios.put(${apiBaseUrl}  + '/issueNew?partyEnum=' + party, $tokenSystemName );
+    }
+
+    transferToken($tokenSystemName, party) {
+        return axios.put(${apiBaseUrl}  + '/transfer${aib.getParam( "corda.token-system-name" )}Token?partyEnum=' + party, $tokenSystemName );
+    }
+
+#end
