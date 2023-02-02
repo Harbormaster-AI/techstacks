@@ -50,7 +50,7 @@ public class BaseCordaSpringRestController
 	 * proxy will jumpstart a Corda connection if non established
 	 */
 	protected net.corda.core.messaging.CordaRPCOps proxy(PartyEnum party ) {
-		if ( rpcConnection == null )
+		// if ( rpcConnection == null )
 			jumpstart( party.toString() );
 		
 		return rpcConnection.getProxy();
@@ -88,8 +88,10 @@ public class BaseCordaSpringRestController
 	
     @PreDestroy
     public void close() {
-		if ( rpcConnection != null )
+		if ( rpcConnection != null ) {
 			rpcConnection.notifyServerAndClose();
+			rpcConnection = null;
+		}
     }
 	
 	// --------------------------------------------
