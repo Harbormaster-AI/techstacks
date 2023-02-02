@@ -10,7 +10,8 @@
     derivedFrom=".java.tech.stack,.lambda.tech.stack,.hibernate.tech.stack"
 	supportsDocker="false"
 	supportsKubernetes="false"
-	product-line="Serverless">
+	product-line="Serverless"
+	primary-vendor="AWS">
 	<target-languages>
 		<target-language name="java"/>
 		<target-language name="node.js"/>
