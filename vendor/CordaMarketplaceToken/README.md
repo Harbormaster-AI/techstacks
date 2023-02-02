@@ -22,16 +22,14 @@ This Cordapp shows simple flows related to the token SDK. In this Cordapp, we wi
 - $node[0]
 #end##foreach( $node in $cordaNodes )
 
-![alt text](./diagram/automobile-node-network.png)
-
 From the above chart we see that Tokens are representing the ownership and status of the physical assets ( $classNames ). A key point to notice here is that **a ${lowercaseSystemName} is represented with $numClasses tokens (${classNames})**. This is designed in the way to be flexible to sell or total a specific part of your ${lowercaseSystemName}. As you can see, this ${lowercaseSystemName} buying/selling market is capable of mimicking multiple business logics. We will be demonstrating one of the possible logic here:
 
 1. ${systemName} Company manufactures the ${lowercaseSystemName}s
 2. ${systemName} Company can sell the ${lowercaseSystemName} to licensed dealer and buyers. 
-3. Used parts agency can get the used ${lowercaseSystemName} parts from the licensed dealer or buyers. 
-4. When there is a need to total the physical ${lowercaseSystemName} part, the current owner of the physical part will redeem the token with the ${systemName}Co
+3. A parts agency can get the used ${lowercaseSystemName} parts from the licensed dealer or buyers. 
+4. When there is a need to destroy the physical ${lowercaseSystemName} part, the current owner of the physical part will redeem the token with the ${systemName}Co
 
-Through out the app, you can see how to create, transact, and redeem a token. 
+Throughout the app, you can see how to create, transact, and redeem a token. 
 
 ## Running the app
 
