@@ -1,6 +1,6 @@
 <tech-stack-package 
 	name="CordaNonfungibleToken"
-	shortName="CordaNonfungibleToken"
+	shortName="CordaNonfungible"
 	description="Corda Token nonfungible token reference app using CQRS and persistent option of JPA or MongoDB"
 	icon-url="https://www.pngkey.com/png/full/74-746252_corda-developer-certification-exam-r3-corda.png" 	
 	info-page-url="https://harbormaster.ai/corda-nonfungile-token-tech-stack/"
@@ -11,7 +11,8 @@
 	supportsDocker="true"
 	supportsKubernetes="true"
     product-line="Blockchain"
-	visible="false">
+	visible="false"
+	primary-vendor="r3">
 	<target-languages>
 		<target-language name="java"/>
 		<target-language name="kotlin"/>

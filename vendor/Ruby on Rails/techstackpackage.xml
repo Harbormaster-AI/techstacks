@@ -10,7 +10,8 @@
     visible="true"
     derivedFrom=".common.tech.stack"
     product-line="WebApp"
-    level="basic">
+    level="basic"
+	primary-vendor="Ruby On Rails">
 	<target-languages>
 		<target-language name="rails"/>
 		<target-language name="javascript"/>

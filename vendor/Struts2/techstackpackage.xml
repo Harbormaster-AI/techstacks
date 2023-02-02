@@ -7,11 +7,12 @@
     version="1.4"
     app-type="webapp"
     release-status="production"
-    derivedFrom=".hibernate.tech.stack,.java.tech.stack"
+    derivedFrom=".hibernate.tech.stack,.java.tech.stack,java-backend.tech.stack"
     supportsDocker="true"
     supportsKubernetes="true"
     product-line="WebApp"
-    level="basic">
+    level="basic"
+	primary-vendor="Apache">
 	<target-languages>
 		<target-language name="java"/>
 		<target-language name="javascript"/>

@@ -1,5 +1,5 @@
 <tech-stack-package 
-    name="Go Tech Stack"
+    name="Go"
     shortName="Golang"
     description="The base for all Go related tech stacks" 
     icon-url="img/go.lang.svg"
@@ -9,13 +9,14 @@
     release-status="production"
     derivedFrom=".common.tech.stack"
     visible="true"
-	product-line="Microservice">
+	product-line="Microservice"
+	primary-vendor="Golang">
 	<target-languages>
 		<target-language name="go"/>
 		<target-language name="javascript"/>
 	</target-languages><!-- target language(s) supported by the template structure -->
 	<tech-stack>
 	    <tech-stack-component name="build" description="ci/cd templates " app-layer="build"/>
-	    <tech-stack-component name="data" description="postgres" app-layer="data"/>
+	    <tech-stack-component name="data" description="mysql,postgres,sqlite,sqlserver" app-layer="data"/>
 	</tech-stack>
 </tech-stack-package>
